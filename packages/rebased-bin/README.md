@@ -1,34 +1,41 @@
 # rebased-bin
 
-生成并同步 `rebased-bin` 到 AUR。
+`rebased-bin` packages the prebuilt Linux release of
+[Rebased](https://github.com/DetachHead/rebased) for Arch Linux.
 
-## 本地更新包文件
+Rebased is a standalone Git client built on the IntelliJ platform.
 
-```bash
-./packages/rebased-bin/update.sh
-```
+## Install
 
-## 本地推送到 AUR
-
-前提：
-
-- AUR 账号已添加对应 SSH 公钥
-- 当前环境可直接连 `aur.archlinux.org:22`
-
-执行：
+With `paru`:
 
 ```bash
-./packages/rebased-bin/sync-aur.sh
+paru -S rebased-bin
 ```
 
-## GitHub Actions 自动更新
+With `yay`:
 
-工作流文件：
+```bash
+yay -S rebased-bin
+```
 
-- `.github/workflows/rebased-bin-aur.yml`
+Manual install from AUR:
 
-需要在 GitHub 仓库 `duanluan/aur-packages` 配置 secret：
+```bash
+git clone https://aur.archlinux.org/rebased-bin.git
+cd rebased-bin
+makepkg -si
+```
 
-- `AUR_SSH_PRIVATE_KEY`
+## Launch
 
-建议使用一个专门给 AUR 的私钥，并把对应公钥加到 AUR 账号设置里。
+Start it from your application menu, or run:
+
+```bash
+rebased
+```
+
+## Notes
+
+- The package installs a desktop entry and application icon.
+- Configuration files are initialized on first launch.

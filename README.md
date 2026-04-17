@@ -1,44 +1,33 @@
 # aur-packages
 
-AUR 包发布仓库。
+User-facing notes for the AUR packages maintained in this repository.
 
-## 目录结构
+## Available Packages
 
-```text
-packages/
-  rebased-bin/
-    PKGBUILD
-    .SRCINFO
-    update.sh
-    sync-aur.sh
-```
+- `rebased-bin`: A standalone Git client based on the IntelliJ platform
 
-每个子目录对应一个 AUR 包。
+## Install
 
-## 已有包
-
-- `rebased-bin`
-
-## 使用方式
-
-更新某个包的包文件：
+With `paru`:
 
 ```bash
-./packages/rebased-bin/update.sh
+paru -S rebased-bin
 ```
 
-推送某个包到 AUR：
+With `yay`:
 
 ```bash
-./packages/rebased-bin/sync-aur.sh
+yay -S rebased-bin
 ```
 
-## GitHub Actions
+Manual install from AUR:
 
-当前工作流：
+```bash
+git clone https://aur.archlinux.org/rebased-bin.git
+cd rebased-bin
+makepkg -si
+```
 
-- `.github/workflows/rebased-bin-aur.yml`
+## Package Notes
 
-需要仓库 secret：
-
-- `AUR_SSH_PRIVATE_KEY`
+- [rebased-bin](packages/rebased-bin/README.md)
