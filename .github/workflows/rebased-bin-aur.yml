@@ -1,0 +1,50 @@
+name: Publish rebased-bin to AUR
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - ".github/workflows/rebased-bin-aur.yml"
+      - "packages/rebased-bin/**"
+  schedule:
+    - cron: "13 */12 * * *"
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y jq openssh-client
+
+      - name: Configure SSH
+        env:
+          AUR_SSH_PRIVATE_KEY: ${{ secrets.AUR_SSH_PRIVATE_KEY }}
+        run: |
+          test -n "${AUR_SSH_PRIVATE_KEY}"
+          install -dm700 ~/.ssh
+          printf '%s\n' "${AUR_SSH_PRIVATE_KEY}" > ~/.ssh/aur
+          chmod 600 ~/.ssh/aur
+          ssh-keyscan aur.archlinux.org >> ~/.ssh/known_hosts
+          cat > ~/.ssh/config <<'EOF'
+          Host aur.archlinux.org
+            User aur
+            IdentityFile ~/.ssh/aur
+            IdentitiesOnly yes
+          EOF
+
+      - name: Configure git
+        run: |
+          git config --global user.name "duanluan"
+          git config --global user.email "duanluan@outlook.com"
+
+      - name: Publish
+        run: ./packages/rebased-bin/sync-aur.sh
