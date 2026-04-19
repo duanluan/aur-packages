@@ -1,0 +1,6 @@
+packages/*/pkg/
+packages/*/src/
+packages/*/*.pkg.tar.*
+packages/*/*.deb
+packages/*/*.rpm
+packages/*/*.tar.gz
