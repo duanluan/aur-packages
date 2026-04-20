@@ -19,9 +19,9 @@ require_command jq
 
 release_json="$(curl -fsSL "${RELEASE_API_URL}")"
 pkgver="$(printf '%s\n' "${release_json}" | jq -r '.tag_name')"
-asset_name="$(printf '%s\n' "${release_json}" | jq -r '[.assets[] | select(.name | test("^ideaIC-.*\\.tar\\.gz$"))][0].name')"
-asset_url="$(printf '%s\n' "${release_json}" | jq -r '[.assets[] | select(.name | test("^ideaIC-.*\\.tar\\.gz$"))][0].browser_download_url')"
-asset_digest="$(printf '%s\n' "${release_json}" | jq -r '[.assets[] | select(.name | test("^ideaIC-.*\\.tar\\.gz$"))][0].digest')"
+asset_name="$(printf '%s\n' "${release_json}" | jq -r '[.assets[] | select(.name | test("^(ideaIC-.*|rebased)\\.tar\\.gz$"))][0].name')"
+asset_url="$(printf '%s\n' "${release_json}" | jq -r '[.assets[] | select(.name | test("^(ideaIC-.*|rebased)\\.tar\\.gz$"))][0].browser_download_url')"
+asset_digest="$(printf '%s\n' "${release_json}" | jq -r '[.assets[] | select(.name | test("^(ideaIC-.*|rebased)\\.tar\\.gz$"))][0].digest')"
 
 if [[ -z "${pkgver}" || "${pkgver}" == "null" ]]; then
   printf 'failed to resolve latest tag\n' >&2
@@ -29,12 +29,9 @@ if [[ -z "${pkgver}" || "${pkgver}" == "null" ]]; then
 fi
 
 if [[ -z "${asset_name}" || "${asset_name}" == "null" || -z "${asset_url}" || "${asset_url}" == "null" ]]; then
-  printf 'failed to resolve linux tarball asset\n' >&2
+  printf 'failed to resolve source tarball asset\n' >&2
   exit 1
 fi
-
-build="${asset_name#ideaIC-}"
-build="${build%.tar.gz}"
 
 if [[ -z "${asset_digest}" || "${asset_digest}" == "null" ]]; then
   tmpdir="$(mktemp -d)"
@@ -51,7 +48,6 @@ cat > "${PKGBUILD_PATH}" <<EOF
 pkgname=rebased-bin
 _pkgname=rebased
 pkgver=${pkgver}
-_build=${build}
 pkgrel=1
 pkgdesc='Standalone JetBrains-based Git client (prebuilt binary)'
 arch=('x86_64')
@@ -66,16 +62,30 @@ source=("\${_pkgname}-\${pkgver}.tar.gz::${asset_url}")
 sha256sums=('${asset_sha256}')
 
 package() {
+  source_root=""
+
+  for candidate in "\${srcdir}"/idea-IC-* "\${srcdir}"/ideaIC-* "\${srcdir}"/rebased* "\${srcdir}"/Rebased*; do
+    if [[ -d "\${candidate}" ]]; then
+      source_root="\${candidate}"
+      break
+    fi
+  done
+
+  if [[ -z "\${source_root}" ]]; then
+    printf 'failed to locate extracted source tree\n' >&2
+    return 1
+  fi
+
   install -dm755 "\${pkgdir}/opt/\${_pkgname}"
-  cp -a "\${srcdir}/idea-IC-${build}/." "\${pkgdir}/opt/\${_pkgname}/"
+  cp -a "\${source_root}/." "\${pkgdir}/opt/\${_pkgname}/"
 
   install -dm755 "\${pkgdir}/usr/bin"
   ln -s "/opt/\${_pkgname}/bin/idea" "\${pkgdir}/usr/bin/rebased"
 
-  install -Dm644 "\${srcdir}/idea-IC-${build}/bin/idea.svg" "\${pkgdir}/usr/share/icons/hicolor/scalable/apps/rebased.svg"
-  install -Dm644 "\${srcdir}/idea-IC-${build}/bin/idea.png" "\${pkgdir}/usr/share/pixmaps/rebased.png"
-  install -Dm644 "\${srcdir}/idea-IC-${build}/LICENSE.txt" "\${pkgdir}/usr/share/licenses/\${pkgname}/LICENSE.txt"
-  install -Dm644 "\${srcdir}/idea-IC-${build}/NOTICE.txt" "\${pkgdir}/usr/share/licenses/\${pkgname}/NOTICE.txt"
+  install -Dm644 "\${source_root}/bin/idea.svg" "\${pkgdir}/usr/share/icons/hicolor/scalable/apps/rebased.svg"
+  install -Dm644 "\${source_root}/bin/idea.png" "\${pkgdir}/usr/share/pixmaps/rebased.png"
+  install -Dm644 "\${source_root}/LICENSE.txt" "\${pkgdir}/usr/share/licenses/\${pkgname}/LICENSE.txt"
+  install -Dm644 "\${source_root}/NOTICE.txt" "\${pkgdir}/usr/share/licenses/\${pkgname}/NOTICE.txt"
 
   install -Dm644 /dev/stdin "\${pkgdir}/usr/share/applications/rebased.desktop" <<'DESKTOP'
 [Desktop Entry]
