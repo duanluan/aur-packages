@@ -1,0 +1,74 @@
+name: Auto update AUR packages
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - ".github/workflows/aur-auto-update.yml"
+      - "scripts/**"
+      - "packages/rebased-bin/**"
+      - "packages/keyviz-zh-bin/**"
+      - "packages/navicat17-premium-cs/**"
+      - "packages/wuyou-docs-bin/**"
+  schedule:
+    - cron: "13 */12 * * *"
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    container: archlinux:latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          pacman -Syu --noconfirm --needed base-devel curl git jq openssh ripgrep
+          useradd -m builder
+          chown -R builder:builder "${GITHUB_WORKSPACE}"
+
+      - name: Configure SSH
+        env:
+          AUR_SSH_PRIVATE_KEY: ${{ secrets.AUR_SSH_PRIVATE_KEY }}
+        run: |
+          test -n "${AUR_SSH_PRIVATE_KEY}"
+          install -dm700 /home/builder/.ssh
+          printf '%s\n' "${AUR_SSH_PRIVATE_KEY}" > /home/builder/.ssh/aur
+          chmod 600 /home/builder/.ssh/aur
+          ssh-keyscan aur.archlinux.org >> /home/builder/.ssh/known_hosts
+          {
+            printf 'Host aur.archlinux.org\n'
+            printf '  User aur\n'
+            printf '  IdentityFile /home/builder/.ssh/aur\n'
+            printf '  IdentitiesOnly yes\n'
+            printf '  BatchMode yes\n'
+          } > /home/builder/.ssh/config
+          chown -R builder:builder /home/builder/.ssh
+
+      - name: Configure git
+        run: |
+          runuser -u builder -- git config --global --add safe.directory "${GITHUB_WORKSPACE}"
+          runuser -u builder -- git config --global user.name "duanluan"
+          runuser -u builder -- git config --global user.email "duanluan@outlook.com"
+
+      - name: Update package files
+        run: runuser -u builder -- ./scripts/update-packages.sh
+
+      - name: Commit package files
+        run: |
+          runuser -u builder -- bash -c '
+            if [[ -n "$(git status --short -- packages)" ]]; then
+              git add packages
+              git commit -m "chore: auto update AUR packages"
+              git push
+            else
+              printf "no package file changes\n"
+            fi
+          '
+
+      - name: Publish to AUR
+        run: runuser -u builder -- ./scripts/sync-aur-packages.sh

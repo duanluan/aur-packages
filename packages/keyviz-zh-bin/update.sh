@@ -5,11 +5,9 @@ set -euo pipefail
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 PKGBUILD_PATH="${SCRIPT_DIR}/PKGBUILD"
 SRCINFO_PATH="${SCRIPT_DIR}/.SRCINFO"
-PKGVER="${PKGVER:-2.1.0}"
-PKGREL="${PKGREL:-2}"
-COMMIT="${COMMIT:-6cf089956a3448583074538de2f89f1a12c2ceae}"
-SRC_DIR="keyviz-${COMMIT}"
-SOURCE_URL="https://codeload.github.com/duanluan/keyviz/tar.gz/${COMMIT}"
+REPO_API_URL="${REPO_API_URL:-https://api.github.com/repos/duanluan/keyviz}"
+BRANCH="${BRANCH:-}"
+COMMIT="${COMMIT:-}"
 
 require_command() {
   if ! command -v "$1" >/dev/null 2>&1; then
@@ -19,21 +17,82 @@ require_command() {
 }
 
 require_command curl
+require_command jq
 require_command makepkg
 require_command sha256sum
+require_command tar
 
-tmpfile="$(mktemp)"
-trap 'rm -f "${tmpfile}"' EXIT
+current_pkgver=""
+current_pkgrel=""
+current_commit=""
 
-curl -fL "${SOURCE_URL}" -o "${tmpfile}" >/dev/null 2>&1
-source_sha256="$(sha256sum "${tmpfile}" | cut -d " " -f1)"
+if [[ -f "${PKGBUILD_PATH}" ]]; then
+  current_pkgver="$(sed -n 's/^pkgver=//p' "${PKGBUILD_PATH}" | head -n1)"
+  current_pkgrel="$(sed -n 's/^pkgrel=//p' "${PKGBUILD_PATH}" | head -n1)"
+  current_commit="$(sed -n 's/^_commit=//p' "${PKGBUILD_PATH}" | head -n1)"
+fi
+
+if [[ -z "${BRANCH}" || -z "${COMMIT}" ]]; then
+  repo_json="$(curl -fsSL "${REPO_API_URL}")"
+
+  if [[ -z "${BRANCH}" ]]; then
+    BRANCH="$(printf '%s\n' "${repo_json}" | jq -r '.default_branch')"
+  fi
+
+  if [[ -z "${COMMIT}" ]]; then
+    COMMIT="$(
+      curl -fsSL "${REPO_API_URL}/commits/${BRANCH}" |
+        jq -r '.sha'
+    )"
+  fi
+fi
+
+if [[ -z "${BRANCH}" || "${BRANCH}" == "null" ]]; then
+  printf 'failed to resolve default branch\n' >&2
+  exit 1
+fi
+
+if [[ -z "${COMMIT}" || "${COMMIT}" == "null" ]]; then
+  printf 'failed to resolve latest commit\n' >&2
+  exit 1
+fi
+
+SRC_DIR="keyviz-${COMMIT}"
+SOURCE_URL="https://codeload.github.com/duanluan/keyviz/tar.gz/${COMMIT}"
+
+tmpdir="$(mktemp -d)"
+trap 'rm -rf "${tmpdir}"' EXIT
+
+curl -fL "${SOURCE_URL}" -o "${tmpdir}/source.tar.gz" >/dev/null 2>&1
+source_sha256="$(sha256sum "${tmpdir}/source.tar.gz" | cut -d " " -f1)"
+
+tar -xzf "${tmpdir}/source.tar.gz" -C "${tmpdir}"
+source_root="${tmpdir}/${SRC_DIR}"
+PKGVER="${PKGVER:-$(jq -r '.version' "${source_root}/src-tauri/tauri.conf.json")}"
+
+if [[ -z "${PKGVER}" || "${PKGVER}" == "null" ]]; then
+  printf 'failed to resolve package version\n' >&2
+  exit 1
+fi
+
+if [[ -n "${PKGREL:-}" ]]; then
+  pkgrel="${PKGREL}"
+elif [[ "${current_pkgver}" == "${PKGVER}" && "${current_pkgrel}" =~ ^[0-9]+$ ]]; then
+  if [[ "${current_commit}" == "${COMMIT}" ]]; then
+    pkgrel="${current_pkgrel}"
+  else
+    pkgrel="$((current_pkgrel + 1))"
+  fi
+else
+  pkgrel=1
+fi
 
 cat > "${PKGBUILD_PATH}" <<EOF
 # Maintainer: duanluan <duanluan@outlook.com>
 
 pkgname=keyviz-zh-bin
 pkgver=${PKGVER}
-pkgrel=${PKGREL}
+pkgrel=${pkgrel}
 _commit=${COMMIT}
 _srcdir="keyviz-\${_commit}"
 pkgdesc='Chinese-localized fork of Keyviz with Linux fixes'
@@ -83,4 +142,4 @@ EOF
   makepkg --printsrcinfo > "${SRCINFO_PATH}"
 )
 
-printf '%s-%s\n' "${PKGVER}" "${PKGREL}"
+printf '%s-%s\n' "${PKGVER}" "${pkgrel}"

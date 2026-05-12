@@ -43,3 +43,19 @@ makepkg -si
 - [keyviz-zh-bin](packages/keyviz-zh-bin/README.md)
 - [navicat17-premium-cs](packages/navicat17-premium-cs/README.md)
 - [wuyou-docs-bin](packages/wuyou-docs-bin/README.md)
+
+## Auto Update
+
+The GitHub Actions workflow `.github/workflows/aur-auto-update.yml` checks these
+packages every 12 hours:
+
+- `rebased-bin`
+- `keyviz-zh-bin`
+- `navicat17-premium-cs`
+- `wuyou-docs-bin`
+
+It regenerates package files, commits changes back to this repository, and then
+publishes changed `PKGBUILD` and `.SRCINFO` files to AUR.
+
+`pdmaas-pro-bin` is intentionally excluded because the upstream Pro package
+requires a download code instead of a stable public source URL.
