@@ -8,6 +8,7 @@ User-facing notes for the AUR packages maintained in this repository.
 - `keyviz-zh-bin`: The Chinese-localized Keyviz package with Linux fixes
 - `navicat17-premium-cs`: The Chinese Simplified Navicat Premium 17 AppImage package
 - `wuyou-docs-bin`: The prebuilt Linux desktop release of Wuyou Docs
+- `codex-plus-plus`: Codex++ auto-injector bridge for openai-codex-desktop
 
 ## Install
 
@@ -18,6 +19,7 @@ paru -S rebased-bin
 paru -S keyviz-zh-bin
 paru -S navicat17-premium-cs
 paru -S wuyou-docs-bin
+paru -S codex-plus-plus
 ```
 
 With `yay`:
@@ -27,6 +29,7 @@ yay -S rebased-bin
 yay -S keyviz-zh-bin
 yay -S navicat17-premium-cs
 yay -S wuyou-docs-bin
+yay -S codex-plus-plus
 ```
 
 Manual install from AUR:
@@ -43,6 +46,7 @@ makepkg -si
 - [keyviz-zh-bin](packages/keyviz-zh-bin/README.md)
 - [navicat17-premium-cs](packages/navicat17-premium-cs/README.md)
 - [wuyou-docs-bin](packages/wuyou-docs-bin/README.md)
+- [codex-plus-plus](packages/codex-plus-plus/README.md)
 
 ## Auto Update
 
@@ -53,9 +57,10 @@ packages every 12 hours:
 - `keyviz-zh-bin`
 - `navicat17-premium-cs`
 - `wuyou-docs-bin`
+- `codex-plus-plus`
 
 It regenerates package files, commits changes back to this repository, and then
-publishes changed `PKGBUILD` and `.SRCINFO` files to AUR.
+publishes changed AUR files to AUR.
 
 `pdmaas-pro-bin` is intentionally excluded because the upstream Pro package
 requires a download code instead of a stable public source URL.

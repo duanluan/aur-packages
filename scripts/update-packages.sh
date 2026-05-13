@@ -10,6 +10,7 @@ DEFAULT_PACKAGES=(
   keyviz-zh-bin
   navicat17-premium-cs
   wuyou-docs-bin
+  codex-plus-plus
 )
 
 if [[ "$#" -gt 0 ]]; then

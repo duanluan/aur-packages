@@ -10,6 +10,7 @@ DEFAULT_PACKAGES=(
   keyviz-zh-bin
   navicat17-premium-cs
   wuyou-docs-bin
+  codex-plus-plus
 )
 
 AUR_SSH_KEY="${AUR_SSH_KEY:-${HOME}/.ssh/aur_actions}"
@@ -28,6 +29,34 @@ require_command git
 require_command install
 require_command mktemp
 require_command ssh
+
+push_with_retry() {
+  local aur_dir="$1"
+  local branch="$2"
+
+  if git -C "${aur_dir}" push origin "${branch}"; then
+    return 0
+  fi
+
+  git -C "${aur_dir}" fetch origin "${branch}"
+  git -C "${aur_dir}" rebase "origin/${branch}"
+  git -C "${aur_dir}" push origin "${branch}"
+}
+
+aur_files_for_package() {
+  local package_dir="$1"
+  local srcinfo_path="${package_dir}/.SRCINFO"
+  local aur_entry
+
+  printf '%s\n' PKGBUILD .SRCINFO
+
+  sed -n -E 's/^[[:space:]]*install = //p; s/^[[:space:]]*source(_[^[:space:]]*)? = //p' "${srcinfo_path}" |
+    while IFS= read -r aur_entry; do
+      [[ "${aur_entry}" == *'::'* ]] && aur_entry="${aur_entry##*::}"
+      [[ "${aur_entry}" =~ ^[a-z]+:// ]] && continue
+      printf '%s\n' "${aur_entry}"
+    done
+}
 
 if [[ -f "${AUR_SSH_KEY}" && -z "${GIT_SSH_COMMAND:-}" ]]; then
   export GIT_SSH_COMMAND="ssh -i ${AUR_SSH_KEY} -o IdentitiesOnly=yes -o BatchMode=yes -o StrictHostKeyChecking=accept-new"
@@ -60,10 +89,18 @@ for package in "${packages[@]}"; do
     git -C "${aur_dir}" remote add origin "${remote_url}"
   fi
 
-  install -Dm644 "${package_dir}/PKGBUILD" "${aur_dir}/PKGBUILD"
-  install -Dm644 "${package_dir}/.SRCINFO" "${aur_dir}/.SRCINFO"
+  mapfile -t aur_files < <(aur_files_for_package "${package_dir}" | sort -u)
 
-  if [[ -z "$(git -C "${aur_dir}" status --short -- PKGBUILD .SRCINFO)" ]]; then
+  for aur_file in "${aur_files[@]}"; do
+    if [[ ! -f "${package_dir}/${aur_file}" ]]; then
+      printf 'missing package file: %s/%s\n' "${package}" "${aur_file}" >&2
+      exit 1
+    fi
+
+    install -Dm644 "${package_dir}/${aur_file}" "${aur_dir}/${aur_file}"
+  done
+
+  if [[ -z "$(git -C "${aur_dir}" status --short -- "${aur_files[@]}")" ]]; then
     printf 'no changes for %s\n' "${package}"
     continue
   fi
@@ -71,7 +108,7 @@ for package in "${packages[@]}"; do
   pkgver="$(sed -n 's/^pkgver=//p' "${package_dir}/PKGBUILD" | head -n1)"
   pkgrel="$(sed -n 's/^pkgrel=//p' "${package_dir}/PKGBUILD" | head -n1)"
 
-  git -C "${aur_dir}" add PKGBUILD .SRCINFO
+  git -C "${aur_dir}" add "${aur_files[@]}"
 
   if git -C "${aur_dir}" rev-parse --verify HEAD >/dev/null 2>&1; then
     git -C "${aur_dir}" commit -m "Update to ${pkgver}-${pkgrel}" >/dev/null 2>&1
@@ -79,5 +116,5 @@ for package in "${packages[@]}"; do
     git -C "${aur_dir}" commit -m "Initial import: ${package} ${pkgver}-${pkgrel}" >/dev/null 2>&1
   fi
 
-  git -C "${aur_dir}" push origin master
+  push_with_retry "${aur_dir}" master
 done
