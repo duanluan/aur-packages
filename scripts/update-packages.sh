@@ -10,6 +10,7 @@ DEFAULT_PACKAGES=(
   keyviz-zh-bin
   navicat17-premium-cs
   wuyou-docs-bin
+  mind-elixir-bin
   codex-plus-plus
 )
 

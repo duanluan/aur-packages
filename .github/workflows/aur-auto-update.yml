@@ -10,6 +10,7 @@ on:
       - "packages/keyviz-zh-bin/**"
       - "packages/navicat17-premium-cs/**"
       - "packages/wuyou-docs-bin/**"
+      - "packages/mind-elixir-bin/**"
       - "packages/codex-plus-plus/**"
   schedule:
     - cron: "13 */12 * * *"
@@ -57,7 +58,9 @@ jobs:
           runuser -u builder -- git config --global user.email "duanluan@outlook.com"
 
       - name: Update package files
-        run: runuser -u builder -- ./scripts/update-packages.sh
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: runuser -u builder -- env GITHUB_TOKEN="${GITHUB_TOKEN}" ./scripts/update-packages.sh
 
       - name: Commit package files
         run: |
