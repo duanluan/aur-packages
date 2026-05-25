@@ -12,7 +12,7 @@ on:
       - "packages/wuyou-docs-bin/**"
       - "packages/wuyou-toolkit-bin/**"
       - "packages/mind-elixir-bin/**"
-      - "packages/mossx-bin/**"
+      - "packages/ccgui-bin/**"
       - "packages/codex-plus-plus/**"
   schedule:
     - cron: "13 */12 * * *"

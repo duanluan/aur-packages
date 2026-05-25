@@ -120,18 +120,18 @@ fi
 cat > "${PKGBUILD_PATH}" <<EOF
 # Maintainer: duanluan <duanluan@outlook.com>
 
-pkgname=mossx-bin
-_pkgname=mossx
+pkgname=ccgui-bin
+_pkgname=ccgui
 _appname=ccgui
 pkgver=${pkgver}
 pkgrel=${pkgrel}
-pkgdesc='MossX desktop client for Claude Code, Codex, Gemini, and Opencode (prebuilt binary)'
+pkgdesc='Next-generation VibeCoding editor (prebuilt binary)'
 arch=('x86_64')
-url='https://www.mossx.ai/download'
+url='https://github.com/zhukunpenglinyutong/desktop-cc-gui'
 license=('MIT')
 depends=('fuse2' 'gtk3' 'webkit2gtk-4.1')
-provides=('mossx' 'ccgui')
-conflicts=('mossx' 'ccgui')
+provides=('ccgui')
+conflicts=('ccgui')
 options=('!strip')
 source=(
   "\${_appname}_\${pkgver}_amd64.AppImage::${asset_url}"
@@ -160,36 +160,35 @@ package() {
   install -Dm755 "\${appimage}" "\${pkgdir}/opt/\${_pkgname}/\${_appname}_\${pkgver}_amd64.AppImage"
   install -Dm644 "\${srcdir}/LICENSE" "\${pkgdir}/usr/share/licenses/\${pkgname}/LICENSE"
 
-  install -Dm755 /dev/stdin "\${pkgdir}/usr/bin/mossx" <<SCRIPT
+  install -Dm755 /dev/stdin "\${pkgdir}/usr/bin/ccgui" <<SCRIPT
 #!/bin/sh
 exec env APPIMAGE_EXTRACT_AND_RUN=1 APPIMAGELAUNCHER_DISABLE=1 \\\\
   /opt/\${_pkgname}/\${_appname}_\${pkgver}_amd64.AppImage "\\\$@"
 SCRIPT
 
   install -dm755 "\${pkgdir}/usr/bin"
-  ln -s mossx "\${pkgdir}/usr/bin/ccgui"
-  ln -s mossx "\${pkgdir}/usr/bin/cc-gui"
+  ln -s ccgui "\${pkgdir}/usr/bin/cc-gui"
 
   install -Dm644 "\${extract_dir}/squashfs-root/usr/share/icons/hicolor/32x32/apps/cc-gui.png" \\
-    "\${pkgdir}/usr/share/icons/hicolor/32x32/apps/mossx.png"
+    "\${pkgdir}/usr/share/icons/hicolor/32x32/apps/ccgui.png"
   install -Dm644 "\${extract_dir}/squashfs-root/usr/share/icons/hicolor/128x128/apps/cc-gui.png" \\
-    "\${pkgdir}/usr/share/icons/hicolor/128x128/apps/mossx.png"
+    "\${pkgdir}/usr/share/icons/hicolor/128x128/apps/ccgui.png"
   install -Dm644 "\${extract_dir}/squashfs-root/ccgui.png" \\
-    "\${pkgdir}/usr/share/icons/hicolor/256x256/apps/mossx.png"
+    "\${pkgdir}/usr/share/icons/hicolor/256x256/apps/ccgui.png"
 
-  install -Dm644 /dev/stdin "\${pkgdir}/usr/share/applications/mossx.desktop" <<DESKTOP
+  install -Dm644 /dev/stdin "\${pkgdir}/usr/share/applications/ccgui.desktop" <<DESKTOP
 [Desktop Entry]
 Type=Application
 Version=1.0
-Name=MossX
-Comment=Next-generation VibeCoding desktop client
-Exec=mossx %U
-Icon=mossx
+Name=ccgui
+Comment=Next-generation VibeCoding editor
+Exec=ccgui %U
+Icon=ccgui
 Terminal=false
 StartupNotify=true
 StartupWMClass=cc-gui
 Categories=Development;IDE;
-Keywords=AI;Claude Code;Codex;Gemini;Opencode;MossX;
+Keywords=AI;Claude Code;Codex;Gemini;Opencode;ccgui;
 X-AppImage-Version=${pkgver}
 DESKTOP
 }
