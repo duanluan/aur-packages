@@ -37,7 +37,6 @@ trap 'rm -rf "${tmpdir}"' EXIT
 curl -fL "${source_url}" -o "${tmpdir}/codex-plus-plus-${pkgver}.tar.gz" >/dev/null 2>&1
 source_sha256="$(sha256sum "${tmpdir}/codex-plus-plus-${pkgver}.tar.gz" | awk '{print $1}')"
 wrapper_sha256="$(sha256sum "${SCRIPT_DIR}/codex-desktop-app-wrapper.sh" | awk '{print $1}')"
-launch_sha256="$(sha256sum "${SCRIPT_DIR}/codex-plus-plus-launch.py" | awk '{print $1}')"
 manager_sha256="$(sha256sum "${SCRIPT_DIR}/codex-plus-plus.sh" | awk '{print $1}')"
 hook_sha256="$(sha256sum "${SCRIPT_DIR}/90-codex-plus-plus-reapply.hook" | awk '{print $1}')"
 
@@ -56,47 +55,39 @@ pkgname=codex-plus-plus
 pkgver=${pkgver}
 pkgrel=${pkgrel}
 pkgdesc='Codex++ auto-injector bridge for openai-codex-desktop'
-arch=('any')
+arch=('x86_64')
 url='https://github.com/BigPizzaV3/CodexPlusPlus'
-license=('NOASSERTION')
+license=('MIT')
+options=('!lto')
 depends=(
   'bash'
   'openai-codex-desktop'
   'python'
-  'python-requests'
-  'python-websocket-client'
 )
 makedepends=(
-  'python-build'
-  'python-installer'
-  'python-setuptools'
-  'python-wheel'
+  'cargo'
 )
 install="\${pkgname}.install"
 source=(
   "\${pkgname}-\${pkgver}.tar.gz::${source_url}"
   'codex-desktop-app-wrapper.sh'
-  'codex-plus-plus-launch.py'
   'codex-plus-plus.sh'
   '90-codex-plus-plus-reapply.hook'
 )
 sha256sums=(
   '${source_sha256}'
   '${wrapper_sha256}'
-  '${launch_sha256}'
   '${manager_sha256}'
   '${hook_sha256}'
 )
 
 build() {
   cd "\${srcdir}/CodexPlusPlus-\${pkgver}"
-  /usr/bin/python -m build --wheel --no-isolation
+  cargo build --release --locked -p codex-plus-launcher
 }
 
 package() {
   cd "\${srcdir}/CodexPlusPlus-\${pkgver}"
-
-  /usr/bin/python -m installer --destdir="\${pkgdir}" dist/*.whl
 
   install -dm755 \\
     "\${pkgdir}/usr/bin" \\
@@ -111,8 +102,8 @@ package() {
     "\${pkgdir}/usr/lib/\${pkgname}/app/codex"
   ln -s codex "\${pkgdir}/usr/lib/\${pkgname}/app/codex.exe"
 
-  install -Dm755 "\${srcdir}/codex-plus-plus-launch.py" \\
-    "\${pkgdir}/usr/lib/\${pkgname}/bin/codex-plus-plus-launch.py"
+  install -Dm755 "target/release/codex-plus-plus" \\
+    "\${pkgdir}/usr/lib/\${pkgname}/bin/codex-plus-plus-upstream"
   install -Dm755 "\${srcdir}/codex-plus-plus.sh" \\
     "\${pkgdir}/usr/bin/codex-plus-plus"
   ln -s /usr/bin/codex-plus-plus \\
