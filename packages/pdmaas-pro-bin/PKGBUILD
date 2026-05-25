@@ -1,0 +1,38 @@
+# Maintainer: duanluan <duanluan@outlook.com>
+
+pkgname=pdmaas-pro-bin
+_pkgname=PDMaas-Pro
+pkgver=2.3.0
+pkgrel=1
+pkgdesc='Enterprise data modeling platform (prebuilt binary)'
+arch=('x86_64')
+url='https://www.yonsum.com/'
+license=('unknown')
+depends=('alsa-lib' 'at-spi2-core' 'cups' 'gtk3' 'java-runtime' 'libnotify' 'libsecret' 'libxss' 'libxtst' 'nss' 'util-linux-libs' 'xdg-utils')
+optdepends=('libayatana-appindicator: tray support')
+provides=('pdmaas-pro')
+conflicts=('pdmaas-pro')
+options=('!strip')
+_debfile="${_pkgname}-linux_amd64_v${pkgver}.deb"
+source=("${_debfile}")
+noextract=("${_debfile}")
+sha256sums=('71e8dfdd8f8ed67fc8400fba89884d7be48ca5f5bc0f833768453116a63dbeff')
+
+package() {
+  local _extractdir
+  _extractdir="$(mktemp -d)"
+  trap 'rm -rf "${_extractdir}"' EXIT
+
+  bsdtar -C "${_extractdir}" -xf "${srcdir}/${_debfile}"
+  bsdtar -C "${pkgdir}" -xf "${_extractdir}/data.tar.xz"
+
+  install -dm755 "${pkgdir}/usr/bin"
+  ln -s "/opt/${_pkgname}/pdmaas-pro" "${pkgdir}/usr/bin/pdmaas-pro"
+
+  chmod 4755 "${pkgdir}/opt/${_pkgname}/chrome-sandbox"
+
+  sed -i \
+    -e 's|^Exec=.*|Exec=pdmaas-pro %U|' \
+    -e 's|^Categories=.*|Categories=Development;Database;|' \
+    "${pkgdir}/usr/share/applications/pdmaas-pro.desktop"
+}
