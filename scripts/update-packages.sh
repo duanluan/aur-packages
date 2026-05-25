@@ -12,6 +12,7 @@ DEFAULT_PACKAGES=(
   wuyou-docs-bin
   wuyou-toolkit-bin
   mind-elixir-bin
+  mossx-bin
   codex-plus-plus
 )
 

@@ -10,6 +10,7 @@ User-facing notes for the AUR packages maintained in this repository.
 - `wuyou-docs-bin`: The prebuilt Linux desktop release of Wuyou Docs
 - `wuyou-toolkit-bin`: The prebuilt Linux desktop release of wuyou-toolkit
 - `mind-elixir-bin`: The prebuilt Linux desktop release of Mind Elixir
+- `mossx-bin`: The prebuilt Linux desktop release of MossX
 - `codex-plus-plus`: Codex++ auto-injector bridge for openai-codex-desktop
 
 ## Install
@@ -23,6 +24,7 @@ paru -S navicat17-premium-cs
 paru -S wuyou-docs-bin
 paru -S wuyou-toolkit-bin
 paru -S mind-elixir-bin
+paru -S mossx-bin
 paru -S codex-plus-plus
 ```
 
@@ -35,6 +37,7 @@ yay -S navicat17-premium-cs
 yay -S wuyou-docs-bin
 yay -S wuyou-toolkit-bin
 yay -S mind-elixir-bin
+yay -S mossx-bin
 yay -S codex-plus-plus
 ```
 
@@ -54,6 +57,7 @@ makepkg -si
 - [wuyou-docs-bin](packages/wuyou-docs-bin/README.md)
 - [wuyou-toolkit-bin](packages/wuyou-toolkit-bin/README.md)
 - [mind-elixir-bin](packages/mind-elixir-bin/README.md)
+- [mossx-bin](packages/mossx-bin/README.md)
 - [codex-plus-plus](packages/codex-plus-plus/README.md)
 
 ## Auto Update
@@ -67,6 +71,7 @@ packages every 12 hours:
 - `wuyou-docs-bin`
 - `wuyou-toolkit-bin`
 - `mind-elixir-bin`
+- `mossx-bin`
 - `codex-plus-plus`
 
 It regenerates package files, commits changes back to this repository, and then
