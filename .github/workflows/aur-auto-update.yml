@@ -15,7 +15,7 @@ on:
       - "packages/ccgui-bin/**"
       - "packages/codex-plus-plus/**"
   schedule:
-    - cron: "13 */12 * * *"
+    - cron: "13 0 * * 1"
 
 permissions:
   contents: write

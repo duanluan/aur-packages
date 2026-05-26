@@ -63,7 +63,7 @@ makepkg -si
 ## Auto Update
 
 The GitHub Actions workflow `.github/workflows/aur-auto-update.yml` checks these
-packages every 12 hours:
+packages weekly:
 
 - `rebased-bin`
 - `keyviz-zh-bin`
