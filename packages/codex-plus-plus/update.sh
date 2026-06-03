@@ -62,6 +62,7 @@ options=('!lto')
 depends=(
   'bash'
   'openai-codex-desktop'
+  'procps-ng'
   'python'
 )
 makedepends=(
@@ -69,7 +70,7 @@ makedepends=(
 )
 install="\${pkgname}.install"
 source=(
-  "\${pkgname}-\${pkgver}.tar.gz::${source_url}"
+  "\${pkgname}-\${pkgver}.tar.gz::https://github.com/BigPizzaV3/CodexPlusPlus/archive/refs/tags/v\${pkgver}.tar.gz"
   'codex-desktop-app-wrapper.sh'
   'codex-plus-plus.sh'
   '90-codex-plus-plus-reapply.hook'
