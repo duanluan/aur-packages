@@ -12,6 +12,7 @@ User-facing notes for the AUR packages maintained in this repository.
 - `mind-elixir-bin`: The prebuilt Linux desktop release of Mind Elixir
 - `ccgui-bin`: The prebuilt Linux desktop release of ccgui
 - `codex-plus-plus`: Codex++ auto-injector bridge for openai-codex-desktop
+- `pilauncher-bin`: The prebuilt Linux desktop release of PiLauncher
 
 ## Install
 
@@ -26,6 +27,7 @@ paru -S wuyou-toolkit-bin
 paru -S mind-elixir-bin
 paru -S ccgui-bin
 paru -S codex-plus-plus
+paru -S pilauncher-bin
 ```
 
 With `yay`:
@@ -39,6 +41,7 @@ yay -S wuyou-toolkit-bin
 yay -S mind-elixir-bin
 yay -S ccgui-bin
 yay -S codex-plus-plus
+yay -S pilauncher-bin
 ```
 
 Manual install from AUR:
@@ -59,6 +62,7 @@ makepkg -si
 - [mind-elixir-bin](packages/mind-elixir-bin/README.md)
 - [ccgui-bin](packages/ccgui-bin/README.md)
 - [codex-plus-plus](packages/codex-plus-plus/README.md)
+- [pilauncher-bin](packages/pilauncher-bin/README.md)
 
 ## Auto Update
 
@@ -73,6 +77,7 @@ packages weekly:
 - `mind-elixir-bin`
 - `ccgui-bin`
 - `codex-plus-plus`
+- `pilauncher-bin`
 
 It regenerates package files, commits changes back to this repository, and then
 publishes changed AUR files to AUR.

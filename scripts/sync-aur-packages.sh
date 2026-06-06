@@ -14,6 +14,7 @@ DEFAULT_PACKAGES=(
   mind-elixir-bin
   ccgui-bin
   codex-plus-plus
+  pilauncher-bin
 )
 
 AUR_SSH_KEY="${AUR_SSH_KEY:-${HOME}/.ssh/aur_actions}"

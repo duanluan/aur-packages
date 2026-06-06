@@ -14,6 +14,7 @@ DEFAULT_PACKAGES=(
   mind-elixir-bin
   ccgui-bin
   codex-plus-plus
+  pilauncher-bin
 )
 
 if [[ "$#" -gt 0 ]]; then
