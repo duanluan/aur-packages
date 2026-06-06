@@ -37,5 +37,6 @@ pilauncher
 
 ## Notes
 
-- The package wraps the upstream amd64 AppImage release for Arch Linux.
+- The package extracts the upstream amd64 AppImage and runs it against Arch's
+  system GTK/WebKit stack for better desktop compatibility.
 - PiLauncher is an independent third-party Minecraft launcher and does not distribute Minecraft.
