@@ -5,7 +5,7 @@ set -euo pipefail
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 PKGBUILD_PATH="${SCRIPT_DIR}/PKGBUILD"
 SRCINFO_PATH="${SCRIPT_DIR}/.SRCINFO"
-RELEASE_API_URL="${RELEASE_API_URL:-https://api.github.com/repos/duanluan/wuyou-toolkit-releases/releases/latest}"
+RELEASE_API_URL="${RELEASE_API_URL:-https://api.github.com/repos/duanluan/wuyou-toolkit-releases/releases?per_page=100}"
 
 require_command() {
   if ! command -v "$1" >/dev/null 2>&1; then
@@ -18,15 +18,51 @@ require_command curl
 require_command jq
 require_command makepkg
 
-release_json="$(curl -fsSL "${RELEASE_API_URL}")"
-tag_name="$(printf '%s\n' "${release_json}" | jq -r '.tag_name')"
-pkgver="${tag_name#v}"
-asset_name="$(printf '%s\n' "${release_json}" | jq -r --arg version "${pkgver}" '[.assets[] | select(.name == ("wuyou-toolkit_" + $version + "_amd64.deb"))][0].name')"
-asset_url="$(printf '%s\n' "${release_json}" | jq -r --arg version "${pkgver}" '[.assets[] | select(.name == ("wuyou-toolkit_" + $version + "_amd64.deb"))][0].browser_download_url')"
-asset_digest="$(printf '%s\n' "${release_json}" | jq -r --arg version "${pkgver}" '[.assets[] | select(.name == ("wuyou-toolkit_" + $version + "_amd64.deb"))][0].digest')"
+curl_headers=()
+if [[ -n "${GITHUB_TOKEN:-}" ]]; then
+  curl_headers+=(-H "Authorization: Bearer ${GITHUB_TOKEN}")
+fi
+
+release_json="$(curl -fsSL "${curl_headers[@]}" "${RELEASE_API_URL}")"
+if ! IFS=$'\t' read -r tag_name pkgver asset_name asset_url asset_digest < <(
+  printf '%s\n' "${release_json}" | jq -r '
+    def releases: if type == "array" then . else [.] end;
+
+    (releases
+      | map({
+          tag_name,
+          asset: (
+            .assets // []
+            | map(select(.name | test("^wuyou-toolkit_[^/]+_amd64\\.deb$")))
+            | .[0]
+          )
+        })
+      | map(select(.asset != null))
+      | .[0]) as $release
+    | if $release == null then
+        empty
+      else
+        ($release.asset.name | capture("^wuyou-toolkit_(?<version>.+)_amd64\\.deb$").version) as $version
+        | [
+            ($release.tag_name // ""),
+            $version,
+            ($release.asset.name // ""),
+            ($release.asset.browser_download_url // ""),
+            ($release.asset.digest // "")
+          ]
+        | @tsv
+      end
+  '
+); then
+  tag_name=""
+  pkgver=""
+  asset_name=""
+  asset_url=""
+  asset_digest=""
+fi
 
 if [[ -z "${tag_name}" || "${tag_name}" == "null" || -z "${pkgver}" ]]; then
-  printf 'failed to resolve latest tag\n' >&2
+  printf 'failed to resolve release with amd64 deb asset\n' >&2
   exit 1
 fi
 

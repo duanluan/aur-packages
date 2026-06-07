@@ -25,15 +25,26 @@ else
   packages=("${DEFAULT_PACKAGES[@]}")
 fi
 
+failed_packages=()
+
 for package in "${packages[@]}"; do
   package_dir="${REPO_ROOT}/packages/${package}"
   update_script="${package_dir}/update.sh"
 
   if [[ ! -x "${update_script}" ]]; then
     printf 'missing executable update script: %s\n' "${update_script}" >&2
-    exit 1
+    failed_packages+=("${package}")
+    continue
   fi
 
   printf 'updating %s\n' "${package}"
-  "${update_script}"
+  if ! "${update_script}"; then
+    printf 'failed to update %s\n' "${package}" >&2
+    failed_packages+=("${package}")
+  fi
 done
+
+if [[ "${#failed_packages[@]}" -gt 0 ]]; then
+  printf 'failed packages: %s\n' "${failed_packages[*]}" >&2
+  exit 1
+fi
