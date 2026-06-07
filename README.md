@@ -13,6 +13,7 @@ User-facing notes for the AUR packages maintained in this repository.
 - `ccgui-bin`: The prebuilt Linux desktop release of ccgui
 - `codex-plus-plus`: Codex++ auto-injector bridge for openai-codex-desktop
 - `pilauncher-bin`: The prebuilt Linux desktop release of PiLauncher
+- `emeditor-wine`: EmEditor running through a dedicated Wine prefix
 
 ## Install
 
@@ -28,6 +29,7 @@ paru -S mind-elixir-bin
 paru -S ccgui-bin
 paru -S codex-plus-plus
 paru -S pilauncher-bin
+paru -S emeditor-wine
 ```
 
 With `yay`:
@@ -42,6 +44,7 @@ yay -S mind-elixir-bin
 yay -S ccgui-bin
 yay -S codex-plus-plus
 yay -S pilauncher-bin
+yay -S emeditor-wine
 ```
 
 Manual install from AUR:
@@ -63,6 +66,7 @@ makepkg -si
 - [ccgui-bin](packages/ccgui-bin/README.md)
 - [codex-plus-plus](packages/codex-plus-plus/README.md)
 - [pilauncher-bin](packages/pilauncher-bin/README.md)
+- [emeditor-wine](packages/emeditor-wine/README.md)
 
 ## Auto Update
 
