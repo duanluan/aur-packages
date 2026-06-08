@@ -41,6 +41,8 @@ manager_sha256="$(sha256sum "${SCRIPT_DIR}/codex-plus-plus.sh" | awk '{print $1}
 plugin_auth_sha256="$(sha256sum "${SCRIPT_DIR}/plugin-auth-unlocked.js" | awk '{print $1}')"
 plugin_unlock_patch="${SCRIPT_DIR}/codex-plus-plus-plugin-unlock.patch"
 plugin_unlock_patch_sha256="$(sha256sum "${plugin_unlock_patch}" | awk '{print $1}')"
+linux_port_patch="${SCRIPT_DIR}/codex-plus-plus-linux-port-fallback.patch"
+linux_port_patch_sha256="$(sha256sum "${linux_port_patch}" | awk '{print $1}')"
 hook_sha256="$(sha256sum "${SCRIPT_DIR}/90-codex-plus-plus-reapply.hook" | awk '{print $1}')"
 
 if [[ -n "${PKGREL:-}" ]]; then
@@ -78,6 +80,7 @@ source=(
   'codex-plus-plus.sh'
   'plugin-auth-unlocked.js'
   "\${pkgname}-plugin-unlock.patch"
+  "\${pkgname}-linux-port-fallback.patch"
   '90-codex-plus-plus-reapply.hook'
 )
 sha256sums=(
@@ -86,12 +89,14 @@ sha256sums=(
   '${manager_sha256}'
   '${plugin_auth_sha256}'
   '${plugin_unlock_patch_sha256}'
+  '${linux_port_patch_sha256}'
   '${hook_sha256}'
 )
 
 prepare() {
   cd "\${srcdir}/CodexPlusPlus-\${pkgver}"
   patch -Np1 -i "\${srcdir}/\${pkgname}-plugin-unlock.patch"
+  patch -Np1 -i "\${srcdir}/\${pkgname}-linux-port-fallback.patch"
 }
 
 build() {
