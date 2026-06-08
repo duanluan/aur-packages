@@ -16,9 +16,9 @@ pkgbase = emeditor-wine
 	depends = xorg-xrdb
 	optdepends = winetricks: optional Wine prefix tuning
 	options = !strip
-	source = emeditor-linux-26.1.1.tar.gz::https://github.com/duanluan/emeditor-linux/archive/refs/tags/v26.1.1.tar.gz
+	source = emeditor-linux-d57f159bc4fcf6962795743854e6ba98f543e3e0.tar.gz::https://github.com/duanluan/emeditor-linux/archive/d57f159bc4fcf6962795743854e6ba98f543e3e0.tar.gz
 	source = emed64_26.1.1.msi::https://download.emeditor.com/emed64_26.1.1.msi
-	sha256sums = ca6b20ad8e49102fbddc037537a4c48af80585e17b34dd04d418eb86b2db8d7f
+	sha256sums = c4fe4ef95bacf2cdb84767ffc95cea66879f5286da8d4786024e3116213514d8
 	sha256sums = bc54ae3700a657c159f176b8f5ad646a4cfef3090d8097ff8dfa99067340f5b5
 
 pkgname = emeditor-wine
