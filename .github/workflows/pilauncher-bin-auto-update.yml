@@ -19,13 +19,16 @@ jobs:
     container: archlinux:latest
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
       - name: Install dependencies
         run: |
           pacman -Syu --noconfirm --needed base-devel curl git jq openssh ripgrep
           useradd -m builder
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Prepare workspace
+        run: |
           chown -R builder:builder "${GITHUB_WORKSPACE}"
 
       - name: Configure SSH
