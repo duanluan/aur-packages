@@ -16,6 +16,7 @@ DEFAULT_PACKAGES=(
   ccgui-bin
   codex-plus-plus
   pilauncher-bin
+  reasonix-desktop-deb
 )
 
 if [[ "$#" -gt 0 ]]; then

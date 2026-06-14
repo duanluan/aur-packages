@@ -1,0 +1,51 @@
+# reasonix-desktop-deb
+
+`reasonix-desktop-deb` repackages the prebuilt `.deb` release of
+[Reasonix Desktop](https://github.com/esengine/DeepSeek-Reasonix) for Arch Linux.
+
+Reasonix Desktop is a Wails-based desktop GUI for the Reasonix terminal-native
+AI coding agent with DeepSeek API.
+
+## Why this package?
+
+- **`reasonix-desktop-bin`** (AUR) is stuck at v0.53.0 — very outdated.
+- **`deepseek-reasonix-desktop-bin`** (AUR) at v1.7.0 uses a raw tarball
+  approach with 24 Electron-related dependencies and produces a white screen.
+- **`reasonix-desktop-deb`** uses the official `.deb` release (native Go/Wails
+  binary) with only two dependencies: `gtk3` and `webkit2gtk-4.1`.
+
+## Install
+
+With `paru`:
+
+```bash
+paru -S reasonix-desktop-deb
+```
+
+With `yay`:
+
+```bash
+yay -S reasonix-desktop-deb
+```
+
+Manual install from AUR:
+
+```bash
+git clone https://aur.archlinux.org/reasonix-desktop-deb.git
+cd reasonix-desktop-deb
+makepkg -si
+```
+
+## Launch
+
+Start it from your application menu, or run:
+
+```bash
+reasonix-desktop
+```
+
+## Conflicts
+
+This package conflicts with `reasonix-desktop`, `deepseek-reasonix-desktop`,
+and `deepseek-reasonix-desktop-bin` — only one Reasonix Desktop package should
+be installed at a time.

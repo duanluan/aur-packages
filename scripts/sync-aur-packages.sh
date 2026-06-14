@@ -16,6 +16,7 @@ DEFAULT_PACKAGES=(
   ccgui-bin
   codex-plus-plus
   pilauncher-bin
+  reasonix-desktop-deb
 )
 
 AUR_SSH_KEY="${AUR_SSH_KEY:-${HOME}/.ssh/aur_actions}"
