@@ -15,6 +15,7 @@ DEFAULT_PACKAGES=(
   mind-elixir-bin
   ccgui-bin
   codex-plus-plus
+  zcode-desktop-bin
   pilauncher-bin
   reasonix-desktop-deb
 )

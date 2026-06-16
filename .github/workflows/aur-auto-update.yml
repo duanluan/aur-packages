@@ -19,6 +19,7 @@ on:
           - mind-elixir-bin
           - ccgui-bin
           - codex-plus-plus
+          - zcode-desktop-bin
           - pilauncher-bin
           - reasonix-desktop-deb
   push:
@@ -34,6 +35,7 @@ on:
       - "packages/mind-elixir-bin/**"
       - "packages/ccgui-bin/**"
       - "packages/codex-plus-plus/**"
+      - "packages/zcode-desktop-bin/**"
       - "packages/pilauncher-bin/**"
       - "packages/reasonix-desktop-deb/**"
   schedule:
