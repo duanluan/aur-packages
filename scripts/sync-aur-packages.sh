@@ -16,6 +16,7 @@ DEFAULT_PACKAGES=(
   ccgui-bin
   codex-plus-plus
   zcode-desktop-bin
+  mastergo-desktop-bin
   pilauncher-bin
   reasonix-desktop-deb
 )

@@ -13,6 +13,7 @@ User-facing notes for the AUR packages maintained in this repository.
 - `ccgui-bin`: The prebuilt Linux desktop release of ccgui
 - `codex-plus-plus`: Codex++ auto-injector bridge for openai-codex-desktop
 - `zcode-desktop-bin`: ZCode desktop app repackaged from the official macOS release
+- `mastergo-desktop-bin`: MasterGo desktop app repackaged from the official macOS release
 - `pilauncher-bin`: The prebuilt Linux desktop release of PiLauncher
 - `emeditor-wine`: EmEditor running through a dedicated Wine prefix
 
@@ -30,6 +31,7 @@ paru -S mind-elixir-bin
 paru -S ccgui-bin
 paru -S codex-plus-plus
 paru -S zcode-desktop-bin
+paru -S mastergo-desktop-bin
 paru -S pilauncher-bin
 paru -S emeditor-wine
 ```
@@ -46,6 +48,7 @@ yay -S mind-elixir-bin
 yay -S ccgui-bin
 yay -S codex-plus-plus
 yay -S zcode-desktop-bin
+yay -S mastergo-desktop-bin
 yay -S pilauncher-bin
 yay -S emeditor-wine
 ```
@@ -69,6 +72,7 @@ makepkg -si
 - [ccgui-bin](packages/ccgui-bin/README.md)
 - [codex-plus-plus](packages/codex-plus-plus/README.md)
 - [zcode-desktop-bin](packages/zcode-desktop-bin/README.md)
+- [mastergo-desktop-bin](packages/mastergo-desktop-bin/README.md)
 - [pilauncher-bin](packages/pilauncher-bin/README.md)
 - [emeditor-wine](packages/emeditor-wine/README.md)
 
@@ -86,6 +90,7 @@ packages weekly:
 - `ccgui-bin`
 - `codex-plus-plus`
 - `zcode-desktop-bin`
+- `mastergo-desktop-bin`
 - `pilauncher-bin`
 
 It regenerates package files, commits changes back to this repository, and then
