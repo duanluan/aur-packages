@@ -18,7 +18,6 @@ on:
           - wuyou-toolkit-bin
           - mind-elixir-bin
           - ccgui-bin
-          - codex-plus-plus
           - zcode-desktop-bin
           - mastergo-desktop-bin
           - pilauncher-bin
@@ -35,7 +34,6 @@ on:
       - "packages/wuyou-toolkit-bin/**"
       - "packages/mind-elixir-bin/**"
       - "packages/ccgui-bin/**"
-      - "packages/codex-plus-plus/**"
       - "packages/zcode-desktop-bin/**"
       - "packages/mastergo-desktop-bin/**"
       - "packages/pilauncher-bin/**"

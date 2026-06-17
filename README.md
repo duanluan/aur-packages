@@ -88,13 +88,15 @@ packages weekly:
 - `wuyou-toolkit-bin`
 - `mind-elixir-bin`
 - `ccgui-bin`
-- `codex-plus-plus`
 - `zcode-desktop-bin`
 - `mastergo-desktop-bin`
 - `pilauncher-bin`
 
 It regenerates package files, commits changes back to this repository, and then
 publishes changed AUR files to AUR.
+
+`codex-plus-plus` is intentionally excluded because every upstream release needs
+manual build and runtime verification before publishing.
 
 `pdmaas-pro-bin` is intentionally excluded because the upstream Pro package
 requires a download code instead of a stable public source URL.
