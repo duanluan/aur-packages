@@ -43,9 +43,19 @@ sudo codex-plus-plus disable
 sudo codex-plus-plus enable
 ```
 
+Use a custom Electron runtime:
+
+```bash
+sudo install -dm755 /etc/codex-plus-plus
+printf '%s\n' /usr/lib/electron42/electron | sudo tee /etc/codex-plus-plus/electron
+sudo codex-plus-plus enable
+```
+
 ## Notes
 
 - The package depends on `openai-codex-desktop`.
 - It keeps a backup of the upstream `/usr/bin/codex-desktop` launcher.
+- By default, it follows the Electron runtime used by the upstream
+  `openai-codex-desktop` launcher.
 - An `alpm` hook reapplies the injection after `openai-codex-desktop` upgrades.
 - `codexplusplus` is kept as a compatibility alias.
