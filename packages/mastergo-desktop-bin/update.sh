@@ -19,7 +19,22 @@ require_command jq
 require_command makepkg
 require_command sha256sum
 
-config_json="$(curl -fsSL "${CONFIG_URL}")"
+curl_retry() {
+  curl \
+    --fail \
+    --location \
+    --show-error \
+    --silent \
+    --retry 6 \
+    --retry-delay 5 \
+    --retry-max-time 180 \
+    --retry-connrefused \
+    --retry-all-errors \
+    --connect-timeout 20 \
+    "$@"
+}
+
+config_json="$(curl_retry "${CONFIG_URL}")"
 pkgver="$(printf '%s\n' "${config_json}" | jq -r '.data | fromjson | .electronMacM1')"
 
 if [[ -z "${pkgver}" ]]; then
@@ -31,7 +46,7 @@ tmpdir="$(mktemp -d)"
 trap 'rm -rf "${tmpdir}"' EXIT
 
 source_url="https://static.mastergo.com/plugins/desktop/macos-arm/MasterGo-${pkgver}.dmg"
-curl -fL "${source_url}" -o "${tmpdir}/MasterGo-${pkgver}-mac-arm64.dmg" >/dev/null 2>&1
+curl_retry --output "${tmpdir}/MasterGo-${pkgver}-mac-arm64.dmg" "${source_url}" >/dev/null
 source_sha256="$(sha256sum "${tmpdir}/MasterGo-${pkgver}-mac-arm64.dmg" | awk '{print $1}')"
 
 sed -i \
