@@ -17,6 +17,7 @@ DEFAULT_PACKAGES=(
   zcode-desktop-bin
   mastergo-desktop-bin
   pilauncher-bin
+  minimax-hub-bin
   reasonix-desktop-deb
 )
 
