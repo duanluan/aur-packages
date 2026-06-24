@@ -38,6 +38,7 @@ on:
       - "packages/zcode-desktop-bin/**"
       - "packages/mastergo-desktop-bin/**"
       - "packages/pilauncher-bin/**"
+      - "packages/minimax-hub-bin/**"
       - "packages/reasonix-desktop-deb/**"
   schedule:
     - cron: "13 0 * * 1"

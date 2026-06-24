@@ -52,10 +52,10 @@ curl_retry --output "${tmpdir}/MiniMax-Hub-${pkgver}-mac-arm64.dmg" "${arm64_url
 x64_sha256="$(sha256sum "${tmpdir}/MiniMax-Hub-${pkgver}-mac-x64.dmg" | awk '{print $1}')"
 arm64_sha256="$(sha256sum "${tmpdir}/MiniMax-Hub-${pkgver}-mac-arm64.dmg" | awk '{print $1}')"
 
-perl -0pi \
-  -e "s/^pkgver=.*$/pkgver=${pkgver}/m" \
-  -e "s/sha256sums_x86_64=\\(\\n  '[0-9a-f]{64}'\\n\\)/sha256sums_x86_64=(\\n  '${x64_sha256}'\\n)/" \
-  -e "s/sha256sums_aarch64=\\(\\n  '[0-9a-f]{64}'\\n\\)/sha256sums_aarch64=(\\n  '${arm64_sha256}'\\n)/" \
+sed -i -E \
+  -e "s/^pkgver=.*/pkgver=${pkgver}/" \
+  -e "/^sha256sums_x86_64=\\('/s/'[0-9a-f]{64}'/'${x64_sha256}'/" \
+  -e "/^sha256sums_aarch64=\\('/s/'[0-9a-f]{64}'/'${arm64_sha256}'/" \
   "${PKGBUILD_PATH}"
 
 (
