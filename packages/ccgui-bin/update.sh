@@ -100,6 +100,8 @@ if [[ -z "${asset_name}" || "${asset_name}" == "null" || -z "${asset_url}" || "$
   exit 1
 fi
 
+pkgbuild_asset_url="${asset_url/\/download\/${tag_name}\//\/download\/v\$\{pkgver\}\/}"
+pkgbuild_asset_url="${pkgbuild_asset_url/${asset_name}/\$\{_appname\}_\$\{pkgver\}_amd64.AppImage}"
 license_name="LICENSE"
 license_url="https://raw.githubusercontent.com/zhukunpenglinyutong/desktop-cc-gui/${tag_name}/LICENSE"
 
@@ -134,7 +136,7 @@ provides=('ccgui')
 conflicts=('ccgui')
 options=('!strip')
 source=(
-  "\${_appname}_\${pkgver}_amd64.AppImage::${asset_url}"
+  "\${_appname}_\${pkgver}_amd64.AppImage::${pkgbuild_asset_url}"
   'LICENSE'
 )
 noextract=("\${_appname}_\${pkgver}_amd64.AppImage")
@@ -189,7 +191,7 @@ StartupNotify=true
 StartupWMClass=cc-gui
 Categories=Development;IDE;
 Keywords=AI;Claude Code;Codex;Gemini;Opencode;ccgui;
-X-AppImage-Version=${pkgver}
+X-AppImage-Version=\${pkgver}
 DESKTOP
 }
 EOF

@@ -105,7 +105,7 @@ provides=('keyviz')
 conflicts=('keyviz' 'keyviz-bin' 'keyviz-cn-bin')
 options=('!strip')
 source=(
-  "\${_srcdir}.tar.gz::${SOURCE_URL}"
+  "\${_srcdir}.tar.gz::https://codeload.github.com/duanluan/keyviz/tar.gz/\${_commit}"
 )
 sha256sums=(
   '${source_sha256}'

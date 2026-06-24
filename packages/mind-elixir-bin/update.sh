@@ -97,6 +97,8 @@ if [[ -z "${asset_name}" || "${asset_name}" == "null" || -z "${asset_url}" || "$
   exit 1
 fi
 
+pkgbuild_asset_url="${asset_url/\/download\/${tag_name}\//\/download\/app-v\$\{pkgver\}\/}"
+pkgbuild_asset_url="${pkgbuild_asset_url/${asset_name}/Mind.Elixir_\$\{pkgver\}_amd64.deb}"
 asset_sha256="$(sha256_for_asset "${asset_url}" "${asset_name}" "${asset_digest}")"
 
 if [[ "${current_pkgver}" == "${pkgver}" && "${current_pkgrel}" =~ ^[0-9]+$ ]]; then
@@ -124,7 +126,7 @@ depends=('gtk3' 'hicolor-icon-theme' 'webkit2gtk-4.1')
 provides=('mind-elixir')
 conflicts=('mind-elixir')
 options=('!strip')
-source=("Mind.Elixir_\${pkgver}_amd64.deb::${asset_url}")
+source=("Mind.Elixir_\${pkgver}_amd64.deb::${pkgbuild_asset_url}")
 sha256sums=('${asset_sha256}')
 
 package() {

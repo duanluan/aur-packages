@@ -35,6 +35,8 @@ if [[ -z "${asset_name}" || "${asset_name}" == "null" || -z "${asset_url}" || "$
   exit 1
 fi
 
+pkgbuild_asset_url="${asset_url/\/download\/${tag_name}\//\/download\/v\$\{pkgver\}\/}"
+pkgbuild_asset_url="${pkgbuild_asset_url/${asset_name}/\$\{_pkgname\}_\$\{pkgver\}_amd64.deb}"
 if [[ -n "${asset_digest}" && "${asset_digest}" != "null" ]]; then
   asset_sha256="${asset_digest#sha256:}"
 else
@@ -59,7 +61,7 @@ depends=('gtk3' 'webkit2gtk-4.1')
 provides=('wuyou-docs')
 conflicts=('wuyou-docs')
 options=('!strip')
-source=("\${_pkgname}_\${pkgver}_amd64.deb::${asset_url}")
+source=("\${_pkgname}_\${pkgver}_amd64.deb::${pkgbuild_asset_url}")
 sha256sums=('${asset_sha256}')
 
 package() {

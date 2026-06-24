@@ -32,7 +32,8 @@ pkgver="$(printf '%s\n' "${release_json}" | jq -r '.tag_name')"
 asset_name="$(printf '%s\n' "${release_json}" | jq -r '[.assets[] | select(.name == "Rebased-x86_64.AppImage")][0].name')"
 asset_url="$(printf '%s\n' "${release_json}" | jq -r '[.assets[] | select(.name == "Rebased-x86_64.AppImage")][0].browser_download_url')"
 asset_digest="$(printf '%s\n' "${release_json}" | jq -r '[.assets[] | select(.name == "Rebased-x86_64.AppImage")][0].digest')"
-source_line="source=(\"\${_pkgname}-\${pkgver}-\${CARCH}.AppImage::${asset_url}\")"
+pkgbuild_asset_url="${asset_url/\/download\/${pkgver}\//\/download\/\$\{pkgver\}\/}"
+source_line="source=(\"\${_pkgname}-\${pkgver}-\${CARCH}.AppImage::${pkgbuild_asset_url}\")"
 
 if [[ -z "${pkgver}" || "${pkgver}" == "null" ]]; then
   printf 'failed to resolve latest tag\n' >&2
@@ -79,7 +80,7 @@ optdepends=('xdg-utils: open URLs from the IDE')
 provides=('rebased')
 conflicts=('rebased')
 options=('!strip')
-source=("\${_pkgname}-\${pkgver}-\${CARCH}.AppImage::${asset_url}")
+source=("\${_pkgname}-\${pkgver}-\${CARCH}.AppImage::${pkgbuild_asset_url}")
 sha256sums=('${asset_sha256}')
 
 package() {
@@ -109,7 +110,7 @@ SCRIPT
   install -Dm644 "\${extract_dir}/squashfs-root/usr/LICENSE.txt" "\${pkgdir}/usr/share/licenses/\${pkgname}/LICENSE.txt"
   install -Dm644 "\${extract_dir}/squashfs-root/usr/NOTICE.txt" "\${pkgdir}/usr/share/licenses/\${pkgname}/NOTICE.txt"
 
-  install -Dm644 /dev/stdin "\${pkgdir}/usr/share/applications/rebased.desktop" <<'DESKTOP'
+  install -Dm644 /dev/stdin "\${pkgdir}/usr/share/applications/rebased.desktop" <<DESKTOP
 [Desktop Entry]
 Type=Application
 Version=1.0
@@ -122,7 +123,7 @@ StartupNotify=true
 StartupWMClass=jetbrains-rebased
 Categories=Development;IDE;VersionControl;
 Keywords=git;vcs;jetbrains;
-X-AppImage-Version=${pkgver}
+X-AppImage-Version=\${pkgver}
 DESKTOP
 }
 EOF

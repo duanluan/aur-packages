@@ -85,6 +85,8 @@ if [[ -z "${asset_name}" || "${asset_name}" == "null" || -z "${asset_url}" || "$
   exit 1
 fi
 
+pkgbuild_asset_url="${asset_url/\/download\/${tag_name}\//\/download\/v\$\{pkgver\}\/}"
+pkgbuild_asset_url="${pkgbuild_asset_url/${asset_name}/\$\{_appname\}_\$\{pkgver\}_amd64.AppImage}"
 license_name="LICENSE"
 license_url="https://raw.githubusercontent.com/MrShellad/pilauncher/main/LICENSE"
 
@@ -119,7 +121,7 @@ provides=('pilauncher')
 conflicts=('pilauncher')
 options=('!strip')
 source=(
-  "\${_appname}_\${pkgver}_amd64.AppImage::${asset_url}"
+  "\${_appname}_\${pkgver}_amd64.AppImage::${pkgbuild_asset_url}"
   'LICENSE'
 )
 noextract=("\${_appname}_\${pkgver}_amd64.AppImage")
@@ -171,7 +173,7 @@ StartupNotify=true
 StartupWMClass=PiLauncher
 Categories=Game;
 Keywords=Minecraft;Launcher;PiLauncher;
-X-AppImage-Version=${pkgver}
+X-AppImage-Version=\${pkgver}
 DESKTOP
 
   while IFS= read -r icon_source; do
