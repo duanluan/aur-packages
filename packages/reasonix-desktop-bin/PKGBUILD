@@ -1,6 +1,6 @@
 # Maintainer: duanluan <duanluan@outlook.com>
 
-pkgname=reasonix-desktop-deb
+pkgname=reasonix-desktop-bin
 _pkgname=reasonix-desktop
 pkgver=1.11.1
 pkgrel=1

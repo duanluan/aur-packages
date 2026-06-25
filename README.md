@@ -16,6 +16,7 @@ User-facing notes for the AUR packages maintained in this repository.
 - `mastergo-desktop-bin`: MasterGo desktop app repackaged from the official macOS release
 - `pilauncher-bin`: The prebuilt Linux desktop release of PiLauncher
 - `minimax-hub-bin`: MiniMax Hub desktop app repackaged from the official macOS release
+- `reasonix-desktop-bin`: Reasonix desktop app repackaged from the official .deb release
 - `emeditor-wine`: EmEditor running through a dedicated Wine prefix
 
 ## Install
@@ -35,6 +36,7 @@ paru -S zcode-desktop-bin
 paru -S mastergo-desktop-bin
 paru -S pilauncher-bin
 paru -S minimax-hub-bin
+paru -S reasonix-desktop-bin
 paru -S emeditor-wine
 ```
 
@@ -53,6 +55,7 @@ yay -S zcode-desktop-bin
 yay -S mastergo-desktop-bin
 yay -S pilauncher-bin
 yay -S minimax-hub-bin
+yay -S reasonix-desktop-bin
 yay -S emeditor-wine
 ```
 
@@ -78,6 +81,7 @@ makepkg -si
 - [mastergo-desktop-bin](packages/mastergo-desktop-bin/README.md)
 - [pilauncher-bin](packages/pilauncher-bin/README.md)
 - [minimax-hub-bin](packages/minimax-hub-bin/README.md)
+- [reasonix-desktop-bin](packages/reasonix-desktop-bin/README.md)
 - [emeditor-wine](packages/emeditor-wine/README.md)
 
 ## Auto Update
@@ -96,6 +100,7 @@ packages weekly:
 - `mastergo-desktop-bin`
 - `pilauncher-bin`
 - `minimax-hub-bin`
+- `reasonix-desktop-bin`
 
 It regenerates package files, commits changes back to this repository, and then
 publishes changed AUR files to AUR.

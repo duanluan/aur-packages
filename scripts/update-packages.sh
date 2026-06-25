@@ -18,7 +18,7 @@ DEFAULT_PACKAGES=(
   mastergo-desktop-bin
   pilauncher-bin
   minimax-hub-bin
-  reasonix-desktop-deb
+  reasonix-desktop-bin
 )
 
 if [[ "$#" -gt 0 ]]; then

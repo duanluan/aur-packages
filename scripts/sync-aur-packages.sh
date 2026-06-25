@@ -18,7 +18,7 @@ DEFAULT_PACKAGES=(
   mastergo-desktop-bin
   pilauncher-bin
   minimax-hub-bin
-  reasonix-desktop-deb
+  reasonix-desktop-bin
 )
 
 AUR_SSH_KEY="${AUR_SSH_KEY:-${HOME}/.ssh/aur_actions}"

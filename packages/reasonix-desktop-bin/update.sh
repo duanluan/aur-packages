@@ -56,7 +56,7 @@ asset_sha256="$(sha256sum "${tmpdir}/${asset_name}" | awk '{print $1}')"
 cat > "${PKGBUILD_PATH}" <<EOF
 # Maintainer: duanluan <duanluan@outlook.com>
 
-pkgname=reasonix-desktop-deb
+pkgname=reasonix-desktop-bin
 _pkgname=reasonix-desktop
 pkgver=${pkgver}
 pkgrel=1
