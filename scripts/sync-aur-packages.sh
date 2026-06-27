@@ -19,6 +19,7 @@ DEFAULT_PACKAGES=(
   pilauncher-bin
   minimax-hub-bin
   reasonix-desktop-bin
+  reeden-bin
 )
 
 AUR_SSH_KEY="${AUR_SSH_KEY:-${HOME}/.ssh/aur_actions}"

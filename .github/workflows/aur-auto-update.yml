@@ -23,6 +23,7 @@ on:
           - pilauncher-bin
           - minimax-hub-bin
           - reasonix-desktop-deb
+          - reeden-bin
   push:
     paths:
       - ".github/workflows/aur-auto-update.yml"
@@ -40,6 +41,7 @@ on:
       - "packages/pilauncher-bin/**"
       - "packages/minimax-hub-bin/**"
       - "packages/reasonix-desktop-deb/**"
+      - "packages/reeden-bin/**"
   schedule:
     - cron: "13 0 * * 1"
 

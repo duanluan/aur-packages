@@ -19,6 +19,7 @@ DEFAULT_PACKAGES=(
   pilauncher-bin
   minimax-hub-bin
   reasonix-desktop-bin
+  reeden-bin
 )
 
 if [[ "$#" -gt 0 ]]; then
