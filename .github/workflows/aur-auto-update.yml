@@ -24,6 +24,7 @@ on:
           - minimax-hub-bin
           - reasonix-desktop-deb
           - reeden-bin
+          - so-novel-bin
   push:
     paths:
       - ".github/workflows/aur-auto-update.yml"
@@ -42,6 +43,7 @@ on:
       - "packages/minimax-hub-bin/**"
       - "packages/reasonix-desktop-deb/**"
       - "packages/reeden-bin/**"
+      - "packages/so-novel-bin/**"
   schedule:
     - cron: "13 0 * * 1"
 

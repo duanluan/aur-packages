@@ -20,6 +20,7 @@ DEFAULT_PACKAGES=(
   minimax-hub-bin
   reasonix-desktop-bin
   reeden-bin
+  so-novel-bin
 )
 
 AUR_SSH_KEY="${AUR_SSH_KEY:-${HOME}/.ssh/aur_actions}"

@@ -18,6 +18,7 @@ User-facing notes for the AUR packages maintained in this repository.
 - `minimax-hub-bin`: MiniMax Hub desktop app repackaged from the official macOS release
 - `reasonix-desktop-bin`: Reasonix desktop app repackaged from the official .deb release
 - `reeden-bin`: Reeden desktop app repackaged from the official .deb release
+- `so-novel-bin`: So Novel web content extraction and ebook export tool
 - `emeditor-wine`: EmEditor running through a dedicated Wine prefix
 
 ## Install
@@ -39,6 +40,7 @@ paru -S pilauncher-bin
 paru -S minimax-hub-bin
 paru -S reasonix-desktop-bin
 paru -S reeden-bin
+paru -S so-novel-bin
 paru -S emeditor-wine
 ```
 
@@ -59,6 +61,7 @@ yay -S pilauncher-bin
 yay -S minimax-hub-bin
 yay -S reasonix-desktop-bin
 yay -S reeden-bin
+yay -S so-novel-bin
 yay -S emeditor-wine
 ```
 
@@ -86,6 +89,7 @@ makepkg -si
 - [minimax-hub-bin](packages/minimax-hub-bin/README.md)
 - [reasonix-desktop-bin](packages/reasonix-desktop-bin/README.md)
 - [reeden-bin](packages/reeden-bin/README.md)
+- [so-novel-bin](packages/so-novel-bin/README.md)
 - [emeditor-wine](packages/emeditor-wine/README.md)
 
 ## Auto Update
@@ -106,6 +110,7 @@ packages weekly:
 - `minimax-hub-bin`
 - `reasonix-desktop-bin`
 - `reeden-bin`
+- `so-novel-bin`
 
 It regenerates package files, commits changes back to this repository, and then
 publishes changed AUR files to AUR.
