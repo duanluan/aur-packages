@@ -20,6 +20,7 @@ DEFAULT_PACKAGES=(
   minimax-hub-bin
   reasonix-desktop-bin
   reeden-bin
+  alexandria-bin
   so-novel-bin
 )
 
