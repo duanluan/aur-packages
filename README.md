@@ -12,7 +12,7 @@ User-facing notes for the AUR packages maintained in this repository.
 - `mind-elixir-bin`: The prebuilt Linux desktop release of Mind Elixir
 - `ccgui-bin`: The prebuilt Linux desktop release of ccgui
 - `codex-plus-plus`: Codex++ auto-injector bridge for openai-codex-desktop
-- `zcode-desktop-bin`: ZCode desktop app repackaged from the official macOS release
+- `zcode-desktop-bin`: ZCode desktop app repackaged from the official Linux release
 - `mastergo-desktop-bin`: MasterGo desktop app repackaged from the official macOS release
 - `pilauncher-bin`: The prebuilt Linux desktop release of PiLauncher
 - `minimax-hub-bin`: MiniMax Hub desktop app repackaged from the official macOS release

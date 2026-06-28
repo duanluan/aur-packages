@@ -1,6 +1,6 @@
 # zcode-desktop-bin
 
-`zcode-desktop-bin` repackages the official macOS ZCode desktop release for
+`zcode-desktop-bin` repackages the official Linux ZCode desktop release for
 Arch Linux.
 
 ## Install
@@ -26,9 +26,7 @@ makepkg -si
 
 ## Notes
 
+- The package installs the official Linux x64 `.deb` build under `/opt/ZCode`.
 - The package installs the `zcode` launcher.
-- The official macOS package uses Electron 41, so this package runs it with
-  Arch Linux's `electron41`.
-- The macOS `node-pty` native module is rebuilt for Linux during packaging.
-- The bundled macOS `rg` binary is replaced with Arch Linux's `ripgrep`.
-- The bundled ZCode agent is launched through Electron's Node runtime.
+- The official Linux package bundles its own Electron runtime.
+- The install hook keeps `chrome-sandbox` permissions aligned with local user namespace support.
