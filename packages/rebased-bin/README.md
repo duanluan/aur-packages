@@ -1,6 +1,6 @@
 # rebased-bin
 
-`rebased-bin` packages the official x86_64 AppImage release of
+`rebased-bin` packages the prebuilt Linux release of
 [Rebased](https://github.com/DetachHead/rebased) for Arch Linux.
 
 Rebased is a standalone Git client built on the IntelliJ platform.
@@ -37,6 +37,5 @@ rebased
 
 ## Notes
 
-- The package installs the upstream AppImage under `/opt/rebased`.
-- The launcher runs the AppImage directly to preserve upstream Linux behavior.
+- The package installs a desktop entry and application icon.
 - Configuration files are initialized on first launch.

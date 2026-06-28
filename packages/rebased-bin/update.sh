@@ -29,11 +29,11 @@ fi
 
 release_json="$(curl -fsSL "${RELEASE_API_URL}")"
 pkgver="$(printf '%s\n' "${release_json}" | jq -r '.tag_name')"
-asset_name="$(printf '%s\n' "${release_json}" | jq -r '[.assets[] | select(.name == "Rebased-x86_64.AppImage")][0].name')"
-asset_url="$(printf '%s\n' "${release_json}" | jq -r '[.assets[] | select(.name == "Rebased-x86_64.AppImage")][0].browser_download_url')"
-asset_digest="$(printf '%s\n' "${release_json}" | jq -r '[.assets[] | select(.name == "Rebased-x86_64.AppImage")][0].digest')"
+asset_name="$(printf '%s\n' "${release_json}" | jq -r '[.assets[] | select(.name == "rebased.tar.gz")][0].name')"
+asset_url="$(printf '%s\n' "${release_json}" | jq -r '[.assets[] | select(.name == "rebased.tar.gz")][0].browser_download_url')"
+asset_digest="$(printf '%s\n' "${release_json}" | jq -r '[.assets[] | select(.name == "rebased.tar.gz")][0].digest')"
 pkgbuild_asset_url="${asset_url/\/download\/${pkgver}\//\/download\/\$\{pkgver\}\/}"
-source_line="source=(\"\${_pkgname}-\${pkgver}-\${CARCH}.AppImage::${pkgbuild_asset_url}\")"
+source_line="source=(\"\${_pkgname}-\${pkgver}.tar.gz::${pkgbuild_asset_url}\")"
 
 if [[ -z "${pkgver}" || "${pkgver}" == "null" ]]; then
   printf 'failed to resolve latest tag\n' >&2
@@ -41,7 +41,7 @@ if [[ -z "${pkgver}" || "${pkgver}" == "null" ]]; then
 fi
 
 if [[ -z "${asset_name}" || "${asset_name}" == "null" || -z "${asset_url}" || "${asset_url}" == "null" ]]; then
-  printf 'failed to resolve AppImage asset\n' >&2
+  printf 'failed to resolve source tarball asset\n' >&2
   exit 1
 fi
 
@@ -70,7 +70,7 @@ cat > "${PKGBUILD_PATH}" <<EOF
 pkgname=rebased-bin
 _pkgname=rebased
 pkgver=${pkgver}
-pkgrel=${pkgrel}
+pkgrel=1
 pkgdesc='Standalone JetBrains-based Git client (prebuilt binary)'
 arch=('x86_64')
 url='https://github.com/DetachHead/rebased'
@@ -80,37 +80,36 @@ optdepends=('xdg-utils: open URLs from the IDE')
 provides=('rebased')
 conflicts=('rebased')
 options=('!strip')
-source=("\${_pkgname}-\${pkgver}-\${CARCH}.AppImage::${pkgbuild_asset_url}")
+source=("\${_pkgname}-\${pkgver}.tar.gz::${pkgbuild_asset_url}")
 sha256sums=('${asset_sha256}')
 
 package() {
-  local appimage="\${srcdir}/\${_pkgname}-\${pkgver}-\${CARCH}.AppImage"
-  local extract_dir="\${srcdir}/appimage-extract"
+  source_root=""
 
-  chmod +x "\${appimage}"
-  rm -rf "\${extract_dir}"
-  install -dm755 "\${extract_dir}"
+  for candidate in "\${srcdir}"/idea-IC-* "\${srcdir}"/ideaIC-* "\${srcdir}"/rebased* "\${srcdir}"/Rebased*; do
+    if [[ -d "\${candidate}" ]]; then
+      source_root="\${candidate}"
+      break
+    fi
+  done
 
-  (
-    cd "\${extract_dir}"
-    APPIMAGE_EXTRACT_AND_RUN=1 "\${appimage}" --appimage-extract >/dev/null
-  )
+  if [[ -z "\${source_root}" ]]; then
+    printf 'failed to locate extracted source tree\n' >&2
+    return 1
+  fi
 
   install -dm755 "\${pkgdir}/opt/\${_pkgname}"
-  install -Dm755 "\${appimage}" "\${pkgdir}/opt/\${_pkgname}/Rebased-x86_64.AppImage"
+  cp -a "\${source_root}/." "\${pkgdir}/opt/\${_pkgname}/"
 
-  install -Dm755 /dev/stdin "\${pkgdir}/usr/bin/rebased" <<'SCRIPT'
-#!/bin/sh
-exec env APPIMAGE_EXTRACT_AND_RUN=1 APPIMAGELAUNCHER_DISABLE=1 \\
-  /opt/rebased/Rebased-x86_64.AppImage "\$@"
-SCRIPT
+  install -dm755 "\${pkgdir}/usr/bin"
+  ln -s "/opt/\${_pkgname}/bin/idea" "\${pkgdir}/usr/bin/rebased"
 
-  install -Dm644 "\${extract_dir}/squashfs-root/usr/bin/idea.svg" "\${pkgdir}/usr/share/icons/hicolor/scalable/apps/rebased.svg"
-  install -Dm644 "\${extract_dir}/squashfs-root/rebased.png" "\${pkgdir}/usr/share/pixmaps/rebased.png"
-  install -Dm644 "\${extract_dir}/squashfs-root/usr/LICENSE.txt" "\${pkgdir}/usr/share/licenses/\${pkgname}/LICENSE.txt"
-  install -Dm644 "\${extract_dir}/squashfs-root/usr/NOTICE.txt" "\${pkgdir}/usr/share/licenses/\${pkgname}/NOTICE.txt"
+  install -Dm644 "\${source_root}/bin/idea.svg" "\${pkgdir}/usr/share/icons/hicolor/scalable/apps/rebased.svg"
+  install -Dm644 "\${source_root}/bin/idea.png" "\${pkgdir}/usr/share/pixmaps/rebased.png"
+  install -Dm644 "\${source_root}/LICENSE.txt" "\${pkgdir}/usr/share/licenses/\${pkgname}/LICENSE.txt"
+  install -Dm644 "\${source_root}/NOTICE.txt" "\${pkgdir}/usr/share/licenses/\${pkgname}/NOTICE.txt"
 
-  install -Dm644 /dev/stdin "\${pkgdir}/usr/share/applications/rebased.desktop" <<DESKTOP
+  install -Dm644 /dev/stdin "\${pkgdir}/usr/share/applications/rebased.desktop" <<'DESKTOP'
 [Desktop Entry]
 Type=Application
 Version=1.0
@@ -123,7 +122,6 @@ StartupNotify=true
 StartupWMClass=jetbrains-rebased
 Categories=Development;IDE;VersionControl;
 Keywords=git;vcs;jetbrains;
-X-AppImage-Version=\${pkgver}
 DESKTOP
 }
 EOF
@@ -145,7 +143,7 @@ pkgbase = rebased-bin
 	provides = rebased
 	conflicts = rebased
 	options = !strip
-	source = rebased-${pkgver}-x86_64.AppImage::${asset_url}
+	source = rebased-${pkgver}.tar.gz::${asset_url}
 	sha256sums = ${asset_sha256}
 
 pkgname = rebased-bin

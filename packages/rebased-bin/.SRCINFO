@@ -14,7 +14,7 @@ pkgbase = rebased-bin
 	provides = rebased
 	conflicts = rebased
 	options = !strip
-	source = rebased-1.1.4-x86_64.AppImage::https://github.com/DetachHead/rebased/releases/download/1.1.4/Rebased-x86_64.AppImage
-	sha256sums = 38c242808e3fdb109d92f90a221d03a2fce8ad0e5e1175e08b5bbd9f212e8a3e
+	source = rebased-1.1.4.tar.gz::https://github.com/DetachHead/rebased/releases/download/1.1.4/rebased.tar.gz
+	sha256sums = f3d8f6255f4e31ee51e9df99040e76cd09949301754022ddee0ba9de1b0e1413
 
 pkgname = rebased-bin
