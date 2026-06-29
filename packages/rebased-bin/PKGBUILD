@@ -1,6 +1,8 @@
 # Maintainer: duanluan <duanluan@outlook.com>
+# Contributor: seiuneko <chfsefefgesfen foxmail com>
 
-pkgname=rebased-bin
+pkgbase=rebased-bin
+pkgname=(rebased-bin rebased-lang-pack-zh rebased-lang-pack-ja rebased-lang-pack-ko)
 _pkgname=rebased
 pkgver=1.1.4
 pkgrel=1
@@ -9,14 +11,32 @@ arch=('x86_64')
 url='https://github.com/DetachHead/rebased'
 license=('Apache-2.0')
 depends=('fontconfig' 'giflib' 'hicolor-icon-theme' 'libdbusmenu-glib' 'ttf-font')
-optdepends=('xdg-utils: open URLs from the IDE')
-provides=('rebased')
-conflicts=('rebased')
+_idea_ver=2026.1.3
 options=('!strip')
-source=("${_pkgname}-${pkgver}.tar.gz::https://github.com/DetachHead/rebased/releases/download/${pkgver}/rebased.tar.gz")
-sha256sums=('f3d8f6255f4e31ee51e9df99040e76cd09949301754022ddee0ba9de1b0e1413')
+source=("${_pkgname}-${pkgver}.tar.gz::https://github.com/DetachHead/rebased/releases/download/${pkgver}/rebased.tar.gz"
+        "ideaIU-${_idea_ver}.tar.gz::https://download.jetbrains.com/idea/ideaIU-${_idea_ver}.tar.gz")
+sha256sums=('f3d8f6255f4e31ee51e9df99040e76cd09949301754022ddee0ba9de1b0e1413'
+            'a6f049716da1d09d9e0ec1500c60bf01a5ff8a0fe2419178dd1ff2fdb2b77563')
+noextract=("ideaIU-${_idea_ver}.tar.gz")
 
-package() {
+_idea_dir=''
+
+prepare() {
+  bsdtar -xf "${srcdir}/ideaIU-${_idea_ver}.tar.gz" \
+    --strip-components=2 \
+    "*/localization-zh" \
+    "*/localization-ja" \
+    "*/localization-ko"
+}
+
+package_rebased-bin() {
+  optdepends=('xdg-utils: open URLs from the IDE'
+               'rebased-lang-pack-zh: Chinese language pack'
+               'rebased-lang-pack-ja: Japanese language pack'
+               'rebased-lang-pack-ko: Korean language pack')
+  provides=('rebased')
+  conflicts=('rebased')
+
   source_root=""
 
   for candidate in "${srcdir}"/idea-IC-* "${srcdir}"/ideaIC-* "${srcdir}"/rebased* "${srcdir}"/Rebased*; do
@@ -39,8 +59,8 @@ package() {
 
   install -Dm644 "${source_root}/bin/idea.svg" "${pkgdir}/usr/share/icons/hicolor/scalable/apps/rebased.svg"
   install -Dm644 "${source_root}/bin/idea.png" "${pkgdir}/usr/share/pixmaps/rebased.png"
-  install -Dm644 "${source_root}/LICENSE.txt" "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE.txt"
-  install -Dm644 "${source_root}/NOTICE.txt" "${pkgdir}/usr/share/licenses/${pkgname}/NOTICE.txt"
+  install -Dm644 "${source_root}/LICENSE.txt" "${pkgdir}/usr/share/licenses/${_pkgname}/LICENSE.txt"
+  install -Dm644 "${source_root}/NOTICE.txt" "${pkgdir}/usr/share/licenses/${_pkgname}/NOTICE.txt"
 
   install -Dm644 /dev/stdin "${pkgdir}/usr/share/applications/rebased.desktop" <<'DESKTOP'
 [Desktop Entry]
@@ -56,4 +76,38 @@ StartupWMClass=jetbrains-rebased
 Categories=Development;IDE;VersionControl;
 Keywords=git;vcs;jetbrains;
 DESKTOP
+}
+
+_install_lang-pack() {
+  local lang="$1"
+
+  install -dm755 "${pkgdir}/opt/${_pkgname}/third-party-plugins"
+  cp -a "${srcdir}/localization-${lang}" "${pkgdir}/opt/${_pkgname}/third-party-plugins/"
+}
+
+package_rebased-lang-pack-zh() {
+  pkgdesc="Chinese language pack for Rebased"
+  arch=('any')
+  url="https://www.jetbrains.com/idea/"
+  license=('custom:commercial')
+  depends=("rebased-bin=${pkgver}")
+  _install_lang-pack zh
+}
+
+package_rebased-lang-pack-ja() {
+  pkgdesc="Japanese language pack for Rebased"
+  arch=('any')
+  url="https://www.jetbrains.com/idea/"
+  license=('custom:commercial')
+  depends=("rebased-bin=${pkgver}")
+  _install_lang-pack ja
+}
+
+package_rebased-lang-pack-ko() {
+  pkgdesc="Korean language pack for Rebased"
+  arch=('any')
+  url="https://www.jetbrains.com/idea/"
+  license=('custom:commercial')
+  depends=("rebased-bin=${pkgver}")
+  _install_lang-pack ko
 }

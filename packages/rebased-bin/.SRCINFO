@@ -10,11 +10,38 @@ pkgbase = rebased-bin
 	depends = hicolor-icon-theme
 	depends = libdbusmenu-glib
 	depends = ttf-font
-	optdepends = xdg-utils: open URLs from the IDE
-	provides = rebased
-	conflicts = rebased
+	noextract = ideaIU-2026.1.3.tar.gz
 	options = !strip
 	source = rebased-1.1.4.tar.gz::https://github.com/DetachHead/rebased/releases/download/1.1.4/rebased.tar.gz
+	source = ideaIU-2026.1.3.tar.gz::https://download.jetbrains.com/idea/ideaIU-2026.1.3.tar.gz
 	sha256sums = f3d8f6255f4e31ee51e9df99040e76cd09949301754022ddee0ba9de1b0e1413
+	sha256sums = a6f049716da1d09d9e0ec1500c60bf01a5ff8a0fe2419178dd1ff2fdb2b77563
 
 pkgname = rebased-bin
+	optdepends = xdg-utils: open URLs from the IDE
+	optdepends = rebased-lang-pack-zh: Chinese language pack
+	optdepends = rebased-lang-pack-ja: Japanese language pack
+	optdepends = rebased-lang-pack-ko: Korean language pack
+	provides = rebased
+	conflicts = rebased
+
+pkgname = rebased-lang-pack-zh
+	pkgdesc = Chinese language pack for Rebased
+	url = https://www.jetbrains.com/idea/
+	arch = any
+	license = custom:commercial
+	depends = rebased-bin=1.1.4
+
+pkgname = rebased-lang-pack-ja
+	pkgdesc = Japanese language pack for Rebased
+	url = https://www.jetbrains.com/idea/
+	arch = any
+	license = custom:commercial
+	depends = rebased-bin=1.1.4
+
+pkgname = rebased-lang-pack-ko
+	pkgdesc = Korean language pack for Rebased
+	url = https://www.jetbrains.com/idea/
+	arch = any
+	license = custom:commercial
+	depends = rebased-bin=1.1.4
