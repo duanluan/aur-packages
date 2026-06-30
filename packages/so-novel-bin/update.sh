@@ -15,9 +15,17 @@ require_command() {
 }
 
 require_command awk
-require_command gh
+require_command curl
+require_command jq
 require_command makepkg
 require_command sha256sum
+
+latest_release_tag() {
+  local headers
+
+  headers="$(curl -fsSLI "https://github.com/${REPO}/releases/latest")"
+  printf '%s\n' "${headers}" | sed -nE 's|^[Ll]ocation: .*/releases/tag/([^[:space:]\r]+).*|\1|p' | tail -n1
+}
 
 current_pkgver=""
 current_pkgrel=""
@@ -30,7 +38,22 @@ if [[ -f "${PKGBUILD_PATH}" ]]; then
   current_sha256_arm64="$(awk -F"'" '/^sha256sums_aarch64=/ {print $2; exit}' "${PKGBUILD_PATH}")"
 fi
 
-tag_name="$(gh release list -R "${REPO}" --limit 1 --json tagName --jq '.[0].tagName')"
+curl_headers=(
+  -H 'Accept: application/vnd.github+json'
+  -H 'X-GitHub-Api-Version: 2022-11-28'
+)
+
+if [[ -n "${GITHUB_TOKEN:-}" ]]; then
+  curl_headers+=(-H "Authorization: Bearer ${GITHUB_TOKEN}")
+fi
+
+release_json=""
+if release_json="$(curl -fsSL "${curl_headers[@]}" "https://api.github.com/repos/${REPO}/releases/latest")"; then
+  tag_name="$(printf '%s\n' "${release_json}" | jq -r '.tag_name')"
+else
+  tag_name="$(latest_release_tag)"
+fi
+
 pkgver="${tag_name#v}"
 
 if [[ -z "${tag_name}" || -z "${pkgver}" || "${tag_name}" == "${pkgver}" ]]; then
@@ -41,8 +64,26 @@ fi
 tmpdir="$(mktemp -d)"
 trap 'rm -rf "${tmpdir}"' EXIT
 
-gh release download "${tag_name}" -R "${REPO}" -p 'sonovel-linux_x64.tar.gz' -D "${tmpdir}" >/dev/null
-gh release download "${tag_name}" -R "${REPO}" -p 'sonovel-linux_arm64.tar.gz' -D "${tmpdir}" >/dev/null
+if [[ -n "${release_json}" ]]; then
+  x64_asset_url="$(printf '%s\n' "${release_json}" | jq -r '.assets[] | select(.name == "sonovel-linux_x64.tar.gz") | .browser_download_url' | head -n1)"
+  arm64_asset_url="$(printf '%s\n' "${release_json}" | jq -r '.assets[] | select(.name == "sonovel-linux_arm64.tar.gz") | .browser_download_url' | head -n1)"
+else
+  x64_asset_url="https://github.com/${REPO}/releases/download/${tag_name}/sonovel-linux_x64.tar.gz"
+  arm64_asset_url="https://github.com/${REPO}/releases/download/${tag_name}/sonovel-linux_arm64.tar.gz"
+fi
+
+if [[ -z "${x64_asset_url}" || "${x64_asset_url}" == "null" ]]; then
+  printf 'failed to resolve release asset: sonovel-linux_x64.tar.gz\n' >&2
+  exit 1
+fi
+
+if [[ -z "${arm64_asset_url}" || "${arm64_asset_url}" == "null" ]]; then
+  printf 'failed to resolve release asset: sonovel-linux_arm64.tar.gz\n' >&2
+  exit 1
+fi
+
+curl -fL --retry 5 --retry-all-errors "${x64_asset_url}" -o "${tmpdir}/sonovel-linux_x64.tar.gz" >/dev/null 2>&1
+curl -fL --retry 5 --retry-all-errors "${arm64_asset_url}" -o "${tmpdir}/sonovel-linux_arm64.tar.gz" >/dev/null 2>&1
 
 sha256_x64="$(sha256sum "${tmpdir}/sonovel-linux_x64.tar.gz" | awk '{print $1}')"
 sha256_arm64="$(sha256sum "${tmpdir}/sonovel-linux_arm64.tar.gz" | awk '{print $1}')"
