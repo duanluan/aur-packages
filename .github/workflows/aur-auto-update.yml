@@ -11,6 +11,7 @@ on:
         options:
           - all
           - rebased-bin
+          - rebased-zh-bin
           - keyviz-zh-bin
           - emeditor-wine
           - navicat17-premium-cs
@@ -31,6 +32,7 @@ on:
       - ".github/workflows/aur-auto-update.yml"
       - "scripts/**"
       - "packages/rebased-bin/**"
+      - "packages/rebased-zh-bin/**"
       - "packages/keyviz-zh-bin/**"
       - "packages/emeditor-wine/**"
       - "packages/navicat17-premium-cs/**"

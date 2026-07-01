@@ -7,6 +7,7 @@ REPO_ROOT="$(cd -- "${SCRIPT_DIR}/.." && pwd)"
 
 DEFAULT_PACKAGES=(
   rebased-bin
+  rebased-zh-bin
   keyviz-zh-bin
   emeditor-wine
   navicat17-premium-cs
