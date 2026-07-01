@@ -62,7 +62,7 @@ jobs:
     steps:
       - name: Install dependencies
         run: |
-          pacman -Syu --noconfirm --needed base-devel curl git jq openssh ripgrep
+          pacman -Syu --noconfirm --needed base-devel curl git jq openssh ripgrep unzip zip
           useradd -m builder
 
       - name: Checkout
