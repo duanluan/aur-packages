@@ -1,8 +1,10 @@
 # rebased-zh-bin
 
-`rebased-zh-bin` packages the official Rebased Linux tarball and bundles a Chinese language pack generated for the Rebased IntelliJ build.
+`rebased-zh-bin` packages the Chinese language pack generated for Rebased and
+depends on `rebased-bin`.
 
-The launcher copies the bundled language pack to the current user's Rebased data directory before starting Rebased.
+`rebased-bin` copies the installed language pack into the current user's
+Rebased data directory before starting Rebased.
 
 ## Refresh language pack
 
@@ -16,8 +18,4 @@ curl -fsSL https://raw.githubusercontent.com/duanluan/shell-scripts/main/prepare
 paru -S rebased-zh-bin
 ```
 
-## Launch
-
-```bash
-rebased
-```
+Start Rebased with the `rebased` command from `rebased-bin`.
