@@ -31,6 +31,13 @@ download_file() {
   curl -fL --retry 5 --retry-delay 2 --retry-all-errors -o "${output_path}" "${url}"
 }
 
+current_pkgver=""
+current_pkgrel=""
+if [[ -f "${PKGBUILD_PATH}" ]]; then
+  current_pkgver="$(sed -n 's/^pkgver=//p' "${PKGBUILD_PATH}" | head -n1)"
+  current_pkgrel="$(sed -n 's/^pkgrel=//p' "${PKGBUILD_PATH}" | head -n1)"
+fi
+
 [[ -f "${PLUGIN_SOURCE_PATH}" ]] || {
   printf 'missing plugin source: %s\n' "${PLUGIN_SOURCE_PATH}" >&2
   exit 1
@@ -38,6 +45,11 @@ download_file() {
 
 release_json="$(curl -fsSL --retry 5 --retry-delay 2 --retry-all-errors "${RELEASE_API_URL}")"
 pkgver="$(printf '%s\n' "${release_json}" | jq -r '.tag_name')"
+if [[ "${pkgver}" == "${current_pkgver}" && -n "${current_pkgrel}" ]]; then
+  pkgrel="${current_pkgrel}"
+else
+  pkgrel=1
+fi
 asset_url="$(printf '%s\n' "${release_json}" | jq -r '[.assets[] | select(.name == "rebased.tar.gz")][0].browser_download_url')"
 asset_digest="$(printf '%s\n' "${release_json}" | jq -r '[.assets[] | select(.name == "rebased.tar.gz")][0].digest')"
 asset_sha256="${asset_digest#sha256:}"
@@ -66,7 +78,7 @@ cat > "${PKGBUILD_PATH}" <<EOF
 pkgname=rebased-zh-bin
 _pkgname=rebased
 pkgver=${pkgver}
-pkgrel=1
+pkgrel=${pkgrel}
 pkgdesc='Standalone JetBrains-based Git client with bundled Chinese language pack'
 arch=('x86_64')
 url='https://github.com/DetachHead/rebased'
@@ -98,7 +110,7 @@ package() {
 set -eu
 
 plugin_src="/opt/rebased/plugins/localization-zh/lib/localization-zh.jar"
-plugin_dst="\${XDG_DATA_HOME:-\${HOME}/.local/share}/JetBrains/IdeaIC1.1/localization-zh.jar"
+plugin_dst="\${XDG_DATA_HOME:-\${HOME}/.local/share}/detachhead/IdeaIC1.1/localization-zh.jar"
 
 if [ -r "\${plugin_src}" ]; then
   mkdir -p "\$(dirname "\${plugin_dst}")"
