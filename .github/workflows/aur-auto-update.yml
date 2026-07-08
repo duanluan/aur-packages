@@ -10,6 +10,8 @@ on:
         type: choice
         options:
           - all
+          - daily
+          - weekly
           - rebased-bin
           - rebased-zh-bin
           - keyviz-zh-bin
@@ -23,7 +25,7 @@ on:
           - mastergo-desktop-bin
           - pilauncher-bin
           - minimax-hub-bin
-          - reasonix-desktop-deb
+          - reasonix-desktop-bin
           - reeden-bin
           - alexandria-bin
           - so-novel-bin
@@ -44,11 +46,12 @@ on:
       - "packages/mastergo-desktop-bin/**"
       - "packages/pilauncher-bin/**"
       - "packages/minimax-hub-bin/**"
-      - "packages/reasonix-desktop-deb/**"
+      - "packages/reasonix-desktop-bin/**"
       - "packages/reeden-bin/**"
       - "packages/alexandria-bin/**"
       - "packages/so-novel-bin/**"
   schedule:
+    - cron: "43 0 * * *"
     - cron: "13 0 * * 1"
 
 permissions:
@@ -96,36 +99,122 @@ jobs:
           runuser -u builder -- git config --global user.name "duanluan"
           runuser -u builder -- git config --global user.email "duanluan@outlook.com"
 
+      - name: Resolve package set
+        id: package-set
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          EVENT_SCHEDULE: ${{ github.event.schedule }}
+          INPUT_PACKAGE: ${{ github.event.inputs.package || 'all' }}
+        shell: bash
+        run: |
+          daily_packages=(
+            rebased-bin
+            rebased-zh-bin
+            ccgui-bin
+            zcode-desktop-bin
+            minimax-hub-bin
+            reasonix-desktop-bin
+            pilauncher-bin
+          )
+          weekly_packages=(
+            keyviz-zh-bin
+            emeditor-wine
+            navicat17-premium-cs
+            wuyou-docs-bin
+            wuyou-toolkit-bin
+            mind-elixir-bin
+            mastergo-desktop-bin
+            reeden-bin
+            alexandria-bin
+            so-novel-bin
+          )
+
+          if [[ "${EVENT_NAME}" == "schedule" ]]; then
+            case "${EVENT_SCHEDULE}" in
+              "43 0 * * *")
+                packages=("${daily_packages[@]}")
+                label="daily"
+                ;;
+              "13 0 * * 1")
+                packages=("${weekly_packages[@]}")
+                label="weekly"
+                ;;
+              *)
+                printf 'unknown schedule: %s\n' "${EVENT_SCHEDULE}" >&2
+                exit 1
+                ;;
+            esac
+          else
+            case "${INPUT_PACKAGE}" in
+              all)
+                packages=("${daily_packages[@]}" "${weekly_packages[@]}")
+                label="all"
+                ;;
+              daily)
+                packages=("${daily_packages[@]}")
+                label="daily"
+                ;;
+              weekly)
+                packages=("${weekly_packages[@]}")
+                label="weekly"
+                ;;
+              *)
+                packages=("${INPUT_PACKAGE}")
+                label="${INPUT_PACKAGE}"
+                ;;
+            esac
+          fi
+
+          for package in "${packages[@]}"; do
+            if [[ ! -d "packages/${package}" ]]; then
+              printf 'unknown package: %s\n' "${package}" >&2
+              exit 1
+            fi
+          done
+
+          {
+            printf 'label=%s\n' "${label}"
+            printf 'packages=%s\n' "${packages[*]}"
+          } >> "${GITHUB_OUTPUT}"
+
+          printf 'selected package set: %s\n' "${label}"
+          printf 'packages: %s\n' "${packages[*]}"
+
       - name: Update package files
         env:
           GITHUB_TOKEN: ${{ github.token }}
-          PACKAGE: ${{ github.event.inputs.package || 'all' }}
+          PACKAGE_SET: ${{ steps.package-set.outputs.packages }}
         shell: bash
         run: |
-          if [[ "${PACKAGE}" == "all" ]]; then
-            runuser -u builder -- env GITHUB_TOKEN="${GITHUB_TOKEN}" ./scripts/update-packages.sh
-          else
-            runuser -u builder -- env GITHUB_TOKEN="${GITHUB_TOKEN}" ./scripts/update-packages.sh "${PACKAGE}"
-          fi
+          read -r -a packages <<<"${PACKAGE_SET}"
+          runuser -u builder -- env GITHUB_TOKEN="${GITHUB_TOKEN}" ./scripts/update-packages.sh "${packages[@]}"
 
       - name: Commit package files
         env:
-          PACKAGE: ${{ github.event.inputs.package || 'all' }}
+          PACKAGE_LABEL: ${{ steps.package-set.outputs.label }}
+          PACKAGE_SET: ${{ steps.package-set.outputs.packages }}
         shell: bash
         run: |
-          if [[ "${PACKAGE}" == "all" ]]; then
-            status_path="packages"
+          read -r -a packages <<<"${PACKAGE_SET}"
+          status_paths=()
+          for package in "${packages[@]}"; do
+            status_paths+=("packages/${package}")
+          done
+
+          if [[ "${PACKAGE_LABEL}" == "all" ]]; then
             commit_message="chore: auto update AUR packages"
             no_changes_message="no package file changes"
+          elif [[ "${PACKAGE_LABEL}" == "daily" || "${PACKAGE_LABEL}" == "weekly" ]]; then
+            commit_message="chore: auto update ${PACKAGE_LABEL} AUR packages"
+            no_changes_message="no ${PACKAGE_LABEL} package file changes"
           else
-            status_path="packages/${PACKAGE}"
-            commit_message="chore: auto update ${PACKAGE}"
-            no_changes_message="no ${PACKAGE} package file changes"
+            commit_message="chore: auto update ${PACKAGE_LABEL}"
+            no_changes_message="no ${PACKAGE_LABEL} package file changes"
           fi
 
-          status="$(runuser -u builder -- git status --short -- "${status_path}")"
+          status="$(runuser -u builder -- git status --short -- "${status_paths[@]}")"
           if [[ -n "${status}" ]]; then
-            runuser -u builder -- git add "${status_path}"
+            runuser -u builder -- git add "${status_paths[@]}"
             runuser -u builder -- git commit -m "${commit_message}"
             runuser -u builder -- git push
           else
@@ -134,11 +223,8 @@ jobs:
 
       - name: Publish to AUR
         env:
-          PACKAGE: ${{ github.event.inputs.package || 'all' }}
+          PACKAGE_SET: ${{ steps.package-set.outputs.packages }}
         shell: bash
         run: |
-          if [[ "${PACKAGE}" == "all" ]]; then
-            runuser -u builder -- ./scripts/sync-aur-packages.sh
-          else
-            runuser -u builder -- ./scripts/sync-aur-packages.sh "${PACKAGE}"
-          fi
+          read -r -a packages <<<"${PACKAGE_SET}"
+          runuser -u builder -- ./scripts/sync-aur-packages.sh "${packages[@]}"

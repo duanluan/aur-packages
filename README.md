@@ -98,21 +98,26 @@ makepkg -si
 
 ## Auto Update
 
-The GitHub Actions workflow `.github/workflows/aur-auto-update.yml` checks these
-packages weekly:
+The GitHub Actions workflow `.github/workflows/aur-auto-update.yml` checks
+frequently updated packages daily:
 
 - `rebased-bin`
+- `rebased-zh-bin`
+- `ccgui-bin`
+- `zcode-desktop-bin`
+- `minimax-hub-bin`
+- `reasonix-desktop-bin`
+- `pilauncher-bin`
+
+Less frequently updated packages stay on the weekly check:
+
 - `keyviz-zh-bin`
+- `emeditor-wine`
 - `navicat17-premium-cs`
 - `wuyou-docs-bin`
 - `wuyou-toolkit-bin`
 - `mind-elixir-bin`
-- `ccgui-bin`
-- `zcode-desktop-bin`
 - `mastergo-desktop-bin`
-- `pilauncher-bin`
-- `minimax-hub-bin`
-- `reasonix-desktop-bin`
 - `reeden-bin`
 - `alexandria-bin`
 - `so-novel-bin`
