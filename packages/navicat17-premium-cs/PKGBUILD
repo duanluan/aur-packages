@@ -22,13 +22,25 @@ package() {
   install -dm755 "${pkgdir}/opt/${pkgname}"
   cp -a "${srcdir}/squashfs-root/." "${pkgdir}/opt/${pkgname}/"
 
-  # Prefer Arch's system copies for these low-level libraries to avoid
+  # Prefer Arch's system copies low-level libraries to avoid
   # symbol-version conflicts with host libmount/libudev users.
-  rm -f     "${pkgdir}/opt/${pkgname}/usr/lib/libsystemd.so"*     "${pkgdir}/opt/${pkgname}/usr/lib/libudev.so"*     "${pkgdir}/opt/${pkgname}/usr/lib/libblkid.so"*     "${pkgdir}/opt/${pkgname}/usr/lib/libselinux.so"*
+  rm -f \
+    "${pkgdir}/opt/${pkgname}/usr/lib/libsystemd.so"* \
+    "${pkgdir}/opt/${pkgname}/usr/lib/libudev.so"* \
+    "${pkgdir}/opt/${pkgname}/usr/lib/libblkid.so"* \
+    "${pkgdir}/opt/${pkgname}/usr/lib/libselinux.so"*
 
-  install -Dm644 "${srcdir}/squashfs-root/usr/share/applications/navicat.desktop"     "${pkgdir}/usr/share/applications/navicat.desktop"
-  install -Dm644 "${srcdir}/squashfs-root/usr/share/icons/hicolor/256x256/apps/navicat-icon.png"     "${pkgdir}/usr/share/icons/hicolor/256x256/apps/navicat-icon.png"
+  install -Dm644 "${srcdir}/squashfs-root/usr/share/applications/navicat.desktop" \
+    "${pkgdir}/usr/share/applications/navicat.desktop"
+  install -Dm644 "${srcdir}/squashfs-root/usr/share/icons/hicolor/256x256/apps/navicat-icon.png" \
+    "${pkgdir}/usr/share/icons/hicolor/256x256/apps/navicat-icon.png"
 
   install -dm755 "${pkgdir}/usr/bin"
   ln -s "/opt/${pkgname}/AppRun" "${pkgdir}/usr/bin/navicat"
+
+  sed -i \
+    -e 's|^Exec=.*|Exec=navicat %U|' \
+    -e 's|^Icon=.*|Icon=navicat-icon|' \
+    -e 's|^Categories=.*|Categories=Development;Database;|' \
+    "${pkgdir}/usr/share/applications/navicat.desktop"
 }
