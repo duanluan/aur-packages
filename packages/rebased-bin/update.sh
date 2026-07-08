@@ -6,7 +6,8 @@ SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 PKGBUILD_PATH="${SCRIPT_DIR}/PKGBUILD"
 SRCINFO_PATH="${SCRIPT_DIR}/.SRCINFO"
 RELEASE_API_URL="https://api.github.com/repos/DetachHead/rebased/releases/latest"
-ASSET_NAME="rebased.tar.gz"
+ASSET_X86_64_NAME="rebased.tar.gz"
+ASSET_AARCH64_NAME="rebased-aarch64.tar.gz"
 
 require_command() {
   if ! command -v "$1" >/dev/null 2>&1; then
@@ -22,42 +23,75 @@ require_command sha256sum
 
 current_pkgver=""
 current_pkgrel=""
-current_source_line=""
+current_sources=""
 if [[ -f "${PKGBUILD_PATH}" ]]; then
   current_pkgver="$(sed -n 's/^pkgver=//p' "${PKGBUILD_PATH}" | head -n1)"
   current_pkgrel="$(sed -n 's/^pkgrel=//p' "${PKGBUILD_PATH}" | head -n1)"
-  current_source_line="$(sed -n '/^source=/,/)/p' "${PKGBUILD_PATH}" | tr -d '\n')"
+  current_sources="$(
+    sed -n '/^source_x86_64=/,/)/p;/^source_aarch64=/,/)/p' "${PKGBUILD_PATH}" |
+      tr -d '\n'
+  )"
 fi
 
 release_json="$(curl -fsSL --retry 5 --retry-delay 2 --retry-all-errors "${RELEASE_API_URL}")"
 pkgver="$(printf '%s\n' "${release_json}" | jq -r '.tag_name')"
-asset_url="$(printf '%s\n' "${release_json}" | jq -r --arg name "${ASSET_NAME}" '[.assets[] | select(.name == $name)][0].browser_download_url')"
-asset_digest="$(printf '%s\n' "${release_json}" | jq -r --arg name "${ASSET_NAME}" '[.assets[] | select(.name == $name)][0].digest')"
+
+resolve_asset_url() {
+  local name="$1"
+  printf '%s\n' "${release_json}" |
+    jq -r --arg name "${name}" '[.assets[] | select(.name == $name)][0].browser_download_url'
+}
+
+resolve_asset_digest() {
+  local name="$1"
+  printf '%s\n' "${release_json}" |
+    jq -r --arg name "${name}" '[.assets[] | select(.name == $name)][0].digest'
+}
+
+resolve_sha256() {
+  local name="$1"
+  local url="$2"
+  local digest="$3"
+
+  if [[ -n "${digest}" && "${digest}" != "null" ]]; then
+    printf '%s\n' "${digest#sha256:}"
+    return
+  fi
+
+  local tmpdir
+  tmpdir="$(mktemp -d)"
+  curl -fL --retry 5 --retry-delay 2 --retry-all-errors "${url}" -o "${tmpdir}/${name}" >/dev/null 2>&1
+  sha256sum "${tmpdir}/${name}" | awk '{print $1}'
+  rm -rf "${tmpdir}"
+}
 
 if [[ -z "${pkgver}" || "${pkgver}" == "null" ]]; then
-  printf 'failed to resolve latest tag\n' >&2
+  printf 'failed resolve latest tag\n' >&2
   exit 1
 fi
 
-if [[ -z "${asset_url}" || "${asset_url}" == "null" ]]; then
-  printf 'failed to resolve %s asset\n' "${ASSET_NAME}" >&2
+asset_url_x86_64="$(resolve_asset_url "${ASSET_X86_64_NAME}")"
+asset_url_aarch64="$(resolve_asset_url "${ASSET_AARCH64_NAME}")"
+asset_digest_x86_64="$(resolve_asset_digest "${ASSET_X86_64_NAME}")"
+asset_digest_aarch64="$(resolve_asset_digest "${ASSET_AARCH64_NAME}")"
+
+if [[ -z "${asset_url_x86_64}" || "${asset_url_x86_64}" == "null" ]]; then
+  printf 'failed to resolve %s asset\n' "${ASSET_X86_64_NAME}" >&2
   exit 1
 fi
 
-pkgbuild_asset_url="${asset_url/\/download\/${pkgver}\//\/download\/\$\{pkgver\}\/}"
-source_line="source=(\"\${_pkgname}-\${pkgver}-\${CARCH}.tar.gz::${pkgbuild_asset_url}\")"
-
-if [[ -z "${asset_digest}" || "${asset_digest}" == "null" ]]; then
-  tmpdir="$(mktemp -d)"
-  trap 'rm -rf "${tmpdir}"' EXIT
-  curl -fL --retry 5 --retry-delay 2 --retry-all-errors "${asset_url}" -o "${tmpdir}/${ASSET_NAME}" >/dev/null 2>&1
-  asset_sha256="$(sha256sum "${tmpdir}/${ASSET_NAME}" | awk '{print $1}')"
-else
-  asset_sha256="${asset_digest#sha256:}"
+if [[ -z "${asset_url_aarch64}" || "${asset_url_aarch64}" == "null" ]]; then
+  printf 'failed to resolve %s asset\n' "${ASSET_AARCH64_NAME}" >&2
+  exit 1
 fi
+
+pkgbuild_url_x86_64="${asset_url_x86_64/\/download\/${pkgver}\//\/download\/\$\{pkgver\}\/}"
+pkgbuild_url_aarch64="${asset_url_aarch64/\/download\/${pkgver}\//\/download\/\$\{pkgver\}\/}"
+asset_sha256_x86_64="$(resolve_sha256 "${ASSET_X86_64_NAME}" "${asset_url_x86_64}" "${asset_digest_x86_64}")"
+asset_sha256_aarch64="$(resolve_sha256 "${ASSET_AARCH64_NAME}" "${asset_url_aarch64}" "${asset_digest_aarch64}")"
 
 if [[ "${current_pkgver}" == "${pkgver}" && "${current_pkgrel}" =~ ^[0-9]+$ ]]; then
-  if [[ "${current_source_line}" == "${source_line}" || "${current_source_line}" == *"rebased.tar.gz"* ]]; then
+  if [[ "${current_sources}" == *"source_x86_64"* && "${current_sources}" == *"source_aarch64"* ]]; then
     pkgrel="${current_pkgrel}"
   else
     pkgrel="$((current_pkgrel + 1))"
@@ -74,7 +108,7 @@ _pkgname=rebased
 pkgver=__PKGVER__
 pkgrel=__PKGREL__
 pkgdesc='Standalone JetBrains-based Git client (prebuilt binary)'
-arch=('x86_64')
+arch=('x86_64' 'aarch64')
 url='https://github.com/DetachHead/rebased'
 license=('Apache-2.0')
 depends=('fontconfig' 'giflib' 'hicolor-icon-theme' 'libdbusmenu-glib' 'ttf-font')
@@ -82,12 +116,20 @@ optdepends=('xdg-utils: open URLs from IDE')
 provides=('rebased')
 conflicts=('rebased')
 options=('!strip')
-source=("${_pkgname}-${pkgver}-${CARCH}.tar.gz::https://github.com/DetachHead/rebased/releases/download/${pkgver}/rebased.tar.gz")
-sha256sums=('__ASSET_SHA256__')
+source_x86_64=("${_pkgname}-${pkgver}-x86_64.tar.gz::__SOURCE_URL_X86_64__")
+source_aarch64=("${_pkgname}-${pkgver}-aarch64.tar.gz::__SOURCE_URL_AARCH64__")
+sha256sums_x86_64=('__ASSET_SHA256_X86_64__')
+sha256sums_aarch64=('__ASSET_SHA256_AARCH64__')
 
 package() {
-  local app_dir="${srcdir}/idea-IC-261.25134.SNAPSHOT"
+  local app_dir
   local install_root="${pkgdir}/opt/${_pkgname}"
+
+  app_dir="$(find "${srcdir}" -maxdepth 1 -type d -name 'idea-IC-*' | sort | head -n1)"
+  if [[ -z "${app_dir}" ]]; then
+    printf 'failed to find extracted Rebased application directory\n' >&2
+    return 1
+  fi
 
   install -dm755 "${install_root}"
   cp -a "${app_dir}/." "${install_root}/"
@@ -133,8 +175,12 @@ PKGBUILD_EOF
 sed -i \
   -e "s/__PKGVER__/${pkgver}/g" \
   -e "s/__PKGREL__/${pkgrel}/g" \
-  -e "s/__ASSET_SHA256__/${asset_sha256}/g" \
+  -e "s#__SOURCE_URL_X86_64__#${pkgbuild_url_x86_64}#g" \
+  -e "s#__SOURCE_URL_AARCH64__#${pkgbuild_url_aarch64}#g" \
+  -e "s/__ASSET_SHA256_X86_64__/${asset_sha256_x86_64}/g" \
+  -e "s/__ASSET_SHA256_AARCH64__/${asset_sha256_aarch64}/g" \
   "${PKGBUILD_PATH}"
 
 (cd "${SCRIPT_DIR}" && makepkg --printsrcinfo > "${SRCINFO_PATH}")
+
 printf '%s\n' "${pkgver}"

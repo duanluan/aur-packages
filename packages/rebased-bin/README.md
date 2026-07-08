@@ -1,6 +1,6 @@
 # rebased-bin
 
-`rebased-bin` packages the official x86_64 tarball release of
+`rebased-bin` packages the official Linux tarball releases of
 [Rebased](https://github.com/DetachHead/rebased) for Arch Linux.
 
 Rebased is a standalone Git client built on the IntelliJ platform.

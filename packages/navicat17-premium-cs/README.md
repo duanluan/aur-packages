@@ -1,7 +1,7 @@
 # navicat17-premium-cs
 
 `navicat17-premium-cs` packages the official Chinese Simplified Linux AppImage
-build of [Navicat Premium](https://www.navicat.com.cn/products/navicat-premium)
+builds of [Navicat Premium](https://www.navicat.com.cn/products/navicat-premium)
 for Arch Linux.
 
 ## Install
@@ -36,7 +36,7 @@ navicat
 
 ## Notes
 
-- The package repackages the upstream x86_64 AppImage from the official
+- The package repackages the upstream x86_64 and aarch64 AppImage builds from the official
   [download page](https://www.navicat.com.cn/download/navicat-premium).
 - Linux package versions should track the latest entry in the official
   [release notes](https://www.navicat.com.cn/products/navicat-premium-release-note).
