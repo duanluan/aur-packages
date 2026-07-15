@@ -38,5 +38,5 @@ rebased
 ## Notes
 
 - package installs the upstream tarball under `/opt/rebased`.
-- launcher runs `/opt/rebased/bin/idea`.
+- launcher runs `/opt/rebased/bin/rebased`.
 - Configuration files are initialized on first launch.

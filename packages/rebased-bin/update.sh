@@ -5,6 +5,8 @@ set -euo pipefail
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 PKGBUILD_PATH="${SCRIPT_DIR}/PKGBUILD"
 SRCINFO_PATH="${SCRIPT_DIR}/.SRCINFO"
+LAUNCHER_PATH="${SCRIPT_DIR}/rebased.sh"
+DESKTOP_FILE_PATH="${SCRIPT_DIR}/rebased.desktop"
 RELEASE_API_URL="https://api.github.com/repos/DetachHead/rebased/releases/latest"
 ASSET_X86_64_NAME="rebased.tar.gz"
 ASSET_AARCH64_NAME="rebased-aarch64.tar.gz"
@@ -20,6 +22,16 @@ require_command curl
 require_command jq
 require_command makepkg
 require_command sha256sum
+
+if [[ ! -f "${LAUNCHER_PATH}" || ! -f "${DESKTOP_FILE_PATH}" ]]; then
+  printf 'missing local source files for rebased-bin\n' >&2
+  exit 1
+fi
+
+launcher_sha256="$(sha256sum "${LAUNCHER_PATH}")"
+launcher_sha256="${launcher_sha256%% *}"
+desktop_file_sha256="$(sha256sum "${DESKTOP_FILE_PATH}")"
+desktop_file_sha256="${desktop_file_sha256%% *}"
 
 current_pkgver=""
 current_pkgrel=""
@@ -116,8 +128,11 @@ optdepends=('xdg-utils: open URLs from IDE')
 provides=('rebased')
 conflicts=('rebased')
 options=('!strip')
+source=("${_pkgname}.sh" "${_pkgname}.desktop")
 source_x86_64=("${_pkgname}-${pkgver}-x86_64.tar.gz::__SOURCE_URL_X86_64__")
 source_aarch64=("${_pkgname}-${pkgver}-aarch64.tar.gz::__SOURCE_URL_AARCH64__")
+sha256sums=('__LAUNCHER_SHA256__'
+            '__DESKTOP_FILE_SHA256__')
 sha256sums_x86_64=('__ASSET_SHA256_X86_64__')
 sha256sums_aarch64=('__ASSET_SHA256_AARCH64__')
 
@@ -134,41 +149,11 @@ package() {
   install -dm755 "${install_root}"
   cp -a "${app_dir}/." "${install_root}/"
 
-  install -Dm755 /dev/stdin "${pkgdir}/usr/bin/rebased" <<'SCRIPT'
-#!/bin/sh
-set -eu
-
-plugin_src="/opt/rebased/plugins/localization-zh/lib/localization-zh.jar"
-plugin_dst="${XDG_DATA_HOME:-${HOME}/.local/share}/detachhead/IdeaIC1.1/localization-zh.jar"
-
-if [ -r "${plugin_src}" ]; then
-  mkdir -p "$(dirname "${plugin_dst}")"
-  if [ ! -f "${plugin_dst}" ] || ! cmp -s "${plugin_src}" "${plugin_dst}"; then
-    cp "${plugin_src}" "${plugin_dst}"
-  fi
-fi
-
-exec /opt/rebased/bin/idea "$@"
-SCRIPT
-
-  install -Dm644 "${app_dir}/bin/idea.svg" "${pkgdir}/usr/share/icons/hicolor/scalable/apps/rebased.svg"
-  install -Dm644 "${app_dir}/bin/idea.png" "${pkgdir}/usr/share/pixmaps/rebased.png"
+  install -Dm755 "${srcdir}/${_pkgname}.sh" "${pkgdir}/usr/bin/${_pkgname}"
+  install -Dm644 "${app_dir}/bin/rebased.svg" "${pkgdir}/usr/share/icons/hicolor/scalable/apps/rebased.svg"
+  install -Dm644 "${app_dir}/bin/rebased.png" "${pkgdir}/usr/share/pixmaps/rebased.png"
   install -Dm644 "${app_dir}/LICENSE.txt" "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE.txt"
-
-  install -Dm644 /dev/stdin "${pkgdir}/usr/share/applications/rebased.desktop" <<DESKTOP
-[Desktop Entry]
-Type=Application
-Version=1.0
-Name=Rebased
-Comment=Standalone Git client based on IntelliJ platform
-Exec=rebased %f
-Icon=rebased
-Terminal=false
-StartupNotify=true
-StartupWMClass=jetbrains-rebased
-Categories=Development;IDE;VersionControl;
-Keywords=git;vcs;jetbrains;
-DESKTOP
+  install -Dm644 "${srcdir}/${_pkgname}.desktop" "${pkgdir}/usr/share/applications/${_pkgname}.desktop"
 }
 PKGBUILD_EOF
 
@@ -177,6 +162,8 @@ sed -i \
   -e "s/__PKGREL__/${pkgrel}/g" \
   -e "s#__SOURCE_URL_X86_64__#${pkgbuild_url_x86_64}#g" \
   -e "s#__SOURCE_URL_AARCH64__#${pkgbuild_url_aarch64}#g" \
+  -e "s/__LAUNCHER_SHA256__/${launcher_sha256}/g" \
+  -e "s/__DESKTOP_FILE_SHA256__/${desktop_file_sha256}/g" \
   -e "s/__ASSET_SHA256_X86_64__/${asset_sha256_x86_64}/g" \
   -e "s/__ASSET_SHA256_AARCH64__/${asset_sha256_aarch64}/g" \
   "${PKGBUILD_PATH}"

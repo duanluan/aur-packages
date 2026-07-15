@@ -37,15 +37,17 @@ fi
 
 install -Dm644 "${SCRIPT_DIR}/PKGBUILD" "${WORK_DIR}/${PKGNAME}/PKGBUILD"
 install -Dm644 "${SCRIPT_DIR}/.SRCINFO" "${WORK_DIR}/${PKGNAME}/.SRCINFO"
+install -Dm644 "${SCRIPT_DIR}/rebased.sh" "${WORK_DIR}/${PKGNAME}/rebased.sh"
+install -Dm644 "${SCRIPT_DIR}/rebased.desktop" "${WORK_DIR}/${PKGNAME}/rebased.desktop"
 
-if [[ -z "$(git -C "${WORK_DIR}/${PKGNAME}" status --short -- PKGBUILD .SRCINFO)" ]]; then
+if [[ -z "$(git -C "${WORK_DIR}/${PKGNAME}" status --short -- PKGBUILD .SRCINFO rebased.sh rebased.desktop)" ]]; then
   printf 'no changes\n'
   exit 0
 fi
 
 pkgver="$(sed -n 's/^pkgver=//p' "${SCRIPT_DIR}/PKGBUILD")"
 
-git -C "${WORK_DIR}/${PKGNAME}" add PKGBUILD .SRCINFO
+git -C "${WORK_DIR}/${PKGNAME}" add PKGBUILD .SRCINFO rebased.sh rebased.desktop
 
 if git -C "${WORK_DIR}/${PKGNAME}" rev-parse --verify HEAD >/dev/null 2>&1; then
   git -C "${WORK_DIR}/${PKGNAME}" commit -m "Update to ${pkgver}" >/dev/null 2>&1
