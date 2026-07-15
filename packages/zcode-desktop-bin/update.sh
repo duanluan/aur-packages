@@ -19,6 +19,22 @@ require_command rg
 require_command sha256sum
 require_command makepkg
 
+curl_retry() {
+  curl \
+    --fail \
+    --location \
+    --show-error \
+    --silent \
+    --retry 6 \
+    --retry-delay 5 \
+    --retry-connrefused \
+    --retry-all-errors \
+    --connect-timeout 20 \
+    --speed-limit 1024 \
+    --speed-time 60 \
+    "$@"
+}
+
 page="$(curl -fsSL "${VERSION_URL}")"
 x64_url="$(
   printf '%s\n' "${page}" |
@@ -26,9 +42,14 @@ x64_url="$(
     head -n1
 )"
 pkgver="$(printf '%s\n' "${x64_url}" | sed -n 's|.*/ZCode-\([0-9][0-9.]*\)-linux-x64[.]deb$|\1|p')"
-arm64_url="${x64_url/linux-x64/linux-arm64}"
+arm64_url="$(
+  printf '%s\n' "${page}" |
+  rg -o 'https://[^"'\'' ]+/ZCode-[0-9][0-9.]*-linux-arm64[.]deb' |
+  head -n1
+)"
+arm64_pkgver="$(printf '%s\n' "${arm64_url}" | sed -n 's|.*/ZCode-\([0-9][0-9.]*\)-linux-arm64[.]deb$|\1|p')"
 
-if [[ -z "${x64_url}" || -z "${pkgver}" || "${arm64_url}" == "${x64_url}" ]]; then
+if [[ -z "${x64_url}" || -z "${pkgver}" || -z "${arm64_url}" || "${arm64_pkgver}" != "${pkgver}" ]]; then
   printf 'failed to resolve latest ZCode Linux deb version\n' >&2
   exit 1
 fi
@@ -36,8 +57,8 @@ fi
 tmpdir="$(mktemp -d)"
 trap 'rm -rf "${tmpdir}"' EXIT
 
-curl -fL "${x64_url}" -o "${tmpdir}/ZCode-${pkgver}-linux-x64.deb" >/dev/null 2>&1
-curl -fL "${arm64_url}" -o "${tmpdir}/ZCode-${pkgver}-linux-arm64.deb" >/dev/null 2>&1
+curl_retry "${x64_url}" -o "${tmpdir}/ZCode-${pkgver}-linux-x64.deb" >/dev/null
+curl_retry "${arm64_url}" -o "${tmpdir}/ZCode-${pkgver}-linux-arm64.deb" >/dev/null
 x64_sha256="$(sha256sum "${tmpdir}/ZCode-${pkgver}-linux-x64.deb" | awk '{print $1}')"
 arm64_sha256="$(sha256sum "${tmpdir}/ZCode-${pkgver}-linux-arm64.deb" | awk '{print $1}')"
 x64_pkgbuild_url="${x64_url//${pkgver}/\$\{pkgver\}}"
