@@ -32,6 +32,39 @@ curl_retry() {
     "$@"
 }
 
+release_url_from_latest_mac_yml() {
+  local arch="$1"
+
+  printf '%s\n' "${latest_mac_yml}" | awk -v arch="${arch}" '
+    /^[[:space:]]*-[[:space:]]*url:[[:space:]]*/ {
+      url = $0
+      sub(/^[[:space:]]*-[[:space:]]*url:[[:space:]]*/, "", url)
+
+      if (arch == "x64" && url ~ /-mac\.zip$/ && url !~ /arm64/) {
+        print url
+        exit
+      }
+
+      if (arch == "arm64" && url ~ /-arm64-mac\.zip$/) {
+        print url
+        exit
+      }
+    }
+  '
+}
+
+resolve_release_url() {
+  local release_path="$1"
+  local encoded_path="${release_path// /%20}"
+
+  if [[ "${encoded_path}" == http://* || "${encoded_path}" == https://* ]]; then
+    printf '%s\n' "${encoded_path}"
+    return
+  fi
+
+  printf '%s/%s\n' "${BASE_URL%/}" "${encoded_path#/}"
+}
+
 latest_mac_yml="$(curl_retry "${BASE_URL}/latest-mac.yml")"
 pkgver="$(printf '%s\n' "${latest_mac_yml}" | awk '/^version:/ {print $2; exit}')"
 
@@ -43,20 +76,70 @@ fi
 tmpdir="$(mktemp -d)"
 trap 'rm -rf "${tmpdir}"' EXIT
 
-x64_url="${BASE_URL}/MiniMax%20Hub-${pkgver}.dmg"
-arm64_url="${BASE_URL}/MiniMax%20Hub-${pkgver}-arm64.dmg"
+x64_release_path="$(release_url_from_latest_mac_yml x64)"
+arm64_release_path="$(release_url_from_latest_mac_yml arm64)"
 
-curl_retry --output "${tmpdir}/MiniMax-Hub-${pkgver}-mac-x64.dmg" "${x64_url}" >/dev/null
-curl_retry --output "${tmpdir}/MiniMax-Hub-${pkgver}-mac-arm64.dmg" "${arm64_url}" >/dev/null
+if [[ -z "${x64_release_path}" || -z "${arm64_release_path}" ]]; then
+  printf 'failed to resolve MiniMax Hub macOS download urls from latest-mac.yml\n' >&2
+  exit 1
+fi
 
-x64_sha256="$(sha256sum "${tmpdir}/MiniMax-Hub-${pkgver}-mac-x64.dmg" | awk '{print $1}')"
-arm64_sha256="$(sha256sum "${tmpdir}/MiniMax-Hub-${pkgver}-mac-arm64.dmg" | awk '{print $1}')"
+x64_url="$(resolve_release_url "${x64_release_path}")"
+arm64_url="$(resolve_release_url "${arm64_release_path}")"
 
-sed -i -E \
-  -e "s/^pkgver=.*/pkgver=${pkgver}/" \
-  -e "/^sha256sums_x86_64=\\('/s/'[0-9a-f]{64}'/'${x64_sha256}'/" \
-  -e "/^sha256sums_aarch64=\\('/s/'[0-9a-f]{64}'/'${arm64_sha256}'/" \
-  "${PKGBUILD_PATH}"
+x64_archive="MiniMax-Hub-${pkgver}-mac-x64.zip"
+arm64_archive="MiniMax-Hub-${pkgver}-mac-arm64.zip"
+
+curl_retry --output "${tmpdir}/${x64_archive}" "${x64_url}" >/dev/null
+curl_retry --output "${tmpdir}/${arm64_archive}" "${arm64_url}" >/dev/null
+
+x64_sha256="$(sha256sum "${tmpdir}/${x64_archive}" | awk '{print $1}')"
+arm64_sha256="$(sha256sum "${tmpdir}/${arm64_archive}" | awk '{print $1}')"
+
+awk \
+  -v pkgver="${pkgver}" \
+  -v x64_url="${x64_url}" \
+  -v arm64_url="${arm64_url}" \
+  -v x64_sha256="${x64_sha256}" \
+  -v arm64_sha256="${arm64_sha256}" '
+    /^pkgver=/ {
+      print "pkgver=" pkgver
+      next
+    }
+
+    /^[[:space:]]*"MiniMax-Hub-\$\{pkgver\}-mac-x64\.(dmg|zip)::/ {
+      print "  \"MiniMax-Hub-${pkgver}-mac-x64.zip::" x64_url "\""
+      next
+    }
+
+    /^[[:space:]]*"MiniMax-Hub-\$\{pkgver\}-mac-arm64\.(dmg|zip)::/ {
+      print "  \"MiniMax-Hub-${pkgver}-mac-arm64.zip::" arm64_url "\""
+      next
+    }
+
+    /^[[:space:]]*"MiniMax-Hub-\$\{pkgver\}-mac-x64\.(dmg|zip)"$/ {
+      print "  \"MiniMax-Hub-${pkgver}-mac-x64.zip\""
+      next
+    }
+
+    /^[[:space:]]*"MiniMax-Hub-\$\{pkgver\}-mac-arm64\.(dmg|zip)"$/ {
+      print "  \"MiniMax-Hub-${pkgver}-mac-arm64.zip\""
+      next
+    }
+
+    /^sha256sums_x86_64=\('\''[0-9a-f]{64}'\''\)/ {
+      print "sha256sums_x86_64=(\047" x64_sha256 "\047)"
+      next
+    }
+
+    /^sha256sums_aarch64=\('\''[0-9a-f]{64}'\''\)/ {
+      print "sha256sums_aarch64=(\047" arm64_sha256 "\047)"
+      next
+    }
+
+    { print }
+  ' "${PKGBUILD_PATH}" > "${tmpdir}/PKGBUILD"
+mv "${tmpdir}/PKGBUILD" "${PKGBUILD_PATH}"
 
 (
   cd "${SCRIPT_DIR}"
