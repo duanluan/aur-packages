@@ -181,20 +181,58 @@ jobs:
           printf 'packages: %s\n' "${packages[*]}"
 
       - name: Update package files
+        id: update
         env:
           GITHUB_TOKEN: ${{ github.token }}
           PACKAGE_SET: ${{ steps.package-set.outputs.packages }}
         shell: bash
         run: |
           read -r -a packages <<<"${PACKAGE_SET}"
-          runuser -u builder -- env GITHUB_TOKEN="${GITHUB_TOKEN}" ./scripts/update-packages.sh "${packages[@]}"
+          successful_packages=()
+          failed_packages=()
+
+          for package in "${packages[@]}"; do
+            if runuser -u builder -- env GITHUB_TOKEN="${GITHUB_TOKEN}" ./scripts/update-packages.sh "${package}"; then
+              successful_packages+=("${package}")
+            else
+              printf 'failed update %s\n' "${package}" >&2
+              failed_packages+=("${package}")
+            fi
+          done
+
+          updated_packages=()
+          for package in "${successful_packages[@]}"; do
+            if [[ -n "$(runuser -u builder -- git status --short -- "packages/${package}")" ]]; then
+              updated_packages+=("${package}")
+            fi
+          done
+
+          {
+            printf 'updated_packages=%s\n' "${updated_packages[*]}"
+            printf 'failed_packages=%s\n' "${failed_packages[*]}"
+          } >> "${GITHUB_OUTPUT}"
+
+          printf 'packages with file changes: %s\n' "${updated_packages[*]:-none}"
+
+          if [[ "${#failed_packages[@]}" -gt 0 ]]; then
+            printf 'packages with update failures: %s\n' "${failed_packages[*]}" >&2
+            {
+              printf '### Package update failures\n\n'
+              printf '%s\n' "${failed_packages[@]}" | sed 's/^/- /'
+            } >> "${GITHUB_STEP_SUMMARY}"
+          fi
 
       - name: Commit package files
         env:
           PACKAGE_LABEL: ${{ steps.package-set.outputs.label }}
-          PACKAGE_SET: ${{ steps.package-set.outputs.packages }}
+          PACKAGE_SET: ${{ steps.update.outputs.updated_packages }}
         shell: bash
         run: |
+          if [[ -z "${PACKAGE_SET}" ]]; then
+            printf 'no package file changes\n'
+            exit 0
+          fi
+
           read -r -a packages <<<"${PACKAGE_SET}"
           status_paths=()
           for package in "${packages[@]}"; do
@@ -223,8 +261,30 @@ jobs:
 
       - name: Publish to AUR
         env:
-          PACKAGE_SET: ${{ steps.package-set.outputs.packages }}
+          PACKAGE_SET: ${{ steps.update.outputs.updated_packages }}
         shell: bash
         run: |
+          if [[ -z "${PACKAGE_SET}" ]]; then
+            printf 'no package changes to publish\n'
+            exit 0
+          fi
+
           read -r -a packages <<<"${PACKAGE_SET}"
-          runuser -u builder -- ./scripts/sync-aur-packages.sh "${packages[@]}"
+          failed_packages=()
+
+          for package in "${packages[@]}"; do
+            if runuser -u builder -- ./scripts/sync-aur-packages.sh "${package}"; then
+              continue
+            fi
+
+            printf 'failed publish %s\n' "${package}" >&2
+            failed_packages+=("${package}")
+          done
+
+          if [[ "${#failed_packages[@]}" -gt 0 ]]; then
+            printf 'packages with publish failures: %s\n' "${failed_packages[*]}" >&2
+            {
+              printf '### Package publish failures\n\n'
+              printf '%s\n' "${failed_packages[@]}" | sed 's/^/- /'
+            } >> "${GITHUB_STEP_SUMMARY}"
+          fi
