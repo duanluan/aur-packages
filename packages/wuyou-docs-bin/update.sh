@@ -21,6 +21,7 @@ require_command makepkg
 release_json="$(curl -fsSL "${RELEASE_API_URL}")"
 tag_name="$(printf '%s\n' "${release_json}" | jq -r '.tag_name')"
 pkgver="${tag_name#v}"
+pkgrel="${PKGREL:-1}"
 asset_name="$(printf '%s\n' "${release_json}" | jq -r --arg version "${pkgver}" '[.assets[] | select(.name == ("wuyou-docs_" + $version + "_amd64.deb"))][0].name')"
 asset_url="$(printf '%s\n' "${release_json}" | jq -r --arg version "${pkgver}" '[.assets[] | select(.name == ("wuyou-docs_" + $version + "_amd64.deb"))][0].browser_download_url')"
 asset_digest="$(printf '%s\n' "${release_json}" | jq -r --arg version "${pkgver}" '[.assets[] | select(.name == ("wuyou-docs_" + $version + "_amd64.deb"))][0].digest')"
@@ -52,7 +53,7 @@ cat > "${PKGBUILD_PATH}" <<EOF
 pkgname=wuyou-docs-bin
 _pkgname=wuyou-docs
 pkgver=${pkgver}
-pkgrel=1
+pkgrel=${pkgrel}
 pkgdesc='Local-first desktop document workspace (prebuilt binary)'
 arch=('x86_64')
 url='https://github.com/duanluan/wuyou-docs-releases'
@@ -65,18 +66,40 @@ source=("\${_pkgname}_\${pkgver}_amd64.deb::${pkgbuild_asset_url}")
 sha256sums=('${asset_sha256}')
 
 package() {
-  local _extractdir
+  local _app_dir _app_source _desktop_dir _desktop_file _desktop_source _extractdir
   _extractdir="\$(mktemp -d)"
   trap 'rm -rf "\${_extractdir}"' EXIT
 
   bsdtar -C "\${_extractdir}" -xf "\${srcdir}/\${_pkgname}_\${pkgver}_amd64.deb"
   bsdtar -C "\${pkgdir}" -xf "\${_extractdir}/data.tar.gz"
 
+  _app_dir="\${pkgdir}/usr/lib/wuyou-docs"
+  if [[ ! -d "\${_app_dir}" ]]; then
+    _app_source="\$(find "\${pkgdir}/usr/lib" -mindepth 1 -maxdepth 1 -type d -print -quit)"
+    if [[ -z "\${_app_source}" ]]; then
+      printf 'wuyou-docs app directory not found\n' >&2
+      return 1
+    fi
+    mv "\${_app_source}" "\${_app_dir}"
+  fi
+
+  _desktop_dir="\${pkgdir}/usr/share/applications"
+  _desktop_file="\${_desktop_dir}/wuyou-docs.desktop"
+  if [[ ! -f "\${_desktop_file}" ]]; then
+    _desktop_source="\$(find "\${_desktop_dir}" -maxdepth 1 -type f -name '*.desktop' -print -quit)"
+    if [[ -z "\${_desktop_source}" ]]; then
+      printf 'wuyou-docs desktop entry not found\n' >&2
+      return 1
+    fi
+    mv "\${_desktop_source}" "\${_desktop_file}"
+  fi
+
   sed -i \
     -e 's/^Name=.*/Name=Wuyou Docs/' \
     -e 's/^Comment=.*/Comment=Local-first desktop document workspace/' \
     -e 's/^Categories=.*/Categories=Office;Utility;/' \
-    "\${pkgdir}/usr/share/applications/wuyou-docs.desktop"
+    "\${_desktop_file}"
+  grep -q '^Name\[zh_CN\]=' "\${_desktop_file}" || sed -i '/^Name=/a Name[zh_CN]=无尤文档\nName[zh_HK]=無尤文檔\nName[zh_MO]=無尤文檔\nName[zh_TW]=無尤文檔' "\${_desktop_file}"
 }
 EOF
 
