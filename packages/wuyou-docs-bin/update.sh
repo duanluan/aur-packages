@@ -95,11 +95,17 @@ package() {
   fi
 
   sed -i \
-    -e 's/^Name=.*/Name=Wuyou Docs/' \
+    -e 's/^Name=.*/Name=无尤文档/' \
+    -e '/^Name\[en\]=/d' \
+    -e '/^Name\[en_US\]=/d' \
+    -e '/^Name\[zh_CN\]=/d' \
+    -e '/^Name\[zh_HK\]=/d' \
+    -e '/^Name\[zh_MO\]=/d' \
+    -e '/^Name\[zh_TW\]=/d' \
     -e 's/^Comment=.*/Comment=Local-first desktop document workspace/' \
-    -e 's/^Categories=.*/Categories=Office;Utility;/' \
+    -e 's/^Categories=.*/Categories=Office;WordProcessor;/' \
     "\${_desktop_file}"
-  grep -q '^Name\[zh_CN\]=' "\${_desktop_file}" || sed -i '/^Name=/a Name[zh_CN]=无尤文档\nName[zh_HK]=無尤文檔\nName[zh_MO]=無尤文檔\nName[zh_TW]=無尤文檔' "\${_desktop_file}"
+  sed -i '/^Name=/a Name[en]=Wuyou Docs\nName[en_US]=Wuyou Docs\nName[zh_CN]=无尤文档\nName[zh_HK]=無尤文檔\nName[zh_MO]=無尤文檔\nName[zh_TW]=無尤文檔' "\${_desktop_file}"
 }
 EOF
 
