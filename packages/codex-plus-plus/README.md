@@ -57,5 +57,8 @@ sudo codex-plus-plus enable
 - It keeps a backup of the upstream `/usr/bin/codex-desktop` launcher.
 - By default, it follows the Electron runtime used by the upstream
   `openai-codex-desktop` launcher.
+- The temporary webview keeps `gpt-5.6-sol` visible when the desktop model
+  availability list has not been updated yet. Set `CODEXPP_UNLOCK_GPT56=0`
+  to disable this compatibility patch.
 - An `alpm` hook reapplies the injection after `openai-codex-desktop` upgrades.
 - `codexplusplus` is kept as a compatibility alias.
