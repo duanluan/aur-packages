@@ -42,6 +42,7 @@ plugin_auth_sha256="$(sha256sum "${SCRIPT_DIR}/plugin-auth-unlocked.js" | awk '{
 linux_port_patch="${SCRIPT_DIR}/codex-plus-plus-linux-port-fallback.patch"
 linux_port_patch_sha256="$(sha256sum "${linux_port_patch}" | awk '{print $1}')"
 hook_sha256="$(sha256sum "${SCRIPT_DIR}/90-codex-plus-plus-reapply.hook" | awk '{print $1}')"
+desktop_sha256="$(sha256sum "${SCRIPT_DIR}/codex-plus-plus.desktop" | awk '{print $1}')"
 
 if [[ -n "${PKGREL:-}" ]]; then
   pkgrel="${PKGREL}"
@@ -58,7 +59,7 @@ pkgname=codex-plus-plus
 pkgver=${pkgver}
 pkgrel=${pkgrel}
 epoch=1
-pkgdesc='Codex++ auto-injector bridge for openai-codex-desktop'
+pkgdesc='Codex++ manual injection bridge for openai-codex-desktop'
 arch=('x86_64')
 url='https://github.com/BigPizzaV3/CodexPlusPlus'
 license=('MIT')
@@ -77,17 +78,19 @@ source=(
   "\${pkgname}-\${pkgver}.tar.gz::https://github.com/BigPizzaV3/CodexPlusPlus/archive/refs/tags/v\${pkgver}.tar.gz"
   'codex-desktop-app-wrapper.sh'
   'codex-plus-plus.sh'
-  'plugin-auth-unlocked.js'
-  "\${pkgname}-linux-port-fallback.patch"
-  '90-codex-plus-plus-reapply.hook'
+'plugin-auth-unlocked.js'
+"\${pkgname}-linux-port-fallback.patch"
+'90-codex-plus-plus-reapply.hook'
+'codex-plus-plus.desktop'
 )
 sha256sums=(
-  '${source_sha256}'
-  '${wrapper_sha256}'
-  '${manager_sha256}'
-  '${plugin_auth_sha256}'
-  '${linux_port_patch_sha256}'
-  '${hook_sha256}'
+'${source_sha256}'
+'${wrapper_sha256}'
+'${manager_sha256}'
+'${plugin_auth_sha256}'
+'${linux_port_patch_sha256}'
+'${hook_sha256}'
+'${desktop_sha256}'
 )
 
 prepare() {
@@ -109,6 +112,7 @@ package() {
     "\${pkgdir}/usr/lib/\${pkgname}/bin" \\
     "\${pkgdir}/usr/lib/\${pkgname}/upstream" \\
     "\${pkgdir}/usr/lib/\${pkgname}/webview" \\
+    "\${pkgdir}/usr/share/applications" \\
     "\${pkgdir}/usr/share/doc/\${pkgname}" \\
     "\${pkgdir}/usr/share/libalpm/hooks" \\
     "\${pkgdir}/var/lib/\${pkgname}"
@@ -129,6 +133,8 @@ package() {
 
   install -Dm644 "\${srcdir}/90-codex-plus-plus-reapply.hook" \\
     "\${pkgdir}/usr/share/libalpm/hooks/90-codex-plus-plus-reapply.hook"
+  install -Dm644 "\${srcdir}/codex-plus-plus.desktop" \\
+    "\${pkgdir}/usr/share/applications/codex-plus-plus.desktop"
   install -Dm644 README.md \\
     "\${pkgdir}/usr/share/doc/\${pkgname}/README.md"
 }

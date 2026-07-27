@@ -10,7 +10,6 @@ WEBVIEW_DIR="${APPDIR}/content/webview"
 PLUGIN_AUTH_UNLOCK_FILE="${CODEXPP_PLUGIN_AUTH_UNLOCK_FILE:-/usr/lib/codex-plus-plus/webview/plugin-auth-unlocked.js}"
 HTTP_PYTHON_BIN="${CODEXPP_OPENAI_CODEX_PYTHON:-/usr/bin/python}"
 RENDERER_PORT="${CODEXPP_RENDERER_PORT:-5175}"
-UNLOCK_GPT56="${CODEXPP_UNLOCK_GPT56:-1}"
 PATCHED_WEBVIEW_DIR=""
 RUNTIME_WEBVIEW_DIR=""
 HTTP_PID=""
@@ -49,6 +48,7 @@ resolve_configured_electron() {
   local configured
 
   [[ -f "${ELECTRON_CONFIG}" ]] || return 0
+
   while IFS= read -r configured || [[ -n "${configured}" ]]; do
     configured="${configured%%#*}"
     configured="${configured#"${configured%%[![:space:]]*}"}"
@@ -71,16 +71,12 @@ resolve_upstream_launcher_electron() {
 
   [[ -f "${launcher}" ]] || return 0
 
-  appdir_value="$(awk '
-    match($0, /appdir="([^"]+)"/, m) {
-      print m[1]
-      exit
-    }
-    match($0, /appdir='\''([^'\'']+)'\''/, m) {
-      print m[1]
-      exit
-    }
-  ' "${launcher}")"
+  appdir_value="$(
+    awk '
+      match($0, /appdir="([^"]+)"/, m) { print m[1]; exit }
+      match($0, /appdir='\''([^'\'']+)'\''/, m) { print m[1]; exit }
+    ' "${launcher}"
+  )"
 
   awk -v appdir="${appdir_value}" '
     match($0, /electron="([^"]+)"/, m) {
@@ -107,93 +103,17 @@ resolve_upstream_launcher_electron() {
   done
 }
 
-patch_gpt56_model_filter() {
-  local source_dir="$1"
-  local target_dir="$2"
-
-  "${HTTP_PYTHON_BIN}" - "${source_dir}" "${target_dir}" <<'PY'
-import pathlib
-import re
-import sys
-
-source_dir = pathlib.Path(sys.argv[1])
-target_dir = pathlib.Path(sys.argv[2])
-matches = []
-multi_match_sources = []
-
-pattern = re.compile(
-    r"if\(([A-Za-z_$][A-Za-z0-9_$]*)\?"
-    r"([A-Za-z_$][A-Za-z0-9_$]*)\.has\("
-    r"([A-Za-z_$][A-Za-z0-9_$]*)\.model\):!\3\.hidden\)\{"
-)
-
-def replacement(match):
-    gate, available_models, model = match.groups()
-    return (
-        f"if({model}.model===`gpt-5.6-sol`||"
-        f"({gate}?{available_models}.has({model}.model):!{model}.hidden)){{"
-    )
-
-for source in sorted(source_dir.glob("*.js")):
-    content = source.read_text(encoding="utf-8")
-    if "useHiddenModels" not in content or "supportedReasoningEfforts" not in content:
-        continue
-
-    patched, count = pattern.subn(replacement, content)
-    if count == 0:
-        continue
-    if count == 1:
-        matches.append((source, patched))
-    else:
-        multi_match_sources.append(f"{source.name} ({count} matches)")
-
-if multi_match_sources:
-    print(
-        "Codex++ warning: GPT-5.6 model filter matched multiple times in "
-        + ", ".join(multi_match_sources)
-        + "; leaving the original webview asset in place.",
-        file=sys.stderr,
-    )
-    raise SystemExit(1)
-
-if len(matches) > 1:
-    print(
-        "Codex++ warning: GPT-5.6 model filter matched multiple webview assets: "
-        + ", ".join(source.name for source, _ in matches)
-        + "; leaving the original webview assets in place.",
-        file=sys.stderr,
-    )
-    raise SystemExit(1)
-
-if not matches:
-    print(
-        "Codex++ warning: GPT-5.6 model filter was not found in the current webview.",
-        file=sys.stderr,
-    )
-    raise SystemExit(1)
-
-source, patched = matches[0]
-(target_dir / source.name).write_text(patched, encoding="utf-8")
-raise SystemExit(0)
-PY
-}
-
 create_patched_webview_dir() {
   local entry
   local name
 
-  if [[ ! -f "${PLUGIN_AUTH_UNLOCK_FILE}" ]]; then
+  [[ -f "${PLUGIN_AUTH_UNLOCK_FILE}" ]] || {
     echo "Codex++ plugin auth unlock file not found: ${PLUGIN_AUTH_UNLOCK_FILE}" >&2
     exit 1
-  fi
+  }
 
   PATCHED_WEBVIEW_DIR="$(mktemp -d "${TMPDIR:-/tmp}/codex-plus-plus-webview.XXXXXX")"
   install -dm755 "${PATCHED_WEBVIEW_DIR}/assets"
-
-  if [[ "${UNLOCK_GPT56}" != "0" ]]; then
-    patch_gpt56_model_filter \
-      "${WEBVIEW_DIR}/assets" "${PATCHED_WEBVIEW_DIR}/assets" || true
-  fi
 
   for entry in "${WEBVIEW_DIR}"/*; do
     name="$(basename "${entry}")"
@@ -207,8 +127,6 @@ create_patched_webview_dir() {
     name="$(basename "${entry}")"
     if [[ "${name}" == plugin-auth-*.js ]]; then
       ln -s "${PLUGIN_AUTH_UNLOCK_FILE}" "${PATCHED_WEBVIEW_DIR}/assets/${name}"
-    elif [[ -e "${PATCHED_WEBVIEW_DIR}/assets/${name}" ]]; then
-      continue
     else
       ln -s "${entry}" "${PATCHED_WEBVIEW_DIR}/assets/${name}"
     fi
@@ -294,7 +212,6 @@ port = int(sys.argv[1])
 root = sys.argv[2]
 ready_file = sys.argv[3]
 fail_file = sys.argv[4]
-
 os.chdir(root)
 
 class Handler(http.server.SimpleHTTPRequestHandler):
@@ -325,7 +242,7 @@ HTTP_PID="$!"
 for _ in {1..50}; do
   [[ -f "${READY_FILE}" ]] && break
   if [[ -f "${FAIL_FILE}" ]]; then
-    echo "Failed to start local webview server on 127.0.0.1:${RENDERER_PORT}" >&2
+    echo "Failed start local webview server on 127.0.0.1:${RENDERER_PORT}" >&2
     cat "${FAIL_FILE}" >&2
     exit 1
   fi
@@ -349,5 +266,4 @@ done
   "${APP_ASAR}" \
   "$@" &
 ELECTRON_PID="$!"
-
 wait "${ELECTRON_PID}"
