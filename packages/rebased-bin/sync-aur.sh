@@ -50,9 +50,13 @@ pkgver="$(sed -n 's/^pkgver=//p' "${SCRIPT_DIR}/PKGBUILD")"
 git -C "${WORK_DIR}/${PKGNAME}" add PKGBUILD .SRCINFO rebased.sh rebased.desktop
 
 if git -C "${WORK_DIR}/${PKGNAME}" rev-parse --verify HEAD >/dev/null 2>&1; then
-  git -C "${WORK_DIR}/${PKGNAME}" commit -m "Update to ${pkgver}" >/dev/null 2>&1
+  git -C "${WORK_DIR}/${PKGNAME}" commit \
+    -m "Update to ${pkgver}" \
+    -m "- Update ${PKGNAME} to ${pkgver}" >/dev/null 2>&1
 else
-  git -C "${WORK_DIR}/${PKGNAME}" commit -m "Initial import: ${PKGNAME} ${pkgver}" >/dev/null 2>&1
+  git -C "${WORK_DIR}/${PKGNAME}" commit \
+    -m "Initial import: ${PKGNAME} ${pkgver}" \
+    -m "- Add initial AUR packaging for ${PKGNAME} ${pkgver}" >/dev/null 2>&1
 fi
 
 git -C "${WORK_DIR}/${PKGNAME}" push origin master
