@@ -5,9 +5,11 @@ set -euo pipefail
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 PKGBUILD_PATH="${SCRIPT_DIR}/PKGBUILD"
 SRCINFO_PATH="${SCRIPT_DIR}/.SRCINFO"
+REBASED_BIN_PKGBUILD_PATH="${SCRIPT_DIR}/../rebased-bin/PKGBUILD"
 RELEASE_API_URL="https://api.github.com/repos/DetachHead/rebased/releases/latest"
-PLUGIN_SCRIPT_URL="https://raw.githubusercontent.com/duanluan/shell-scripts/main/prepare-jetbrains-zh-plugin.sh"
+PLUGIN_SCRIPT_URL="${PLUGIN_SCRIPT_URL:-https://raw.githubusercontent.com/duanluan/shell-scripts/main/prepare-jetbrains-zh-plugin.sh}"
 PLUGIN_SOURCE_PATH="${SCRIPT_DIR}/assets/localization-zh-source.jar"
+REBASED_IDE_DIR="${REBASED_IDE_DIR:-}"
 ASSET_NAME="rebased.tar.gz"
 TEMP_DIR="$(mktemp -d)"
 trap 'rm -rf "${TEMP_DIR}"' EXIT
@@ -64,21 +66,34 @@ else
   pkgrel=1
 fi
 
-if [[ "${pkgver}" == "1.1.5" ]]; then
+rebased_bin_min_pkgrel=1
+if [[ -f "${REBASED_BIN_PKGBUILD_PATH}" ]]; then
+  rebased_bin_pkgver="$(sed -n 's/^pkgver=//p' "${REBASED_BIN_PKGBUILD_PATH}" | head -n1)"
+  rebased_bin_pkgrel="$(sed -n 's/^pkgrel=//p' "${REBASED_BIN_PKGBUILD_PATH}" | head -n1)"
+  if [[ "${rebased_bin_pkgver}" == "${pkgver}" && "${rebased_bin_pkgrel}" =~ ^[0-9]+$ ]]; then
+    rebased_bin_min_pkgrel="${rebased_bin_pkgrel}"
+  fi
+fi
+if [[ "${pkgver}" == "1.1.5" && "${rebased_bin_min_pkgrel}" -lt 2 ]]; then
   rebased_bin_min_pkgrel=2
-else
-  rebased_bin_min_pkgrel=1
 fi
 
 plugin_output_dir="${SCRIPT_DIR}/assets/${pkgver}"
 plugin_output_path="${plugin_output_dir}/localization-zh.jar"
 
 mkdir -p "${plugin_output_dir}"
-download_file "${asset_url}" "${TEMP_DIR}/${ASSET_NAME}"
-tar -xzf "${TEMP_DIR}/${ASSET_NAME}" -C "${TEMP_DIR}"
-ide_dir="$(find "${TEMP_DIR}" -maxdepth 1 -type d -name 'idea-IC-*' | head -n1)"
+if [[ -n "${REBASED_IDE_DIR}" ]]; then
+  ide_dir="${REBASED_IDE_DIR}"
+else
+  download_file "${asset_url}" "${TEMP_DIR}/${ASSET_NAME}"
+  tar -xzf "${TEMP_DIR}/${ASSET_NAME}" -C "${TEMP_DIR}"
+  ide_dir="$(find "${TEMP_DIR}" -mindepth 1 -maxdepth 1 -type d -name 'Rebased*' | sort | head -n1)"
+fi
+[[ -n "${ide_dir}" ]] || ide_dir="$(find "${TEMP_DIR}" -mindepth 1 -maxdepth 1 -type d -name 'idea-oss' | sort | head -n1)"
+[[ -n "${ide_dir}" ]] || ide_dir="$(find "${TEMP_DIR}" -mindepth 1 -maxdepth 1 -type d -name 'idea-IC-*' | sort | head -n1)"
+[[ -n "${ide_dir}" ]] || ide_dir="$(find "${TEMP_DIR}" -mindepth 1 -maxdepth 2 -type f -name product-info.json -printf '%h\n' | sort | head -n1)"
 
-if [[ -z "${ide_dir}" ]]; then
+if [[ -z "${ide_dir}" || ! -d "${ide_dir}" ]]; then
   printf 'failed to find extracted Rebased directory\n' >&2
   exit 1
 fi

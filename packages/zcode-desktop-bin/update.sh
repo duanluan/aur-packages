@@ -6,6 +6,7 @@ SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 PKGBUILD_PATH="${SCRIPT_DIR}/PKGBUILD"
 SRCINFO_PATH="${SCRIPT_DIR}/.SRCINFO"
 VERSION_URL="${VERSION_URL:-https://zcode.z.ai/en}"
+RELEASE_BASE_URL="${RELEASE_BASE_URL:-https://cdn-zcode.z.ai/zcode/electron/releases}"
 
 require_command() {
   if ! command -v "$1" >/dev/null 2>&1; then
@@ -35,19 +36,28 @@ curl_retry() {
     "$@"
 }
 
-page="$(curl -fsSL "${VERSION_URL}")"
-x64_url="$(
-  printf '%s\n' "${page}" |
-    rg -o 'https://[^"'\'' ]+/ZCode-[0-9][0-9.]*-linux-x64[.]deb' |
-    head -n1
-)"
-pkgver="$(printf '%s\n' "${x64_url}" | sed -n 's|.*/ZCode-\([0-9][0-9.]*\)-linux-x64[.]deb$|\1|p')"
-arm64_url="$(
-  printf '%s\n' "${page}" |
-  rg -o 'https://[^"'\'' ]+/ZCode-[0-9][0-9.]*-linux-arm64[.]deb' |
-  head -n1
-)"
-arm64_pkgver="$(printf '%s\n' "${arm64_url}" | sed -n 's|.*/ZCode-\([0-9][0-9.]*\)-linux-arm64[.]deb$|\1|p')"
+target_pkgver="${PKGVER:-}"
+
+if [[ -n "${target_pkgver}" ]]; then
+  pkgver="${target_pkgver}"
+  x64_url="${RELEASE_BASE_URL}/${pkgver}/linux-x64/ZCode-${pkgver}-linux-x64.deb"
+  arm64_url="${RELEASE_BASE_URL}/${pkgver}/linux-arm64/ZCode-${pkgver}-linux-arm64.deb"
+  arm64_pkgver="${pkgver}"
+else
+  page="$(curl -fsSL "${VERSION_URL}")"
+  x64_url="$(
+    printf '%s\n' "${page}" |
+      rg -o 'https://[^"'\'' ]+/ZCode-[0-9][0-9.]*-linux-x64[.]deb' |
+      head -n1
+  )"
+  pkgver="$(printf '%s\n' "${x64_url}" | sed -n 's|.*/ZCode-\([0-9][0-9.]*\)-linux-x64[.]deb$|\1|p')"
+  arm64_url="$(
+    printf '%s\n' "${page}" |
+      rg -o 'https://[^"'\'' ]+/ZCode-[0-9][0-9.]*-linux-arm64[.]deb' |
+      head -n1
+  )"
+  arm64_pkgver="$(printf '%s\n' "${arm64_url}" | sed -n 's|.*/ZCode-\([0-9][0-9.]*\)-linux-arm64[.]deb$|\1|p')"
+fi
 
 if [[ -z "${x64_url}" || -z "${pkgver}" || -z "${arm64_url}" || "${arm64_pkgver}" != "${pkgver}" ]]; then
   printf 'failed to resolve latest ZCode Linux deb version\n' >&2
