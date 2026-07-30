@@ -208,6 +208,7 @@ jobs:
           done
 
           {
+            printf 'successful_packages=%s\n' "${successful_packages[*]}"
             printf 'updated_packages=%s\n' "${updated_packages[*]}"
             printf 'failed_packages=%s\n' "${failed_packages[*]}"
           } >> "${GITHUB_OUTPUT}"
@@ -261,7 +262,7 @@ jobs:
 
       - name: Publish to AUR
         env:
-          PACKAGE_SET: ${{ steps.update.outputs.updated_packages }}
+          PACKAGE_SET: ${{ steps.update.outputs.successful_packages }}
         shell: bash
         run: |
           if [[ -z "${PACKAGE_SET}" ]]; then
