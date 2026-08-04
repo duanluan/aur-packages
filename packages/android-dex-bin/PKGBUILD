@@ -1,0 +1,81 @@
+# Maintainer: duanluan <duanluan@outlook.com>
+pkgname=android-dex-bin
+_pkgname=android-dex
+pkgver=0.9
+pkgrel=2
+pkgdesc='Transform Android devices into a desktop experience (prebuilt Linux bundle)'
+arch=('x86_64')
+url='https://github.com/Shrey113/Android-Dex'
+license=('unknown')
+depends=(
+  'bash'
+  'ffmpeg'
+  'gtk3'
+  'libayatana-appindicator'
+  'libdecor'
+  'libepoxy'
+  'libjxl'
+  'librist'
+  'libnsl'
+  'numactl'
+  'libusb'
+  'libxrandr'
+  'libxss'
+  'mesa'
+  'mpg123'
+  'rav1e'
+  'sdl2'
+  'svt-av1'
+  'zenity'
+)
+optdepends=(
+  'android-udev: Android USB device permissions'
+  'kdialog: KDE file picker dialogs'
+)
+provides=('android-dex')
+conflicts=('android-dex')
+options=('!strip' '!lto')
+source=("${_pkgname}-${pkgver}.tar.gz::https://github.com/Shrey113/Android-Dex/releases/download/Android-Dex-v.0.9/android_dex_linux.tar.gz")
+sha256sums=('f189ab71e906b6f6c8e96f1de5a6862a2db65e3f890afcbdb00330608a8602dd')
+
+package() {
+  local app_dir="${srcdir}/android_dex"
+  local install_root="${pkgdir}/opt/${_pkgname}"
+
+  install -dm755 "${install_root}"
+  cp -a "${app_dir}/." "${install_root}/"
+
+  install -dm755 "${install_root}/lib"
+  ln -s /usr/lib/libjxl.so "${install_root}/lib/libjxl.so.0.7"
+  ln -s /usr/lib/libjxl_threads.so "${install_root}/lib/libjxl_threads.so.0.7"
+  ln -s /usr/lib/librav1e.so "${install_root}/lib/librav1e.so.0"
+  ln -s /usr/lib/libSvtAv1Enc.so "${install_root}/lib/libSvtAv1Enc.so.1"
+  ln -s /usr/lib/librist.so "${install_root}/lib/librist.so.4"
+  ln -s /usr/lib/libnuma.so "${install_root}/lib/libnuma.so.1"
+  sed -i 's/^chmod +x "\$APP_BINARY"$/true/' "${install_root}/run_android_dex.sh"
+
+  chmod 755 "${install_root}/android_dex_win" "${install_root}/run_android_dex.sh"
+  if [[ -d "${install_root}/Build_copy/adb-linux" ]]; then
+    chmod 755 "${install_root}/Build_copy/adb-linux/adb" "${install_root}/Build_copy/adb-linux/scrcpy"
+  fi
+
+  install -Dm755 /dev/stdin "${pkgdir}/usr/bin/${_pkgname}" <<'SCRIPT'
+#!/bin/sh
+cd /opt/android-dex || exit 1
+exec ./run_android_dex.sh "$@"
+SCRIPT
+
+  install -Dm644 "${app_dir}/data/flutter_assets/assets/big_app_icon.png" "${pkgdir}/usr/share/pixmaps/${_pkgname}.png"
+
+  install -Dm644 /dev/stdin "${pkgdir}/usr/share/applications/${_pkgname}.desktop" <<'DESKTOP'
+[Desktop Entry]
+Type=Application
+Name=Android DEX
+Comment=Transform Android devices into a desktop experience
+Exec=android-dex
+Icon=android-dex
+Terminal=false
+Categories=Utility;RemoteAccess;
+StartupNotify=true
+DESKTOP
+}

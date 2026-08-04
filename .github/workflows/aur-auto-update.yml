@@ -28,6 +28,7 @@ on:
           - reasonix-desktop-bin
           - reeden-bin
           - alexandria-bin
+          - android-dex-bin
           - so-novel-bin
   push:
     paths:
@@ -49,6 +50,7 @@ on:
       - "packages/reasonix-desktop-bin/**"
       - "packages/reeden-bin/**"
       - "packages/alexandria-bin/**"
+      - "packages/android-dex-bin/**"
       - "packages/so-novel-bin/**"
   schedule:
     - cron: "43 0 * * *"
@@ -126,6 +128,7 @@ jobs:
             mastergo-desktop-bin
             reeden-bin
             alexandria-bin
+            android-dex-bin
             so-novel-bin
           )
 

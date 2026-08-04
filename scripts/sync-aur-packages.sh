@@ -22,6 +22,7 @@ DEFAULT_PACKAGES=(
   reasonix-desktop-bin
   reeden-bin
   alexandria-bin
+  android-dex-bin
   so-novel-bin
 )
 

@@ -19,6 +19,7 @@ User-facing notes for the AUR packages maintained in this repository.
 - `reasonix-desktop-bin`: Reasonix desktop app repackaged from the official .deb release
 - `reeden-bin`: Reeden desktop app repackaged from the official .deb release
 - `alexandria-bin`: Alexandria desktop app repackaged from the official .deb release
+- `android-dex-bin`: Android DEX Linux bundle repackaged from the official release
 - `so-novel-bin`: So Novel web content extraction and ebook export tool
 - `emeditor-wine`: EmEditor running through a dedicated Wine prefix
 
@@ -42,6 +43,7 @@ paru -S minimax-hub-bin
 paru -S reasonix-desktop-bin
 paru -S reeden-bin
 paru -S alexandria-bin
+paru -S android-dex-bin
 paru -S so-novel-bin
 paru -S emeditor-wine
 ```
@@ -64,6 +66,7 @@ yay -S minimax-hub-bin
 yay -S reasonix-desktop-bin
 yay -S reeden-bin
 yay -S alexandria-bin
+yay -S android-dex-bin
 yay -S so-novel-bin
 yay -S emeditor-wine
 ```
@@ -93,6 +96,7 @@ makepkg -si
 - [reasonix-desktop-bin](packages/reasonix-desktop-bin/README.md)
 - [reeden-bin](packages/reeden-bin/README.md)
 - [alexandria-bin](packages/alexandria-bin/README.md)
+- [android-dex-bin](packages/android-dex-bin/README.md)
 - [so-novel-bin](packages/so-novel-bin/README.md)
 - [emeditor-wine](packages/emeditor-wine/README.md)
 
@@ -120,6 +124,7 @@ Less frequently updated packages stay on the weekly check:
 - `mastergo-desktop-bin`
 - `reeden-bin`
 - `alexandria-bin`
+- `android-dex-bin`
 - `so-novel-bin`
 
 It regenerates package files, commits changes back to this repository, and then
