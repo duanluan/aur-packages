@@ -2,7 +2,7 @@
 
 pkgname=minimax-hub-bin
 _pkgname=minimax-hub
-pkgver=2.0.10
+pkgver=2.0.11
 pkgrel=6
 pkgdesc='MiniMax Hub desktop app repackaged from the official macOS release'
 arch=('x86_64' 'aarch64')
@@ -38,10 +38,10 @@ source=(
   'LICENSE'
 )
 source_x86_64=(
-  "MiniMax-Hub-${pkgver}-mac-x64.zip::https://filecdn.minimax.chat/public/minimax-hub/release/domestic/builds/2.0.10/hilo-desktop-797/MiniMax%20Hub-2.0.10-mac.zip"
+  "MiniMax-Hub-${pkgver}-mac-x64.zip::https://filecdn.minimax.chat/public/minimax-hub/release/domestic/builds/2.0.11/hilo-desktop-807/MiniMax%20Hub-2.0.11-mac.zip"
 )
 source_aarch64=(
-  "MiniMax-Hub-${pkgver}-mac-arm64.zip::https://filecdn.minimax.chat/public/minimax-hub/release/domestic/builds/2.0.10/hilo-desktop-797/MiniMax%20Hub-2.0.10-arm64-mac.zip"
+  "MiniMax-Hub-${pkgver}-mac-arm64.zip::https://filecdn.minimax.chat/public/minimax-hub/release/domestic/builds/2.0.11/hilo-desktop-807/MiniMax%20Hub-2.0.11-arm64-mac.zip"
 )
 noextract=(
   "MiniMax-Hub-${pkgver}-mac-x64.zip"
@@ -52,8 +52,8 @@ sha256sums=('4e8ac22b373c6290dbd80576df9d9bec4203d1aafc4fbbbdb33e556966de5e04'
             '9d78784df2f0854fdf08d436c22501adff17068de77ae584254045e51c041490'
             '20bcf5b029a2b88bd1027207f287e44d87586d2dac6e82ac66174141f9fb928b'
             'a95f4a1bb7d5ba464ca8503549fa98a6d6bdfc667af0a9265f6b01416f85de96')
-sha256sums_x86_64=('ca1167bde93c2fe4ed8860498785fb322ec8b72ad9b4172c6b8eae65867a5dc6')
-sha256sums_aarch64=('733b6d0247053ee8e8cf76e398c03bd45a272b6528c6a138b2830a8dcdfcdf77')
+sha256sums_x86_64=('1e1567d9b5f02a09e47df9711fbac1350f73f08f82d1036c2ec7a202cc271370')
+sha256sums_aarch64=('a1e74728f31a1b5247386cf2ecc0f4a883afa8d2e834e6f1d5381c5727987ddd')
 
 _electron_major=39
 
