@@ -2,7 +2,7 @@
 
 pkgname=rebased-bin
 _pkgname=rebased
-pkgver=1.1.10
+pkgver=1.1.11
 pkgrel=1
 pkgdesc='Standalone JetBrains-based Git client (prebuilt binary)'
 arch=('x86_64' 'aarch64')
@@ -18,8 +18,8 @@ source_x86_64=("${_pkgname}-${pkgver}-x86_64.tar.gz::https://github.com/DetachHe
 source_aarch64=("${_pkgname}-${pkgver}-aarch64.tar.gz::https://github.com/DetachHead/rebased/releases/download/${pkgver}/rebased-aarch64.tar.gz")
 sha256sums=('e152fc59d093764f826b990c04a64db48d43f1ee8708b265155c16888a9e54bf'
             'c9ca95ac0578c7ad1db358afce473475d9d82010676018e157bbdfaaeb256cae')
-sha256sums_x86_64=('2b5a6d560c3eed29831daf01a4e21a53b72ed96d5257f07caded92fa5fe5a56a')
-sha256sums_aarch64=('91913261dffe52e139c6a14ecead65587ef06ef51ee5e7445f0cc987bef2f04b')
+sha256sums_x86_64=('8726ffed0075869ff0489fe7233270e7e5ed00e37573a7df696c7288425cefc6')
+sha256sums_aarch64=('0d43557b990a3e6b5868ab62bbd6e2a0d679ff4fe45ea63666ab9126974ae5dc')
 
 package() {
   local app_dir
