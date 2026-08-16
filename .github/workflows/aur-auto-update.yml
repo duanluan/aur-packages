@@ -21,6 +21,7 @@ on:
           - wuyou-toolkit-bin
           - mind-elixir-bin
           - ccgui-bin
+          - codeg-bin
           - zcode-desktop-bin
           - mastergo-desktop-bin
           - pilauncher-bin
@@ -44,6 +45,7 @@ on:
       - "packages/wuyou-toolkit-bin/**"
       - "packages/mind-elixir-bin/**"
       - "packages/ccgui-bin/**"
+      - "packages/codeg-bin/**"
       - "packages/zcode-desktop-bin/**"
       - "packages/mastergo-desktop-bin/**"
       - "packages/pilauncher-bin/**"
@@ -115,6 +117,7 @@ jobs:
             rebased-bin
             rebased-zh-bin
             ccgui-bin
+            codeg-bin
             zcode-desktop-bin
             minimax-hub-bin
             reasonix-desktop-bin

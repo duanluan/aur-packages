@@ -15,6 +15,7 @@ DEFAULT_PACKAGES=(
   wuyou-toolkit-bin
   mind-elixir-bin
   ccgui-bin
+  codeg-bin
   zcode-desktop-bin
   mastergo-desktop-bin
   pilauncher-bin
