@@ -26,6 +26,7 @@ on:
           - pilauncher-bin
           - minimax-hub-bin
           - reasonix-desktop-bin
+          - pi-agent-desktop-bin
           - reeden-bin
           - alexandria-bin
           - android-dex-bin
@@ -48,6 +49,7 @@ on:
       - "packages/pilauncher-bin/**"
       - "packages/minimax-hub-bin/**"
       - "packages/reasonix-desktop-bin/**"
+      - "packages/pi-agent-desktop-bin/**"
       - "packages/reeden-bin/**"
       - "packages/alexandria-bin/**"
       - "packages/android-dex-bin/**"
@@ -116,6 +118,7 @@ jobs:
             zcode-desktop-bin
             minimax-hub-bin
             reasonix-desktop-bin
+            pi-agent-desktop-bin
             pilauncher-bin
           )
           weekly_packages=(

@@ -17,6 +17,7 @@ User-facing notes for the AUR packages maintained in this repository.
 - `pilauncher-bin`: The prebuilt Linux desktop release of PiLauncher
 - `minimax-hub-bin`: MiniMax Hub desktop app repackaged from the official macOS release
 - `reasonix-desktop-bin`: Reasonix desktop app repackaged from the official .deb release
+- `pi-agent-desktop-bin`: Pi Agent desktop app repackaged from the official .deb release
 - `reeden-bin`: Reeden desktop app repackaged from the official .deb release
 - `alexandria-bin`: Alexandria desktop app repackaged from the official .deb release
 - `android-dex-bin`: Android DEX Linux bundle repackaged from the official release
@@ -41,6 +42,7 @@ paru -S mastergo-desktop-bin
 paru -S pilauncher-bin
 paru -S minimax-hub-bin
 paru -S reasonix-desktop-bin
+paru -S pi-agent-desktop-bin
 paru -S reeden-bin
 paru -S alexandria-bin
 paru -S android-dex-bin
@@ -64,6 +66,7 @@ yay -S mastergo-desktop-bin
 yay -S pilauncher-bin
 yay -S minimax-hub-bin
 yay -S reasonix-desktop-bin
+yay -S pi-agent-desktop-bin
 yay -S reeden-bin
 yay -S alexandria-bin
 yay -S android-dex-bin
@@ -94,6 +97,7 @@ makepkg -si
 - [pilauncher-bin](packages/pilauncher-bin/README.md)
 - [minimax-hub-bin](packages/minimax-hub-bin/README.md)
 - [reasonix-desktop-bin](packages/reasonix-desktop-bin/README.md)
+- [pi-agent-desktop-bin](packages/pi-agent-desktop-bin/README.md)
 - [reeden-bin](packages/reeden-bin/README.md)
 - [alexandria-bin](packages/alexandria-bin/README.md)
 - [android-dex-bin](packages/android-dex-bin/README.md)
@@ -111,6 +115,7 @@ frequently updated packages daily:
 - `zcode-desktop-bin`
 - `minimax-hub-bin`
 - `reasonix-desktop-bin`
+- `pi-agent-desktop-bin`
 - `pilauncher-bin`
 
 Less frequently updated packages stay on the weekly check:

@@ -20,6 +20,7 @@ DEFAULT_PACKAGES=(
   pilauncher-bin
   minimax-hub-bin
   reasonix-desktop-bin
+  pi-agent-desktop-bin
   reeden-bin
   alexandria-bin
   android-dex-bin
