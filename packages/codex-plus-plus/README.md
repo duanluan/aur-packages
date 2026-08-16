@@ -1,8 +1,8 @@
 # codex-plus-plus
 
 `codex-plus-plus` packages [Codex++](https://github.com/BigPizzaV3/CodexPlusPlus)
-as a manual injection bridge for the Arch Linux `openai-codex-desktop`
-package.
+as a manual injection bridge for the Arch Linux ChatGPT desktop app. The
+current `openai-codex-desktop` package provides the `chatgpt` dependency.
 
 ## Install
 
@@ -28,7 +28,7 @@ makepkg -si
 
 ## Usage
 
-The package does not take over `openai-codex-desktop` automatically.
+The package does not take over the ChatGPT launcher automatically.
 
 Check status:
 
@@ -42,7 +42,7 @@ Launch the injected app without changing the upstream launcher:
 codex-plus-plus run
 ```
 
-The package also installs `OpenAI Codex (Codex++)` in the application menu.
+The package also installs `ChatGPT (Codex++)` in the application menu.
 
 Enable or disable injection:
 
@@ -51,20 +51,13 @@ sudo codex-plus-plus enable
 sudo codex-plus-plus disable
 ```
 
-Use a custom Electron runtime:
-
-```bash
-sudo install -dm755 /etc/codex-plus-plus
-printf '%s\n' /usr/lib/electron42/electron | sudo tee /etc/codex-plus-plus/electron
-sudo codex-plus-plus enable
-```
-
 ## Notes
 
-- The package depends on `openai-codex-desktop`.
-- It leaves `/usr/bin/codex-desktop` on the upstream launcher unless enabled manually.
-- The recommended desktop path is `OpenAI Codex (Codex++)`, which runs `codex-plus-plus run`.
-- It keeps a backup of the upstream `/usr/bin/codex-desktop` launcher when enabled.
-- By default, it follows the Electron runtime used by the upstream `openai-codex-desktop` launcher.
-- An `alpm` hook reapplies the injection after `openai-codex-desktop` upgrades only when Codex++ is enabled.
+- The package depends on `chatgpt`, currently provided by `openai-codex-desktop`.
+- It leaves `/usr/bin/chatgpt` on the upstream launcher unless enabled manually.
+- The recommended desktop path is `ChatGPT (Codex++)`, which runs `codex-plus-plus run`.
+- It keeps a backup of the upstream `/usr/bin/chatgpt` launcher when enabled.
+- It reuses the official ChatGPT launcher and native `/usr/lib/chatgpt/ChatGPT` app.
+- An `alpm` hook reapplies the injection after ChatGPT package upgrades only when Codex++ is enabled.
+- `/usr/bin/codex-desktop` remains supported through the upstream compatibility alias.
 - `codexplusplus` is kept as a compatibility alias.

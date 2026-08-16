@@ -11,7 +11,7 @@ User-facing notes for the AUR packages maintained in this repository.
 - `wuyou-toolkit-bin`: The prebuilt Linux desktop release of wuyou-toolkit
 - `mind-elixir-bin`: The prebuilt Linux desktop release of Mind Elixir
 - `ccgui-bin`: The prebuilt Linux desktop release of ccgui
-- `codex-plus-plus`: Codex++ auto-injector bridge for openai-codex-desktop
+- `codex-plus-plus`: Codex++ injection bridge for the ChatGPT desktop app
 - `zcode-desktop-bin`: ZCode desktop app repackaged from the official Linux release
 - `mastergo-desktop-bin`: MasterGo desktop app repackaged from the official macOS release
 - `pilauncher-bin`: The prebuilt Linux desktop release of PiLauncher
