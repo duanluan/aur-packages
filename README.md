@@ -12,6 +12,8 @@ User-facing notes for the AUR packages maintained in this repository.
 - `mind-elixir-bin`: The prebuilt Linux desktop release of Mind Elixir
 - `ccgui-bin`: The prebuilt Linux desktop release of ccgui
 - `codeg-bin`: Codeg multi-agent coding workspace repackaged from the official .deb release
+- `codepilot-bin`: CodePilot desktop client repackaged from the official .deb release
+- `gooeypi-bin`: GooeyPi desktop workspace repackaged from the official Arch release
 - `codex-plus-plus`: Codex++ injection bridge for the ChatGPT desktop app
 - `zcode-desktop-bin`: ZCode desktop app repackaged from the official Linux release
 - `mastergo-desktop-bin`: MasterGo desktop app repackaged from the official macOS release
@@ -38,6 +40,8 @@ paru -S wuyou-toolkit-bin
 paru -S mind-elixir-bin
 paru -S ccgui-bin
 paru -S codeg-bin
+paru -S codepilot-bin
+paru -S gooeypi-bin
 paru -S codex-plus-plus
 paru -S zcode-desktop-bin
 paru -S mastergo-desktop-bin
@@ -63,6 +67,8 @@ yay -S wuyou-toolkit-bin
 yay -S mind-elixir-bin
 yay -S ccgui-bin
 yay -S codeg-bin
+yay -S codepilot-bin
+yay -S gooeypi-bin
 yay -S codex-plus-plus
 yay -S zcode-desktop-bin
 yay -S mastergo-desktop-bin
@@ -95,6 +101,8 @@ makepkg -si
 - [mind-elixir-bin](packages/mind-elixir-bin/README.md)
 - [ccgui-bin](packages/ccgui-bin/README.md)
 - [codeg-bin](packages/codeg-bin/README.md)
+- [codepilot-bin](packages/codepilot-bin/README.md)
+- [gooeypi-bin](packages/gooeypi-bin/README.md)
 - [codex-plus-plus](packages/codex-plus-plus/README.md)
 - [zcode-desktop-bin](packages/zcode-desktop-bin/README.md)
 - [mastergo-desktop-bin](packages/mastergo-desktop-bin/README.md)
@@ -117,6 +125,8 @@ frequently updated packages daily:
 - `rebased-zh-bin`
 - `ccgui-bin`
 - `codeg-bin`
+- `codepilot-bin`
+- `gooeypi-bin`
 - `zcode-desktop-bin`
 - `minimax-hub-bin`
 - `reasonix-desktop-bin`

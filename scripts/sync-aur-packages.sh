@@ -16,6 +16,8 @@ DEFAULT_PACKAGES=(
   mind-elixir-bin
   ccgui-bin
   codeg-bin
+  codepilot-bin
+  gooeypi-bin
   zcode-desktop-bin
   mastergo-desktop-bin
   pilauncher-bin

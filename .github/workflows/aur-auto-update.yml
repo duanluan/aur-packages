@@ -22,6 +22,8 @@ on:
           - mind-elixir-bin
           - ccgui-bin
           - codeg-bin
+          - codepilot-bin
+          - gooeypi-bin
           - zcode-desktop-bin
           - mastergo-desktop-bin
           - pilauncher-bin
@@ -46,6 +48,8 @@ on:
       - "packages/mind-elixir-bin/**"
       - "packages/ccgui-bin/**"
       - "packages/codeg-bin/**"
+      - "packages/codepilot-bin/**"
+      - "packages/gooeypi-bin/**"
       - "packages/zcode-desktop-bin/**"
       - "packages/mastergo-desktop-bin/**"
       - "packages/pilauncher-bin/**"
@@ -118,6 +122,8 @@ jobs:
             rebased-zh-bin
             ccgui-bin
             codeg-bin
+            codepilot-bin
+            gooeypi-bin
             zcode-desktop-bin
             minimax-hub-bin
             reasonix-desktop-bin
