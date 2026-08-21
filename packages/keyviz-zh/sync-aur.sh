@@ -3,9 +3,9 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
-PKGNAME="${PKGNAME:-wuyou-toolkit-bin}"
+PKGNAME="${PKGNAME:-keyviz-zh}"
 AUR_REMOTE_URL="${AUR_REMOTE_URL:-ssh://aur@aur.archlinux.org/${PKGNAME}.git}"
-AUR_SSH_KEY="${AUR_SSH_KEY:-${HOME}/.ssh/aur_actions}"
+AUR_SSH_KEY="${AUR_SSH_KEY:-/home/duanluan/.ssh/aur_actions}"
 WORK_DIR="$(mktemp -d)"
 trap 'rm -rf "${WORK_DIR}"' EXIT
 

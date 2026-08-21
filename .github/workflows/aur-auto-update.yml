@@ -14,23 +14,23 @@ on:
           - weekly
           - rebased-bin
           - rebased-zh-bin
-          - keyviz-zh-bin
+          - keyviz-zh
           - emeditor-wine
           - navicat17-premium-cs
-          - wuyou-docs-bin
-          - wuyou-toolkit-bin
-          - mind-elixir-bin
+          - wuyou-docs
+          - wuyou-toolkit
+          - mind-elixir
           - ccgui-bin
           - codeg-bin
           - codepilot-bin
           - gooeypi-bin
-          - zcode-desktop-bin
-          - mastergo-desktop-bin
+          - zcode
+          - mastergo
           - pilauncher-bin
-          - minimax-hub-bin
+          - minimax-hub
           - reasonix-desktop-bin
           - pi-agent-desktop-bin
-          - reeden-bin
+          - reeden
           - alexandria-bin
           - android-dex-bin
           - so-novel-bin
@@ -40,23 +40,23 @@ on:
       - "scripts/**"
       - "packages/rebased-bin/**"
       - "packages/rebased-zh-bin/**"
-      - "packages/keyviz-zh-bin/**"
+      - "packages/keyviz-zh/**"
       - "packages/emeditor-wine/**"
       - "packages/navicat17-premium-cs/**"
-      - "packages/wuyou-docs-bin/**"
-      - "packages/wuyou-toolkit-bin/**"
-      - "packages/mind-elixir-bin/**"
+      - "packages/wuyou-docs/**"
+      - "packages/wuyou-toolkit/**"
+      - "packages/mind-elixir/**"
       - "packages/ccgui-bin/**"
       - "packages/codeg-bin/**"
       - "packages/codepilot-bin/**"
       - "packages/gooeypi-bin/**"
-      - "packages/zcode-desktop-bin/**"
-      - "packages/mastergo-desktop-bin/**"
+      - "packages/zcode/**"
+      - "packages/mastergo/**"
       - "packages/pilauncher-bin/**"
-      - "packages/minimax-hub-bin/**"
+      - "packages/minimax-hub/**"
       - "packages/reasonix-desktop-bin/**"
       - "packages/pi-agent-desktop-bin/**"
-      - "packages/reeden-bin/**"
+      - "packages/reeden/**"
       - "packages/alexandria-bin/**"
       - "packages/android-dex-bin/**"
       - "packages/so-novel-bin/**"
@@ -124,21 +124,21 @@ jobs:
             codeg-bin
             codepilot-bin
             gooeypi-bin
-            zcode-desktop-bin
-            minimax-hub-bin
+            zcode
+            minimax-hub
             reasonix-desktop-bin
             pi-agent-desktop-bin
             pilauncher-bin
           )
           weekly_packages=(
-            keyviz-zh-bin
+            keyviz-zh
             emeditor-wine
             navicat17-premium-cs
-            wuyou-docs-bin
-            wuyou-toolkit-bin
-            mind-elixir-bin
-            mastergo-desktop-bin
-            reeden-bin
+            wuyou-docs
+            wuyou-toolkit
+            mind-elixir
+            mastergo
+            reeden
             alexandria-bin
             android-dex-bin
             so-novel-bin

@@ -8,23 +8,23 @@ REPO_ROOT="$(cd -- "${SCRIPT_DIR}/.." && pwd)"
 DEFAULT_PACKAGES=(
   rebased-bin
   rebased-zh-bin
-  keyviz-zh-bin
+  keyviz-zh
   emeditor-wine
   navicat17-premium-cs
-  wuyou-docs-bin
-  wuyou-toolkit-bin
-  mind-elixir-bin
+  wuyou-docs
+  wuyou-toolkit
+  mind-elixir
   ccgui-bin
   codeg-bin
   codepilot-bin
   gooeypi-bin
-  zcode-desktop-bin
-  mastergo-desktop-bin
+  zcode
+  mastergo
   pilauncher-bin
-  minimax-hub-bin
+  minimax-hub
   reasonix-desktop-bin
   pi-agent-desktop-bin
-  reeden-bin
+  reeden
   alexandria-bin
   android-dex-bin
   so-novel-bin

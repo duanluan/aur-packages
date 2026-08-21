@@ -3,7 +3,7 @@
 set -euo pipefail
 
 electron="/usr/lib/electron41/electron"
-agent="/usr/lib/zcode-desktop-bin/resources/glm/zcode.cjs"
+agent="/usr/lib/zcode/resources/glm/zcode.cjs"
 
 [[ -x "${electron}" ]] || {
   echo "Missing Electron runtime: ${electron}" >&2

@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-appdir="/usr/lib/zcode-desktop-bin"
+appdir="/usr/lib/zcode"
 electron="/usr/lib/electron41/electron"
 resources_dir="${appdir}/resources"
 user_flags=()

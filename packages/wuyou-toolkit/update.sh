@@ -85,17 +85,16 @@ fi
 cat > "${PKGBUILD_PATH}" <<EOF
 # Maintainer: duanluan <duanluan@outlook.com>
 
-pkgname=wuyou-toolkit-bin
+pkgname=wuyou-toolkit
 _pkgname=wuyou-toolkit
 pkgver=${pkgver}
 pkgrel=1
 pkgdesc='Native shell for wuyou-toolkit (prebuilt binary)'
 arch=('x86_64')
 url='https://github.com/duanluan/wuyou-toolkit-releases'
-license=('unknown')
+license=('NOASSERTION')
 depends=('gtk3' 'webkit2gtk-4.1')
-provides=('wuyou-toolkit')
-conflicts=('wuyou-toolkit')
+provides=("wuyou-toolkit-bin=\${pkgver}")
 options=('!strip')
 source=("\${_pkgname}_\${pkgver}_amd64.deb::${pkgbuild_asset_url}")
 sha256sums=('${asset_sha256}')

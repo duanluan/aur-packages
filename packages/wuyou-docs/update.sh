@@ -50,17 +50,16 @@ fi
 cat > "${PKGBUILD_PATH}" <<EOF
 # Maintainer: duanluan <duanluan@outlook.com>
 
-pkgname=wuyou-docs-bin
+pkgname=wuyou-docs
 _pkgname=wuyou-docs
 pkgver=${pkgver}
 pkgrel=${pkgrel}
 pkgdesc='Local-first desktop document workspace (prebuilt binary)'
 arch=('x86_64')
 url='https://github.com/duanluan/wuyou-docs-releases'
-license=('unknown')
+license=('NOASSERTION')
 depends=('gtk3' 'webkit2gtk-4.1')
-provides=('wuyou-docs')
-conflicts=('wuyou-docs')
+provides=("wuyou-docs-bin=\${pkgver}")
 options=('!strip')
 source=("\${_pkgname}_\${pkgver}_amd64.deb::${pkgbuild_asset_url}")
 sha256sums=('${asset_sha256}')

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-appdir="/usr/lib/minimax-hub-bin"
+appdir="/usr/lib/minimax-hub"
 electron="/usr/lib/electron39/electron"
 resources_dir="${appdir}/resources"
 user_flags=()

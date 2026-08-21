@@ -8,23 +8,23 @@ REPO_ROOT="$(cd -- "${SCRIPT_DIR}/.." && pwd)"
 DEFAULT_PACKAGES=(
   rebased-bin
   rebased-zh-bin
-  keyviz-zh-bin
+  keyviz-zh
   emeditor-wine
   navicat17-premium-cs
-  wuyou-docs-bin
-  wuyou-toolkit-bin
-  mind-elixir-bin
+  wuyou-docs
+  wuyou-toolkit
+  mind-elixir
   ccgui-bin
   codeg-bin
   codepilot-bin
   gooeypi-bin
-  zcode-desktop-bin
-  mastergo-desktop-bin
+  zcode
+  mastergo
   pilauncher-bin
-  minimax-hub-bin
+  minimax-hub
   reasonix-desktop-bin
   pi-agent-desktop-bin
-  reeden-bin
+  reeden
   alexandria-bin
   android-dex-bin
   so-novel-bin
@@ -47,19 +47,6 @@ require_command install
 require_command mktemp
 require_command ssh
 
-push_with_retry() {
-  local aur_dir="$1"
-  local branch="$2"
-
-  if git -C "${aur_dir}" push origin "${branch}"; then
-    return 0
-  fi
-
-  git -C "${aur_dir}" fetch origin "${branch}"
-  git -C "${aur_dir}" rebase "origin/${branch}"
-  git -C "${aur_dir}" push origin "${branch}"
-}
-
 aur_files_for_package() {
   local package_dir="$1"
   local srcinfo_path="${package_dir}/.SRCINFO"
@@ -73,6 +60,55 @@ aur_files_for_package() {
       [[ "${aur_entry}" =~ ^[a-z]+:// ]] && continue
       printf '%s\n' "${aur_entry}"
     done
+}
+
+reconcile_aur_files() {
+  local aur_dir="$1"
+  local package_dir="$2"
+  local aur_file
+  local tracked_file
+  local -a aur_files
+  local -A expected_aur_files=()
+
+  mapfile -t aur_files < <(aur_files_for_package "${package_dir}" | sort -u)
+
+  for aur_file in "${aur_files[@]}"; do
+    expected_aur_files["${aur_file}"]=1
+
+    if [[ ! -f "${package_dir}/${aur_file}" ]]; then
+      printf 'missing package file: %s\n' "${package_dir}/${aur_file}" >&2
+      return 1
+    fi
+
+    install -Dm644 "${package_dir}/${aur_file}" "${aur_dir}/${aur_file}"
+  done
+
+  while IFS= read -r tracked_file; do
+    if [[ -z "${expected_aur_files[${tracked_file}]+x}" ]]; then
+      git -C "${aur_dir}" rm -- "${tracked_file}" >/dev/null
+    fi
+  done < <(git -C "${aur_dir}" ls-files)
+}
+
+push_with_retry() {
+  local aur_dir="$1"
+  local branch="$2"
+  local package_dir="$3"
+
+  if git -C "${aur_dir}" push origin "${branch}"; then
+    return 0
+  fi
+
+  git -C "${aur_dir}" fetch origin "${branch}"
+  git -C "${aur_dir}" rebase "origin/${branch}"
+  reconcile_aur_files "${aur_dir}" "${package_dir}"
+
+  if [[ -n "$(git -C "${aur_dir}" status --short)" ]]; then
+    git -C "${aur_dir}" add --all
+    git -C "${aur_dir}" commit -m 'Reconcile package files' >/dev/null 2>&1
+  fi
+
+  git -C "${aur_dir}" push origin "${branch}"
 }
 
 if [[ -f "${AUR_SSH_KEY}" && -z "${GIT_SSH_COMMAND:-}" ]]; then
@@ -106,18 +142,9 @@ for package in "${packages[@]}"; do
     git -C "${aur_dir}" remote add origin "${remote_url}"
   fi
 
-  mapfile -t aur_files < <(aur_files_for_package "${package_dir}" | sort -u)
+  reconcile_aur_files "${aur_dir}" "${package_dir}"
 
-  for aur_file in "${aur_files[@]}"; do
-    if [[ ! -f "${package_dir}/${aur_file}" ]]; then
-      printf 'missing package file: %s/%s\n' "${package}" "${aur_file}" >&2
-      exit 1
-    fi
-
-    install -Dm644 "${package_dir}/${aur_file}" "${aur_dir}/${aur_file}"
-  done
-
-  if [[ -z "$(git -C "${aur_dir}" status --short -- "${aur_files[@]}")" ]]; then
+  if [[ -z "$(git -C "${aur_dir}" status --short)" ]]; then
     printf 'no changes for %s\n' "${package}"
     continue
   fi
@@ -125,7 +152,7 @@ for package in "${packages[@]}"; do
   pkgver="$(sed -n 's/^pkgver=//p' "${package_dir}/PKGBUILD" | head -n1)"
   pkgrel="$(sed -n 's/^pkgrel=//p' "${package_dir}/PKGBUILD" | head -n1)"
 
-  git -C "${aur_dir}" add "${aur_files[@]}"
+  git -C "${aur_dir}" add --all
 
   if git -C "${aur_dir}" rev-parse --verify HEAD >/dev/null 2>&1; then
     git -C "${aur_dir}" commit -m "Update to ${pkgver}-${pkgrel}" >/dev/null 2>&1
@@ -133,5 +160,5 @@ for package in "${packages[@]}"; do
     git -C "${aur_dir}" commit -m "Initial import: ${package} ${pkgver}-${pkgrel}" >/dev/null 2>&1
   fi
 
-  push_with_retry "${aur_dir}" master
+  push_with_retry "${aur_dir}" master "${package_dir}"
 done

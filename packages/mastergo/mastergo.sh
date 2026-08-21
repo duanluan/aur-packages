@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-appdir="/usr/lib/mastergo-desktop-bin"
+appdir="/usr/lib/mastergo"
 electron="/usr/lib/electron31/electron"
 resources_dir="${appdir}/resources"
 user_flags=()

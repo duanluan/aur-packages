@@ -3,7 +3,7 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
-PKGNAME="${PKGNAME:-reeden-bin}"
+PKGNAME="${PKGNAME:-wuyou-toolkit}"
 AUR_REMOTE_URL="${AUR_REMOTE_URL:-ssh://aur@aur.archlinux.org/${PKGNAME}.git}"
 AUR_SSH_KEY="${AUR_SSH_KEY:-${HOME}/.ssh/aur_actions}"
 WORK_DIR="$(mktemp -d)"
@@ -40,10 +40,20 @@ fi
 install -Dm644 "${SCRIPT_DIR}/PKGBUILD" "${WORK_DIR}/${PKGNAME}/PKGBUILD"
 install -Dm644 "${SCRIPT_DIR}/.SRCINFO" "${WORK_DIR}/${PKGNAME}/.SRCINFO"
 
-if [[ -f "${SCRIPT_DIR}/README.md" ]]; then
-  install -Dm644 "${SCRIPT_DIR}/README.md" "${WORK_DIR}/${PKGNAME}/README.md"
+if [[ -z "$(git -C "${WORK_DIR}/${PKGNAME}" status --short -- PKGBUILD .SRCINFO)" ]]; then
+  printf 'no changes\n'
+  exit 0
 fi
 
-git -C "${WORK_DIR}/${PKGNAME}" add PKGBUILD .SRCINFO README.md
-git -C "${WORK_DIR}/${PKGNAME}" commit -m "Update ${PKGNAME}" >/dev/null
+pkgver="$(sed -n 's/^pkgver=//p' "${SCRIPT_DIR}/PKGBUILD")"
+pkgrel="$(sed -n 's/^pkgrel=//p' "${SCRIPT_DIR}/PKGBUILD")"
+
+git -C "${WORK_DIR}/${PKGNAME}" add PKGBUILD .SRCINFO
+
+if git -C "${WORK_DIR}/${PKGNAME}" rev-parse --verify HEAD >/dev/null 2>&1; then
+  git -C "${WORK_DIR}/${PKGNAME}" commit -m "Update to ${pkgver}-${pkgrel}" >/dev/null 2>&1
+else
+  git -C "${WORK_DIR}/${PKGNAME}" commit -m "Initial import: ${PKGNAME} ${pkgver}-${pkgrel}" >/dev/null 2>&1
+fi
+
 git -C "${WORK_DIR}/${PKGNAME}" push origin master

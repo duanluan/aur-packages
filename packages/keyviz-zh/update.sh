@@ -90,7 +90,7 @@ fi
 cat > "${PKGBUILD_PATH}" <<EOF
 # Maintainer: duanluan <duanluan@outlook.com>
 
-pkgname=keyviz-zh-bin
+pkgname=keyviz-zh
 pkgver=${PKGVER}
 pkgrel=${pkgrel}
 _commit=${COMMIT}
@@ -98,10 +98,10 @@ _srcdir="keyviz-\${_commit}"
 pkgdesc='Chinese-localized fork of Keyviz with Linux fixes'
 arch=('x86_64')
 url='https://github.com/duanluan/keyviz'
-license=('GPL3')
+license=('GPL-3.0-only')
 depends=('gtk3' 'libayatana-appindicator' 'webkit2gtk-4.1')
 makedepends=('cargo' 'nodejs' 'npm')
-provides=('keyviz')
+provides=("keyviz-zh-bin=\${pkgver}" 'keyviz')
 conflicts=('keyviz' 'keyviz-bin' 'keyviz-cn-bin')
 options=('!strip')
 source=(

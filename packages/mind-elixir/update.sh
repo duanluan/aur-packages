@@ -114,17 +114,16 @@ fi
 cat > "${PKGBUILD_PATH}" <<EOF
 # Maintainer: duanluan <duanluan@outlook.com>
 
-pkgname=mind-elixir-bin
+pkgname=mind-elixir
 _pkgname=mind-elixir
 pkgver=${pkgver}
 pkgrel=${pkgrel}
 pkgdesc='Lightweight privacy-focused mind mapping tool (prebuilt binary)'
 arch=('x86_64')
 url='https://app.mind-elixir.com/'
-license=('unknown')
+license=('NOASSERTION')
 depends=('gtk3' 'hicolor-icon-theme' 'webkit2gtk-4.1')
-provides=('mind-elixir')
-conflicts=('mind-elixir')
+provides=("mind-elixir-bin=\${pkgver}")
 options=('!strip')
 source=("Mind.Elixir_\${pkgver}_amd64.deb::${pkgbuild_asset_url}")
 sha256sums=('${asset_sha256}')

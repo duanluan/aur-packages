@@ -69,7 +69,7 @@ fi
 cat > "${PKGBUILD_PATH}" <<EOF
 # Maintainer: duanluan <duanluan@outlook.com>
 
-pkgname=reeden-bin
+pkgname=reeden
 _pkgname=reeden
 _appname=Reeden
 pkgver=${pkgver}
@@ -77,10 +77,9 @@ pkgrel=${pkgrel}
 pkgdesc='Modern cross-platform ebook reader (prebuilt binary)'
 arch=('x86_64')
 url='https://reeden.app/cn/download'
-license=('unknown')
+license=('NOASSERTION')
 depends=('gtk3' 'libayatana-appindicator' 'sqlite' 'xdg-user-dirs')
-provides=('reeden')
-conflicts=('reeden')
+provides=("reeden-bin=\${pkgver}")
 options=('!strip')
 source=("\${_appname}-\${pkgver}-linux-x86_64.deb::https://download.reeden.app/\${_appname}/\${pkgver}/\${_appname}-\${pkgver}-linux-x86_64.deb")
 sha256sums=('${asset_sha256}')
@@ -108,4 +107,4 @@ EOF
   makepkg --printsrcinfo > "${SRCINFO_PATH}"
 )
 
-printf 'updated reeden-bin to %s-%s\n' "${pkgver}" "${pkgrel}"
+printf 'updated reeden to %s-%s\n' "${pkgver}" "${pkgrel}"
