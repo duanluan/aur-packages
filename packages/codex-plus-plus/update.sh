@@ -63,7 +63,7 @@ license=('MIT')
 options=('!lto')
 depends=(
   'bash'
-  'chatgpt'
+  'chatgpt-desktop'
   'procps-ng'
 )
 makedepends=(

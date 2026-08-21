@@ -1,7 +1,7 @@
 pkgbase = codex-plus-plus
 	pkgdesc = Codex++ manual injection bridge for the ChatGPT desktop app
 	pkgver = 1.2.47
-	pkgrel = 1
+	pkgrel = 2
 	epoch = 1
 	url = https://github.com/BigPizzaV3/CodexPlusPlus
 	install = codex-plus-plus.install
@@ -9,7 +9,7 @@ pkgbase = codex-plus-plus
 	license = MIT
 	makedepends = cargo
 	depends = bash
-	depends = chatgpt
+	depends = chatgpt-desktop
 	depends = procps-ng
 	options = !lto
 	source = codex-plus-plus-1.2.47.tar.gz::https://github.com/BigPizzaV3/CodexPlusPlus/archive/refs/tags/v1.2.47.tar.gz

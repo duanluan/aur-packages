@@ -1,8 +1,8 @@
 # codex-plus-plus
 
 `codex-plus-plus` packages [Codex++](https://github.com/BigPizzaV3/CodexPlusPlus)
-as a manual injection bridge for the Arch Linux ChatGPT desktop app. The
-current `openai-codex-desktop` package provides the `chatgpt` dependency.
+as a manual injection bridge for the Arch Linux ChatGPT desktop app. It uses
+the [`chatgpt-desktop`](https://aur.archlinux.org/packages/chatgpt-desktop) package.
 
 ## Install
 
@@ -53,7 +53,7 @@ sudo codex-plus-plus disable
 
 ## Notes
 
-- The package depends on `chatgpt`, currently provided by `openai-codex-desktop`.
+- The package depends on `chatgpt-desktop`.
 - It leaves `/usr/bin/chatgpt` on the upstream launcher unless enabled manually.
 - The recommended desktop path is `ChatGPT (Codex++)`, which runs `codex-plus-plus run`.
 - It keeps a backup of the upstream `/usr/bin/chatgpt` launcher when enabled.
