@@ -37,6 +37,8 @@ ccgui
 
 ## Notes
 
-- The package installs the upstream AppImage under `/opt/ccgui`.
+- The package extracts the upstream binaries under `/opt/ccgui` and uses the
+  system WebKitGTK and GStreamer runtime. This avoids ABI mismatches between
+  the AppImage media libraries and Arch Linux GStreamer plugins.
 - The `cc-gui` command is provided as a compatibility alias.
 - The download page links to the upstream `desktop-cc-gui` release assets.
