@@ -86,7 +86,7 @@ pkgdesc='Desktop UI for browsing sessions and working with the pi coding agent (
 arch=('x86_64')
 url='https://github.com/abcwyc/pi-agent-desktop'
 license=('MIT')
-depends=('gtk3' 'libayatana-appindicator' 'webkit2gtk-4.1')
+depends=('gtk3' 'webkit2gtk-4.1' 'nodejs>=22.19.0' 'npm')
 provides=("\${_pkgname}")
 conflicts=("\${_pkgname}")
 options=('!strip')
@@ -102,6 +102,7 @@ package() {
   install -dm755 "\${extract_dir}"
   bsdtar -C "\${extract_dir}" -xf "\${srcdir}/\${_appname// /_}_\${pkgver}_amd64.deb"
   bsdtar -C "\${pkgdir}" -xf "\${extract_dir}/data.tar.gz"
+  rm -rf "\${pkgdir}/usr/lib/\${_appname}/resources/node"
 
   mv "\${pkgdir}/usr/bin/\${_pkgname}" \\
     "\${pkgdir}/usr/lib/\${_appname}/\${_pkgname}"

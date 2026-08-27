@@ -39,7 +39,8 @@ pi-agent-desktop
 ## Notes
 
 - The package uses the official prebuilt x86_64 `.deb` release.
-- The upstream bundle includes its own Node.js runtime and server resources.
+- The package removes the bundled Node.js runtime and uses system Node.js
+  22.19.0 or newer. The `npm` package supplies `npx` for skill management.
 - The launcher disables WebKit's DMABUF renderer by default to avoid a blank
   window on affected Linux graphics stacks. Set
   `WEBKIT_DISABLE_DMABUF_RENDERER=0` to override it.
