@@ -303,4 +303,5 @@ jobs:
               printf '### Package publish failures\n\n'
               printf '%s\n' "${failed_packages[@]}" | sed 's/^/- /'
             } >> "${GITHUB_STEP_SUMMARY}"
+            exit 1
           fi

@@ -136,7 +136,7 @@ for package in "${packages[@]}"; do
   printf 'syncing %s\n' "${package}"
 
   if git ls-remote "${remote_url}" >/dev/null 2>&1; then
-    git clone "${remote_url}" "${aur_dir}" >/dev/null 2>&1
+    git clone --branch master "${remote_url}" "${aur_dir}" >/dev/null 2>&1
   else
     git init --initial-branch=master "${aur_dir}" >/dev/null 2>&1
     git -C "${aur_dir}" remote add origin "${remote_url}"
