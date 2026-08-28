@@ -1,7 +1,8 @@
 [Desktop Entry]
 Name=ZCode
 Comment=ZCode desktop app
-Exec=zcode %U
+Exec=/usr/bin/zcode %U
+TryExec=/usr/bin/zcode
 Icon=zcode
 Terminal=false
 Type=Application
