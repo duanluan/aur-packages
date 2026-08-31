@@ -27,6 +27,7 @@ on:
           - zcode
           - mastergo
           - pilauncher-bin
+          - pideck-bin
           - minimax-hub
           - reasonix-desktop-bin
           - pi-agent-desktop-bin
@@ -53,6 +54,7 @@ on:
       - "packages/zcode/**"
       - "packages/mastergo/**"
       - "packages/pilauncher-bin/**"
+      - "packages/pideck-bin/**"
       - "packages/minimax-hub/**"
       - "packages/reasonix-desktop-bin/**"
       - "packages/pi-agent-desktop-bin/**"
@@ -129,6 +131,7 @@ jobs:
             reasonix-desktop-bin
             pi-agent-desktop-bin
             pilauncher-bin
+            pideck-bin
           )
           weekly_packages=(
             keyviz-zh

@@ -18,6 +18,7 @@ User-facing notes for the AUR packages maintained in this repository.
 - `zcode`: ZCode desktop app repackaged from the official Linux release
 - `mastergo`: MasterGo desktop app repackaged from the official macOS release
 - `pilauncher-bin`: The prebuilt Linux desktop release of PiLauncher
+- `pideck-bin`: The prebuilt Linux desktop release of PiDeck
 - `minimax-hub`: MiniMax Hub desktop app repackaged from the official macOS release
 - `reasonix-desktop-bin`: Reasonix desktop app repackaged from the official .deb release
 - `pi-agent-desktop-bin`: Pi Agent desktop app repackaged from the official .deb release
@@ -46,6 +47,7 @@ paru -S codex-plus-plus
 paru -S zcode
 paru -S mastergo
 paru -S pilauncher-bin
+paru -S pideck-bin
 paru -S minimax-hub
 paru -S reasonix-desktop-bin
 paru -S pi-agent-desktop-bin
@@ -73,6 +75,7 @@ yay -S codex-plus-plus
 yay -S zcode
 yay -S mastergo
 yay -S pilauncher-bin
+yay -S pideck-bin
 yay -S minimax-hub
 yay -S reasonix-desktop-bin
 yay -S pi-agent-desktop-bin
@@ -131,6 +134,7 @@ package repositories.
 - [zcode](packages/zcode/README.md)
 - [mastergo](packages/mastergo/README.md)
 - [pilauncher-bin](packages/pilauncher-bin/README.md)
+- [pideck-bin](packages/pideck-bin/README.md)
 - [minimax-hub](packages/minimax-hub/README.md)
 - [reasonix-desktop-bin](packages/reasonix-desktop-bin/README.md)
 - [pi-agent-desktop-bin](packages/pi-agent-desktop-bin/README.md)
@@ -156,6 +160,7 @@ frequently updated packages daily:
 - `reasonix-desktop-bin`
 - `pi-agent-desktop-bin`
 - `pilauncher-bin`
+- `pideck-bin`
 
 Less frequently updated packages stay on the weekly check:
 

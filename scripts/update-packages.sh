@@ -21,6 +21,7 @@ DEFAULT_PACKAGES=(
   zcode
   mastergo
   pilauncher-bin
+  pideck-bin
   minimax-hub
   reasonix-desktop-bin
   pi-agent-desktop-bin
