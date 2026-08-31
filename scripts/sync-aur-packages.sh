@@ -127,6 +127,7 @@ for package in "${packages[@]}"; do
   package_dir="${REPO_ROOT}/packages/${package}"
   remote_url="${AUR_REMOTE_BASE}/${package}.git"
   aur_dir="${WORK_DIR}/${package}"
+  remote_refs=''
 
   if [[ ! -f "${package_dir}/PKGBUILD" || ! -f "${package_dir}/.SRCINFO" ]]; then
     printf 'missing package files: %s\n' "${package}" >&2
@@ -135,7 +136,7 @@ for package in "${packages[@]}"; do
 
   printf 'syncing %s\n' "${package}"
 
-  if git ls-remote "${remote_url}" >/dev/null 2>&1; then
+  if remote_refs="$(git ls-remote "${remote_url}" 2>/dev/null)" && [[ -n "${remote_refs}" ]]; then
     git clone --branch master "${remote_url}" "${aur_dir}" >/dev/null 2>&1
   else
     git init --initial-branch=master "${aur_dir}" >/dev/null 2>&1
