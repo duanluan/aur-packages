@@ -29,6 +29,7 @@ DEFAULT_PACKAGES=(
   alexandria-bin
   android-dex-bin
   so-novel-bin
+  opensquilla
 )
 
 if [[ "$#" -gt 0 ]]; then

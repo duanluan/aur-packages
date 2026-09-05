@@ -35,6 +35,7 @@ on:
           - alexandria-bin
           - android-dex-bin
           - so-novel-bin
+          - opensquilla
   push:
     paths:
       - ".github/workflows/aur-auto-update.yml"
@@ -62,6 +63,7 @@ on:
       - "packages/alexandria-bin/**"
       - "packages/android-dex-bin/**"
       - "packages/so-novel-bin/**"
+      - "packages/opensquilla/**"
   schedule:
     - cron: "43 0 * * *"
     - cron: "13 0 * * 1"
@@ -132,6 +134,7 @@ jobs:
             pi-agent-desktop-bin
             pilauncher-bin
             pideck-bin
+            opensquilla
           )
           weekly_packages=(
             keyviz-zh
