@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=Apifox
+Comment=API documentation, debugging, mocking, and automated testing
+Exec=apifox %U
+TryExec=apifox
+Icon=apifox
+Terminal=false
+Type=Application
+Categories=Development;
+StartupNotify=true
+StartupWMClass=Apifox

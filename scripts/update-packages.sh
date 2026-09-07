@@ -28,6 +28,7 @@ DEFAULT_PACKAGES=(
   reeden
   alexandria-bin
   android-dex-bin
+  apifox
   so-novel-bin
   opensquilla
 )

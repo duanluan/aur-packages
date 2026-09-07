@@ -26,6 +26,7 @@ User-facing notes for the AUR packages maintained in this repository.
 - [reeden](packages/reeden/README.md): Reeden desktop app
 - [alexandria-bin](packages/alexandria-bin/README.md): Alexandria desktop app
 - [android-dex-bin](packages/android-dex-bin/README.md): Android DEX Linux bundle
+- [apifox](packages/apifox/README.md): Apifox API documentation, debugging, mocking, and automated testing tool
 - [so-novel-bin](packages/so-novel-bin/README.md): So Novel web content extraction and ebook export tool
 - [emeditor-wine](packages/emeditor-wine/README.md): EmEditor running through a dedicated Wine prefix
 - [opensquilla](packages/opensquilla/README.md): OpenSquilla desktop app
@@ -72,6 +73,7 @@ frequently updated packages daily:
 - `pilauncher-bin`
 - `pideck-bin`
 - `opensquilla`
+- `apifox`
 
 Less frequently updated packages stay on the weekly check:
 

@@ -135,6 +135,7 @@ jobs:
             pilauncher-bin
             pideck-bin
             opensquilla
+            apifox
           )
           weekly_packages=(
             keyviz-zh
