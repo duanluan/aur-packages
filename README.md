@@ -30,6 +30,7 @@ User-facing notes for the AUR packages maintained in this repository.
 - [so-novel-bin](packages/so-novel-bin/README.md): So Novel web content extraction and ebook export tool
 - [emeditor-wine](packages/emeditor-wine/README.md): EmEditor running through a dedicated Wine prefix
 - [opensquilla](packages/opensquilla/README.md): OpenSquilla desktop app
+- [wechat-xwayland](packages/wechat-xwayland/README.md): Launch WeChat through XWayland with a KDE window-activation command
 
 ## Renamed Packages
 
