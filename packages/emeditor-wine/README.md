@@ -1,6 +1,6 @@
 # emeditor-wine
 
-EmEditor 26.1.1 running through a dedicated Wine prefix.
+EmEditor 26.2.7 running through a dedicated Wine prefix.
 
 The AUR package downloads the launcher source from the tagged
 `duanluan/emeditor-linux` release and downloads the official EmEditor MSI during
