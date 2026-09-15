@@ -1,4 +1,11 @@
 #!/bin/sh
 # Force Qt to use XWayland so wmctrl can activate the existing window.
 export QT_QPA_PLATFORM=xcb
+
+# Reuse the running instance: a second WeChat process doubles the memory
+# footprint and its extra PID breaks the tray matching in the activation
+# script, which leaves the minimized window unreachable.
+if pgrep -x wechat >/dev/null 2>&1; then
+  exec /usr/bin/activate-wechat-xwayland
+fi
 exec /opt/wechat/wechat "$@"

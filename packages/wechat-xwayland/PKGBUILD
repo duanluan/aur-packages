@@ -1,7 +1,7 @@
 # Maintainer: local package
 pkgname=wechat-xwayland
 pkgver=1.0
-pkgrel=1
+pkgrel=2
 pkgdesc='Launch wechat-bin through Qt XWayland with a KDE activation command'
 arch=('any')
 url='https://aur.archlinux.org/packages/wechat-bin'
