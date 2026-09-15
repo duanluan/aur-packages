@@ -31,6 +31,7 @@ User-facing notes for the AUR packages maintained in this repository.
 - [emeditor-wine](packages/emeditor-wine/README.md): EmEditor running through a dedicated Wine prefix
 - [opensquilla](packages/opensquilla/README.md): OpenSquilla desktop app
 - [wechat-xwayland](packages/wechat-xwayland/README.md): Launch WeChat through XWayland with a KDE window-activation command
+- [zcode-pro](packages/zcode-pro/README.md): UI enhancement launcher for the ZCode desktop app (custom project aliases)
 
 ## Renamed Packages
 

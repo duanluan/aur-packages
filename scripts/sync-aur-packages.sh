@@ -19,6 +19,7 @@ DEFAULT_PACKAGES=(
   codepilot-bin
   gooeypi-bin
   zcode
+  zcode-pro
   mastergo
   pilauncher-bin
   pideck-bin
