@@ -34,8 +34,9 @@ on:
           - reeden
           - alexandria-bin
           - android-dex-bin
-          - so-novel-bin
-          - opensquilla
+            - so-novel-bin
+            - opensquilla
+            - mimo-desktop
   push:
     paths:
       - ".github/workflows/aur-auto-update.yml"
@@ -64,6 +65,7 @@ on:
       - "packages/android-dex-bin/**"
       - "packages/so-novel-bin/**"
       - "packages/opensquilla/**"
+      - "packages/mimo-desktop/**"
   schedule:
     - cron: "43 0 * * *"
     - cron: "13 0 * * 1"
@@ -149,6 +151,7 @@ jobs:
             alexandria-bin
             android-dex-bin
             so-novel-bin
+            mimo-desktop
           )
 
           if [[ "${EVENT_NAME}" == "schedule" ]]; then

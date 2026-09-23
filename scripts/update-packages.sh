@@ -31,6 +31,7 @@ DEFAULT_PACKAGES=(
   apifox
   so-novel-bin
   opensquilla
+  mimo-desktop
 )
 
 if [[ "$#" -gt 0 ]]; then

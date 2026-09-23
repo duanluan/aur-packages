@@ -32,6 +32,7 @@ User-facing notes for the AUR packages maintained in this repository.
 - [opensquilla](packages/opensquilla/README.md): OpenSquilla desktop app
 - [wechat-xwayland](packages/wechat-xwayland/README.md): Launch WeChat through XWayland with a KDE window-activation command
 - [zcode-pro](packages/zcode-pro/README.md): UI enhancement launcher for the ZCode desktop app (custom project aliases)
+- [mimo-desktop](packages/mimo-desktop/README.md): Xiaomi MiMo desktop app
 
 ## Renamed Packages
 
@@ -90,6 +91,7 @@ Less frequently updated packages stay on the weekly check:
 - `alexandria-bin`
 - `android-dex-bin`
 - `so-novel-bin`
+- `mimo-desktop`
 
 It regenerates package files, commits changes back to this repository, and then
 publishes changed AUR files to AUR.

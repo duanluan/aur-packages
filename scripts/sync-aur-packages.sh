@@ -31,6 +31,7 @@ DEFAULT_PACKAGES=(
   android-dex-bin
   apifox
   so-novel-bin
+  mimo-desktop
 )
 
 AUR_SSH_KEY="${AUR_SSH_KEY:-${HOME}/.ssh/aur_actions}"
