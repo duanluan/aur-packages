@@ -7,3 +7,4 @@ packages/*/*.tar.gz
 packages/*/*.dmg
 packages/*/*.whl
 packages/*/*.AppImage
+.idea/
