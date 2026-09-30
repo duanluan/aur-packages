@@ -37,6 +37,7 @@ on:
             - so-novel-bin
             - opensquilla
             - mimo-desktop
+            - evox
   push:
     paths:
       - ".github/workflows/aur-auto-update.yml"
@@ -66,6 +67,7 @@ on:
       - "packages/so-novel-bin/**"
       - "packages/opensquilla/**"
       - "packages/mimo-desktop/**"
+      - "packages/evox/**"
   schedule:
     - cron: "43 0 * * *"
     - cron: "13 0 * * 1"
@@ -138,6 +140,7 @@ jobs:
             pideck-bin
             opensquilla
             apifox
+            evox
           )
           weekly_packages=(
             keyviz-zh

@@ -32,6 +32,7 @@ DEFAULT_PACKAGES=(
   so-novel-bin
   opensquilla
   mimo-desktop
+  evox
 )
 
 if [[ "$#" -gt 0 ]]; then

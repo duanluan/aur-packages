@@ -33,6 +33,7 @@ User-facing notes for the AUR packages maintained in this repository.
 - [wechat-xwayland](packages/wechat-xwayland/README.md): Launch WeChat through XWayland with a KDE window-activation command
 - [zcode-pro](packages/zcode-pro/README.md): UI enhancement launcher for the ZCode desktop app (custom project aliases)
 - [mimo-desktop](packages/mimo-desktop/README.md): Xiaomi MiMo desktop app
+- [evox](packages/evox/README.md): EvoMap EvoX self-evolving swarm coding agent (beta channel)
 
 ## Renamed Packages
 
@@ -77,6 +78,7 @@ frequently updated packages daily:
 - `pideck-bin`
 - `opensquilla`
 - `apifox`
+- `evox`
 
 Less frequently updated packages stay on the weekly check:
 

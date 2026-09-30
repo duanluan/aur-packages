@@ -32,6 +32,7 @@ DEFAULT_PACKAGES=(
   apifox
   so-novel-bin
   mimo-desktop
+  evox
 )
 
 AUR_SSH_KEY="${AUR_SSH_KEY:-${HOME}/.ssh/aur_actions}"
