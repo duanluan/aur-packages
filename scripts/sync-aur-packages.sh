@@ -30,6 +30,7 @@ DEFAULT_PACKAGES=(
   alexandria-bin
   android-dex-bin
   apifox
+  photon-studio
   so-novel-bin
   mimo-desktop
   evox

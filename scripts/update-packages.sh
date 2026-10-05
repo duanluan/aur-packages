@@ -29,6 +29,7 @@ DEFAULT_PACKAGES=(
   alexandria-bin
   android-dex-bin
   apifox
+  photon-studio
   so-novel-bin
   opensquilla
   mimo-desktop

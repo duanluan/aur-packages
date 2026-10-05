@@ -27,6 +27,7 @@ User-facing notes for the AUR packages maintained in this repository.
 - [alexandria-bin](packages/alexandria-bin/README.md): Alexandria desktop app
 - [android-dex-bin](packages/android-dex-bin/README.md): Android DEX Linux bundle
 - [apifox](packages/apifox/README.md): Apifox API documentation, debugging, mocking, and automated testing tool
+- [photon-studio](packages/photon-studio/README.md): Photon Studio desktop photo and image editor
 - [so-novel-bin](packages/so-novel-bin/README.md): So Novel web content extraction and ebook export tool
 - [emeditor-wine](packages/emeditor-wine/README.md): EmEditor running through a dedicated Wine prefix
 - [opensquilla](packages/opensquilla/README.md): OpenSquilla desktop app
@@ -78,6 +79,7 @@ frequently updated packages daily:
 - `pideck-bin`
 - `opensquilla`
 - `apifox`
+- `photon-studio`
 - `evox`
 
 Less frequently updated packages stay on the weekly check:
@@ -103,3 +105,7 @@ manual build and runtime verification before publishing.
 
 `pdmaas-pro-bin` is intentionally excluded because the upstream Pro package
 requires a download code instead of a stable public source URL.
+
+## Docs
+
+- [Arch / AUR 打包规则摘录](docs/aur-packaging-rules.md): `-bin` 命名规则、重复包处理等，新包命名前先看这份。
