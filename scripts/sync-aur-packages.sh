@@ -95,6 +95,24 @@ reconcile_aur_files() {
   done < <(git -C "${aur_dir}" ls-files)
 }
 
+clone_with_retry() {
+  local remote_url="$1"
+  local dest="$2"
+  local attempt
+
+  for attempt in 1 2 3; do
+    rm -rf "${dest}"
+    if git clone --quiet --branch master "${remote_url}" "${dest}"; then
+      return 0
+    fi
+
+    printf 'clone attempt %d/3 failed: %s\n' "${attempt}" "${remote_url}" >&2
+    sleep 3
+  done
+
+  return 1
+}
+
 push_with_retry() {
   local aur_dir="$1"
   local branch="$2"
@@ -110,7 +128,7 @@ push_with_retry() {
 
   if [[ -n "$(git -C "${aur_dir}" status --short)" ]]; then
     git -C "${aur_dir}" add --all
-    git -C "${aur_dir}" commit -m 'Reconcile package files' >/dev/null 2>&1
+    git -C "${aur_dir}" commit --quiet -m 'Reconcile package files'
   fi
 
   git -C "${aur_dir}" push origin "${branch}"
@@ -142,9 +160,9 @@ for package in "${packages[@]}"; do
   printf 'syncing %s\n' "${package}"
 
   if remote_refs="$(git ls-remote "${remote_url}" 2>/dev/null)" && [[ -n "${remote_refs}" ]]; then
-    git clone --branch master "${remote_url}" "${aur_dir}" >/dev/null 2>&1
+    clone_with_retry "${remote_url}" "${aur_dir}"
   else
-    git init --initial-branch=master "${aur_dir}" >/dev/null 2>&1
+    git init --quiet --initial-branch=master "${aur_dir}"
     git -C "${aur_dir}" remote add origin "${remote_url}"
   fi
 
@@ -161,9 +179,9 @@ for package in "${packages[@]}"; do
   git -C "${aur_dir}" add --all
 
   if git -C "${aur_dir}" rev-parse --verify HEAD >/dev/null 2>&1; then
-    git -C "${aur_dir}" commit -m "Update to ${pkgver}-${pkgrel}" >/dev/null 2>&1
+    git -C "${aur_dir}" commit --quiet -m "Update to ${pkgver}-${pkgrel}"
   else
-    git -C "${aur_dir}" commit -m "Initial import: ${package} ${pkgver}-${pkgrel}" >/dev/null 2>&1
+    git -C "${aur_dir}" commit --quiet -m "Initial import: ${package} ${pkgver}-${pkgrel}"
   fi
 
   push_with_retry "${aur_dir}" master "${package_dir}"
