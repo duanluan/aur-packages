@@ -35,6 +35,7 @@ User-facing notes for the AUR packages maintained in this repository.
 - [zcode-pro](packages/zcode-pro/README.md): UI enhancement launcher for the ZCode desktop app (custom project aliases)
 - [mimo-desktop](packages/mimo-desktop/README.md): Xiaomi MiMo desktop app
 - [evox](packages/evox/README.md): EvoMap EvoX self-evolving swarm coding agent (beta channel)
+- [tessoa](packages/tessoa/README.md): GPU-accelerated file manager with split panes, layouts, tags and multiple views
 
 ## Renamed Packages
 
@@ -81,6 +82,7 @@ frequently updated packages daily:
 - `apifox`
 - `photon-studio`
 - `evox`
+- `tessoa`
 
 Less frequently updated packages stay on the weekly check:
 

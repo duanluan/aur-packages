@@ -34,6 +34,7 @@ DEFAULT_PACKAGES=(
   opensquilla
   mimo-desktop
   evox
+  tessoa
 )
 
 if [[ "$#" -gt 0 ]]; then

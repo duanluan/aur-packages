@@ -40,6 +40,7 @@ on:
             - opensquilla
             - mimo-desktop
             - evox
+            - tessoa
   push:
     paths:
       - ".github/workflows/aur-auto-update.yml"
@@ -72,6 +73,7 @@ on:
       - "packages/opensquilla/**"
       - "packages/mimo-desktop/**"
       - "packages/evox/**"
+      - "packages/tessoa/**"
   schedule:
     - cron: "43 0 * * *"
     - cron: "13 0 * * 1"
@@ -146,6 +148,7 @@ jobs:
             apifox
             photon-studio
             evox
+            tessoa
           )
           weekly_packages=(
             keyviz-zh
