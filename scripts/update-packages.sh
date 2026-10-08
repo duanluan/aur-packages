@@ -35,6 +35,7 @@ DEFAULT_PACKAGES=(
   mimo-desktop
   evox
   tessoa
+  ldtk-git
 )
 
 if [[ "$#" -gt 0 ]]; then

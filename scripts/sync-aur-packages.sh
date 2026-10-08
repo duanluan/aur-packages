@@ -35,6 +35,7 @@ DEFAULT_PACKAGES=(
   mimo-desktop
   evox
   tessoa
+  ldtk-git
 )
 
 AUR_SSH_KEY="${AUR_SSH_KEY:-${HOME}/.ssh/aur_actions}"

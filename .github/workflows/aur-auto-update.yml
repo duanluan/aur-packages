@@ -37,10 +37,11 @@ on:
           - apifox
           - photon-studio
           - so-novel-bin
-            - opensquilla
-            - mimo-desktop
-            - evox
-            - tessoa
+          - opensquilla
+          - mimo-desktop
+          - evox
+          - tessoa
+          - ldtk-git
   push:
     paths:
       - ".github/workflows/aur-auto-update.yml"
@@ -74,6 +75,7 @@ on:
       - "packages/mimo-desktop/**"
       - "packages/evox/**"
       - "packages/tessoa/**"
+      - "packages/ldtk-git/**"
   schedule:
     - cron: "43 0 * * *"
     - cron: "13 0 * * 1"
@@ -163,6 +165,7 @@ jobs:
             android-dex-bin
             so-novel-bin
             mimo-desktop
+            ldtk-git
           )
 
           if [[ "${EVENT_NAME}" == "schedule" ]]; then
