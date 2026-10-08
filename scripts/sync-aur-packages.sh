@@ -65,7 +65,7 @@ aur_files_for_package() {
   sed -n -E 's/^[[:space:]]*install = //p; s/^[[:space:]]*source(_[^[:space:]]*)? = //p' "${srcinfo_path}" |
     while IFS= read -r aur_entry; do
       [[ "${aur_entry}" == *'::'* ]] && aur_entry="${aur_entry##*::}"
-      [[ "${aur_entry}" =~ ^[a-z]+:// ]] && continue
+      [[ "${aur_entry}" =~ ^[a-z+]+:// ]] && continue
       printf '%s\n' "${aur_entry}"
     done
 }
