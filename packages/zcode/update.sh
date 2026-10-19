@@ -65,6 +65,17 @@ if [[ -z "${x64_url}" || -z "${pkgver}" || -z "${arm64_url}" || "${arm64_pkgver}
   exit 1
 fi
 
+# 防降级：新版可能先上 CDN、官网下载页仍指旧版；解析到的版本低于当前已发布
+# 版本时保持现状，避免每日自动更新把已发布的高版本改回旧版
+current_pkgver_pre="$(awk -F= '/^pkgver=/ {print $2; exit}' "${PKGBUILD_PATH}")"
+if [[ -n "${current_pkgver_pre}" && "${current_pkgver_pre}" != "${pkgver}" ]]; then
+  lower_of_two="$(printf '%s\n%s\n' "${pkgver}" "${current_pkgver_pre}" | sort -V | head -n1)"
+  if [[ "${lower_of_two}" == "${pkgver}" ]]; then
+    printf 'skip: resolved %s <= current %s\n' "${pkgver}" "${current_pkgver_pre}" >&2
+    exit 0
+  fi
+fi
+
 tmpdir="$(mktemp -d)"
 trap 'rm -rf "${tmpdir}"' EXIT
 
