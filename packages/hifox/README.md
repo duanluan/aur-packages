@@ -1,6 +1,6 @@
-# hifox-cli-bin
+# hifox
 
-`hifox-cli-bin` packages the official Linux x64 and arm64 releases of the
+`hifox` packages the official Linux x64 and arm64 releases of the
 [HiFox](https://hifox.com/) CLI for Arch Linux.
 
 HiFox is a collaboration platform where humans and AI agents share the same
@@ -15,19 +15,19 @@ official way to use HiFox.
 With `paru`:
 
 ```bash
-paru -S hifox-cli-bin
+paru -S hifox
 ```
 
 With `yay`:
 
 ```bash
-yay -S hifox-cli-bin
+yay -S hifox
 ```
 
 Manual install from this repository:
 
 ```bash
-cd packages/hifox-cli-bin
+cd packages/hifox
 makepkg -si
 ```
 

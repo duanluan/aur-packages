@@ -78,15 +78,15 @@ fi
 cat > "${PKGBUILD_PATH}" <<EOF
 # Maintainer: duanluan <duanluan@outlook.com>
 
-pkgname=hifox-cli-bin
+pkgname=hifox
 pkgver=${pkgver}
 pkgrel=${pkgrel}
-pkgdesc='HiFox CLI: terminal client for the HiFox human and AI agent collaboration platform (prebuilt binary)'
+pkgdesc='HiFox CLI: terminal client for the HiFox human and AI agent collaboration platform'
 arch=('x86_64' 'aarch64')
 url='https://hifox.com/'
 license=('LicenseRef-Proprietary')
-provides=('hifox-cli')
-conflicts=('hifox-cli')
+provides=("hifox-cli-bin=\${pkgver}")
+conflicts=('hifox-cli-bin')
 options=('!strip')
 _base_url="https://file-assets.hifox.com/download"
 source_x86_64=("hifox-cli_linux_amd64-\${pkgver}.tar.gz::\${_base_url}/\${pkgver}/linux/HiFox-cli_linux_amd64.tar.gz")
