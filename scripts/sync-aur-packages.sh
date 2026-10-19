@@ -37,7 +37,7 @@ DEFAULT_PACKAGES=(
   tessoa
   ldtk-git
   qoder-cn
-  hifox
+  hifox-cli
 )
 
 AUR_SSH_KEY="${AUR_SSH_KEY:-${HOME}/.ssh/aur_actions}"

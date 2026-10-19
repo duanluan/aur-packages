@@ -37,7 +37,7 @@ DEFAULT_PACKAGES=(
   tessoa
   ldtk-git
   qoder-cn
-  hifox
+  hifox-cli
 )
 
 if [[ "$#" -gt 0 ]]; then
