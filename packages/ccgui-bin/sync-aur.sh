@@ -39,9 +39,8 @@ fi
 
 install -Dm644 "${SCRIPT_DIR}/PKGBUILD" "${WORK_DIR}/${PKGNAME}/PKGBUILD"
 install -Dm644 "${SCRIPT_DIR}/.SRCINFO" "${WORK_DIR}/${PKGNAME}/.SRCINFO"
-install -Dm644 "${SCRIPT_DIR}/LICENSE" "${WORK_DIR}/${PKGNAME}/LICENSE"
 
-if [[ -z "$(git -C "${WORK_DIR}/${PKGNAME}" status --short -- PKGBUILD .SRCINFO LICENSE)" ]]; then
+if [[ -z "$(git -C "${WORK_DIR}/${PKGNAME}" status --short -- PKGBUILD .SRCINFO)" ]]; then
   printf 'no changes\n'
   exit 0
 fi
@@ -49,7 +48,7 @@ fi
 pkgver="$(sed -n 's/^pkgver=//p' "${SCRIPT_DIR}/PKGBUILD")"
 pkgrel="$(sed -n 's/^pkgrel=//p' "${SCRIPT_DIR}/PKGBUILD")"
 
-git -C "${WORK_DIR}/${PKGNAME}" add PKGBUILD .SRCINFO LICENSE
+git -C "${WORK_DIR}/${PKGNAME}" add PKGBUILD .SRCINFO
 
 if git -C "${WORK_DIR}/${PKGNAME}" rev-parse --verify HEAD >/dev/null 2>&1; then
   git -C "${WORK_DIR}/${PKGNAME}" commit -m "Update to ${pkgver}-${pkgrel}" >/dev/null 2>&1

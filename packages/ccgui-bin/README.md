@@ -3,7 +3,8 @@
 `ccgui-bin` packages the official x86_64 AppImage release of
 [ccgui](https://github.com/zhukunpenglinyutong/desktop-cc-gui) for Arch Linux.
 
-ccgui is a desktop client for Claude Code, Codex, Gemini, and Opencode.
+ccgui is a multi-engine AI coding desktop client (Tauri) that brings Claude
+Code, Codex, Gemini, OpenCode, DeepSeek Harness and more into one GUI.
 
 ## Install
 
@@ -37,8 +38,10 @@ ccgui
 
 ## Notes
 
-- The package extracts the upstream binaries under `/opt/ccgui` and uses the
-  system WebKitGTK and GStreamer runtime. This avoids ABI mismatches between
-  the AppImage media libraries and Arch Linux GStreamer plugins.
-- The `cc-gui` command is provided as a compatibility alias.
+- The package extracts the upstream binary (`ccgui-next`) under `/opt/ccgui`
+  and uses the system WebKitGTK and GStreamer runtime. This avoids ABI
+  mismatches between the AppImage media libraries and Arch Linux GStreamer
+  plugins.
+- The `cc-gui` command is provided as a compatibility alias for the
+  pre-1.0 binary name; `ccgui-next` matches the upstream binary name.
 - The download page links to the upstream `desktop-cc-gui` release assets.
