@@ -37,6 +37,7 @@ User-facing notes for the AUR packages maintained in this repository.
 - [evox](packages/evox/README.md): EvoMap EvoX self-evolving swarm coding agent (beta channel)
 - [tessoa](packages/tessoa/README.md): GPU-accelerated file manager with split panes, layouts, tags and multiple views
 - [qoder-cn](packages/qoder-cn/README.md): Qoder CN desktop app repackaged from the official Linux deb
+- [hifox-cli-bin](packages/hifox-cli-bin/README.md): HiFox CLI terminal client for the HiFox human and AI agent collaboration platform
 
 ## Renamed Packages
 
