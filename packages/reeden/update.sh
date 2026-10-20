@@ -30,23 +30,25 @@ if [[ -f "${PKGBUILD_PATH}" ]]; then
 fi
 
 page_html="$(curl -fsSL -A 'Mozilla/5.0' "${DOWNLOAD_PAGE_URL}")"
-asset_url="$(
-  printf '%s\n' "${page_html}" |
-    perl -0ne 'print "$1\n" if m{(https://download\.reeden\.app/Reeden/[^"<> ]+/Reeden-[^"<> ]+-linux-x86_64\.deb)}'
-)"
-asset_url="${asset_url%%$'\n'*}"
 
-if [[ -z "${asset_url}" ]]; then
-  printf 'failed to resolve Reeden Linux deb URL\n' >&2
+# 下载页现在只放 latest 链接（文件名不含版本号），版本号从页面 JSON-LD 的
+# softwareVersion 字段读取，再按旧格式构造带版本的下载地址
+pkgver="$(
+  printf '%s\n' "${page_html}" |
+    perl -0ne 'print "$1\n" if m{"softwareVersion"\s*:\s*"([0-9]+\.[0-9]+\.[0-9]+(?:\+[0-9]+)?)"}'
+)"
+pkgver="${pkgver%%$'\n'*}"
+
+if [[ -z "${pkgver}" ]]; then
+  printf 'failed to resolve Reeden version from %s\n' "${DOWNLOAD_PAGE_URL}" >&2
   exit 1
 fi
 
-asset_name="${asset_url##*/}"
-pkgver="${asset_url#https://download.reeden.app/Reeden/}"
-pkgver="${pkgver%%/*}"
+asset_name="Reeden-${pkgver}-linux-x86_64.deb"
+asset_url="https://download.reeden.app/Reeden/${pkgver}/${asset_name}"
 
-if [[ -z "${pkgver}" || -z "${asset_name}" ]]; then
-  printf 'failed to resolve Reeden version from URL: %s\n' "${asset_url}" >&2
+if ! curl -fsSIL -A 'Mozilla/5.0' "${asset_url}" >/dev/null; then
+  printf 'versioned deb URL not available: %s\n' "${asset_url}" >&2
   exit 1
 fi
 
