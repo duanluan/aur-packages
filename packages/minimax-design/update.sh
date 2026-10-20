@@ -69,7 +69,7 @@ latest_mac_yml="$(curl_retry "${BASE_URL}/latest-mac.yml")"
 pkgver="$(printf '%s\n' "${latest_mac_yml}" | awk '/^version:/ {print $2; exit}')"
 
 if [[ -z "${pkgver}" ]]; then
-  printf 'failed to resolve latest MiniMax Hub macOS version\n' >&2
+  printf 'failed to resolve latest MiniMax Design macOS version\n' >&2
   exit 1
 fi
 
@@ -80,15 +80,15 @@ x64_release_path="$(release_url_from_latest_mac_yml x64)"
 arm64_release_path="$(release_url_from_latest_mac_yml arm64)"
 
 if [[ -z "${x64_release_path}" || -z "${arm64_release_path}" ]]; then
-  printf 'failed to resolve MiniMax Hub macOS download urls from latest-mac.yml\n' >&2
+  printf 'failed to resolve MiniMax Design macOS download urls from latest-mac.yml\n' >&2
   exit 1
 fi
 
 x64_url="$(resolve_release_url "${x64_release_path}")"
 arm64_url="$(resolve_release_url "${arm64_release_path}")"
 
-x64_archive="MiniMax-Hub-${pkgver}-mac-x64.zip"
-arm64_archive="MiniMax-Hub-${pkgver}-mac-arm64.zip"
+x64_archive="MiniMax-Design-${pkgver}-mac-x64.zip"
+arm64_archive="MiniMax-Design-${pkgver}-mac-arm64.zip"
 
 curl_retry --output "${tmpdir}/${x64_archive}" "${x64_url}" >/dev/null
 curl_retry --output "${tmpdir}/${arm64_archive}" "${arm64_url}" >/dev/null
@@ -107,23 +107,23 @@ awk \
       next
     }
 
-    /^[[:space:]]*"MiniMax-Hub-\$\{pkgver\}-mac-x64\.(dmg|zip)::/ {
-      print "  \"MiniMax-Hub-${pkgver}-mac-x64.zip::" x64_url "\""
+    /^[[:space:]]*"MiniMax-Design-\$\{pkgver\}-mac-x64\.(dmg|zip)::/ {
+      print "  \"MiniMax-Design-${pkgver}-mac-x64.zip::" x64_url "\""
       next
     }
 
-    /^[[:space:]]*"MiniMax-Hub-\$\{pkgver\}-mac-arm64\.(dmg|zip)::/ {
-      print "  \"MiniMax-Hub-${pkgver}-mac-arm64.zip::" arm64_url "\""
+    /^[[:space:]]*"MiniMax-Design-\$\{pkgver\}-mac-arm64\.(dmg|zip)::/ {
+      print "  \"MiniMax-Design-${pkgver}-mac-arm64.zip::" arm64_url "\""
       next
     }
 
-    /^[[:space:]]*"MiniMax-Hub-\$\{pkgver\}-mac-x64\.(dmg|zip)"$/ {
-      print "  \"MiniMax-Hub-${pkgver}-mac-x64.zip\""
+    /^[[:space:]]*"MiniMax-Design-\$\{pkgver\}-mac-x64\.(dmg|zip)"$/ {
+      print "  \"MiniMax-Design-${pkgver}-mac-x64.zip\""
       next
     }
 
-    /^[[:space:]]*"MiniMax-Hub-\$\{pkgver\}-mac-arm64\.(dmg|zip)"$/ {
-      print "  \"MiniMax-Hub-${pkgver}-mac-arm64.zip\""
+    /^[[:space:]]*"MiniMax-Design-\$\{pkgver\}-mac-arm64\.(dmg|zip)"$/ {
+      print "  \"MiniMax-Design-${pkgver}-mac-arm64.zip\""
       next
     }
 

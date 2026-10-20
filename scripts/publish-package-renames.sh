@@ -10,15 +10,10 @@ if ! command -v rg >/dev/null 2>&1; then
   exit 1
 fi
 
+# 只保留当前待发布的迁移对：历史迁移的过渡包已从 AUR 删除，
+# 保留旧条目会在同步时按“远端不存在则新建”重新创建已删除的包
 package_renames=(
-  'keyviz-zh-bin:keyviz-zh'
-  'mastergo-desktop-bin:mastergo'
-  'minimax-hub-bin:minimax-hub'
-  'mind-elixir-bin:mind-elixir'
-  'reeden-bin:reeden'
-  'wuyou-docs-bin:wuyou-docs'
-  'wuyou-toolkit-bin:wuyou-toolkit'
-  'zcode-desktop-bin:zcode'
+  'minimax-hub:minimax-design'
 )
 
 canonical_packages=()

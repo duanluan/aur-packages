@@ -28,7 +28,7 @@ on:
           - mastergo
           - pilauncher-bin
           - pideck-bin
-          - minimax-hub
+          - minimax-design
           - reasonix-desktop-bin
           - pi-agent-desktop-bin
           - reeden
@@ -63,7 +63,7 @@ on:
       - "packages/mastergo/**"
       - "packages/pilauncher-bin/**"
       - "packages/pideck-bin/**"
-      - "packages/minimax-hub/**"
+      - "packages/minimax-design/**"
       - "packages/reasonix-desktop-bin/**"
       - "packages/pi-agent-desktop-bin/**"
       - "packages/reeden/**"
@@ -143,7 +143,7 @@ jobs:
             codepilot-bin
             gooeypi-bin
             zcode
-            minimax-hub
+            minimax-design
             reasonix-desktop-bin
             pi-agent-desktop-bin
             pilauncher-bin

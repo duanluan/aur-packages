@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-appdir="/usr/lib/minimax-hub"
+appdir="/usr/lib/minimax-design"
 electron="/usr/lib/electron39/electron"
 resources_dir="${appdir}/resources"
 user_flags=()
@@ -16,12 +16,21 @@ if [[ -z "${config_home}" && -n "${HOME:-}" ]]; then
   config_home="${HOME}/.config"
 fi
 
-if [[ -n "${config_home}" && -f "${config_home}/minimax-hub-flags.conf" ]]; then
+flags_conf=''
+if [[ -n "${config_home}" ]]; then
+  if [[ -f "${config_home}/minimax-design-flags.conf" ]]; then
+    flags_conf="${config_home}/minimax-design-flags.conf"
+  elif [[ -f "${config_home}/minimax-hub-flags.conf" ]]; then
+    flags_conf="${config_home}/minimax-hub-flags.conf"
+  fi
+fi
+
+if [[ -n "${flags_conf}" ]]; then
   while IFS= read -r flag_line || [[ -n "${flag_line}" ]]; do
     flag_line="${flag_line%%#*}"
     read -r -a flag_parts <<<"${flag_line}"
     user_flags+=("${flag_parts[@]}")
-  done <"${config_home}/minimax-hub-flags.conf"
+  done <"${flags_conf}"
 fi
 
 export NODE_ENV="${NODE_ENV:-production}"

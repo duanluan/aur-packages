@@ -20,7 +20,7 @@ User-facing notes for the AUR packages maintained in this repository.
 - [mastergo](packages/mastergo/README.md): MasterGo desktop app
 - [pilauncher-bin](packages/pilauncher-bin/README.md): Prebuilt Linux desktop release of PiLauncher
 - [pideck-bin](packages/pideck-bin/README.md): Prebuilt Linux desktop release of PiDeck
-- [minimax-hub](packages/minimax-hub/README.md): MiniMax Hub desktop app
+- [minimax-design](packages/minimax-design/README.md): MiniMax Design desktop app (formerly MiniMax Hub)
 - [reasonix-desktop-bin](packages/reasonix-desktop-bin/README.md): Reasonix desktop app
 - [pi-agent-desktop-bin](packages/pi-agent-desktop-bin/README.md): Pi Agent desktop app
 - [reeden](packages/reeden/README.md): Reeden desktop app
@@ -48,6 +48,7 @@ name:
 - `keyviz-zh-bin` -> `keyviz-zh`
 - `mastergo-desktop-bin` -> `mastergo`
 - `minimax-hub-bin` -> `minimax-hub`
+- `minimax-hub` -> `minimax-design`
 - `mind-elixir-bin` -> `mind-elixir`
 - `reeden-bin` -> `reeden`
 - `wuyou-docs-bin` -> `wuyou-docs`
@@ -75,7 +76,7 @@ frequently updated packages daily:
 - `codepilot-bin`
 - `gooeypi-bin`
 - `zcode`
-- `minimax-hub`
+- `minimax-design`
 - `reasonix-desktop-bin`
 - `pi-agent-desktop-bin`
 - `pilauncher-bin`

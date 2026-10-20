@@ -22,7 +22,7 @@ DEFAULT_PACKAGES=(
   mastergo
   pilauncher-bin
   pideck-bin
-  minimax-hub
+  minimax-design
   reasonix-desktop-bin
   pi-agent-desktop-bin
   reeden
