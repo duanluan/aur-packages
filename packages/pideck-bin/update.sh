@@ -68,7 +68,10 @@ if [[ -z "${tag_name}" || "${tag_name}" == 'null' || -z "${pkgver}" ]]; then
   exit 1
 fi
 
-asset_name="pi-desktop_${pkgver}_amd64.deb"
+# 0.9.0 起上游 deb 资产按 electron-builder artifactName 模板命名为
+# ${productName}_${version}_${arch}.deb（PiDeck_0.9.1_amd64.deb），
+# 早期版本是 pi-desktop_${version}_amd64.deb
+asset_name="PiDeck_${pkgver}_amd64.deb"
 asset_url="$(asset_field "${asset_name}" browser_download_url)"
 asset_digest="$(asset_field "${asset_name}" digest)"
 if [[ -z "${asset_url}" ]]; then
@@ -102,8 +105,8 @@ cat > "${PKGBUILD_PATH}" <<EOF
 # Maintainer: duanluan <duanluan@outlook.com>
 
 pkgname=pideck-bin
-_pkgname=pi-desktop
 _appname=PiDeck
+_binname=pideck
 pkgver=${pkgver}
 pkgrel=${pkgrel}
 pkgdesc='Desktop workbench for managing local AI coding agent sessions (prebuilt binary)'
@@ -148,12 +151,12 @@ optdepends=(
   'libappindicator: system tray support'
   'org.freedesktop.secrets: secret storage backend'
 )
-provides=("pideck=\${pkgver}" "\${_pkgname}=\${pkgver}")
+provides=("pideck=\${pkgver}" "pi-desktop=\${pkgver}")
 conflicts=('pideck' 'pi-desktop')
 options=('!strip')
 source=('LICENSE')
-source_x86_64=("\${_pkgname}_\${pkgver}_amd64.deb::https://github.com/ayuayue/PiDeck/releases/download/v\${pkgver}/\${_pkgname}_\${pkgver}_amd64.deb")
-noextract=("\${_pkgname}_\${pkgver}_amd64.deb")
+source_x86_64=("\${_appname}_\${pkgver}_amd64.deb::https://github.com/ayuayue/PiDeck/releases/download/v\${pkgver}/\${_appname}_\${pkgver}_amd64.deb")
+noextract=("\${_appname}_\${pkgver}_amd64.deb")
 sha256sums=('${license_sha256}')
 sha256sums_x86_64=('${x86_64_sha256}')
 
@@ -163,7 +166,7 @@ package() {
 
   rm -rf "\${extract_dir}"
   install -dm755 "\${extract_dir}"
-  bsdtar -C "\${extract_dir}" -xf "\${srcdir}/\${_pkgname}_\${pkgver}_amd64.deb"
+  bsdtar -C "\${extract_dir}" -xf "\${srcdir}/\${_appname}_\${pkgver}_amd64.deb"
 
   data_archives=("\${extract_dir}"/data.tar.*)
   if (( \${#data_archives[@]} != 1 )) || [[ ! -f "\${data_archives[0]}" ]]; then
@@ -173,8 +176,9 @@ package() {
   bsdtar -C "\${pkgdir}" -xf "\${data_archives[0]}"
 
   install -dm755 "\${pkgdir}/usr/bin"
-  ln -s "/opt/\${_appname}/\${_pkgname}" "\${pkgdir}/usr/bin/\${_pkgname}"
-  ln -s "\${_pkgname}" "\${pkgdir}/usr/bin/pideck"
+  ln -s "/opt/\${_appname}/\${_binname}" "\${pkgdir}/usr/bin/\${_binname}"
+  # 保留旧命令名 pi-desktop，老用户脚本不断档
+  ln -s "\${_binname}" "\${pkgdir}/usr/bin/pi-desktop"
 
   chmod 0755 "\${pkgdir}/opt/\${_appname}/chrome-sandbox"
   install -Dm644 "\${srcdir}/LICENSE" "\${pkgdir}/usr/share/licenses/\${pkgname}/LICENSE"
