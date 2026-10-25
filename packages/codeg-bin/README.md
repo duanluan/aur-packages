@@ -40,16 +40,18 @@ codeg
 The upstream package also provides:
 
 ```bash
-codeg-server --help
+codeg-cli --help
 codeg-mcp --help
+codeg-computer-helper --help
 ```
 
 ## Notes
 
-- The package preserves the upstream Tauri desktop application, standalone
-  server, MCP sidecar, and bundled Web assets.
-- The `codeg-server` launcher points `CODEG_STATIC_DIR` to the packaged Web
-  assets by default and preserves explicit user overrides.
+- The package preserves the upstream Tauri desktop application, CLI, MCP
+  sidecar, and bundled Web assets.
+- Since upstream 0.33.0, `codeg-server` is no longer bundled with the desktop
+  package; it ships as separate `codeg-server-linux-*.tar.gz` release assets
+  and is not part of `codeg-bin`.
 - The desktop launcher disables WebKit's DMABUF renderer by default to avoid a
   blank window on affected Linux graphics stacks. Set
   `WEBKIT_DISABLE_DMABUF_RENDERER=0` to override it.
