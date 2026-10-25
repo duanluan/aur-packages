@@ -1,0 +1,13 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=EmEditor
+Comment=Launch EmEditor with the emeditor-wine wrapper
+Exec=emeditor-wine %F
+Icon=emeditor-wine
+Terminal=false
+StartupNotify=true
+StartupWMClass=emeditor.exe
+Categories=Utility;TextEditor;Development;
+MimeType=text/plain;
+Keywords=text;editor;emeditor;wine;

@@ -22,6 +22,7 @@ DEFAULT_PACKAGES=(
   mastergo
   pilauncher-bin
   pideck-bin
+  echobird-bin
   minimax-design
   reasonix-desktop-bin
   pi-agent-desktop-bin
@@ -38,6 +39,8 @@ DEFAULT_PACKAGES=(
   ldtk-git
   qoder-cn
   hifox-cli
+  workbuddy-international
+  agents-anywhere
 )
 
 if [[ "$#" -gt 0 ]]; then

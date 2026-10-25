@@ -4,6 +4,7 @@ packages/*/*.pkg.tar.*
 packages/*/*.deb
 packages/*/*.rpm
 packages/*/*.tar.gz
+packages/*/*.zip
 packages/*/*.dmg
 packages/*/*.whl
 packages/*/*.AppImage

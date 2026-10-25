@@ -28,6 +28,7 @@ on:
           - mastergo
           - pilauncher-bin
           - pideck-bin
+          - echobird-bin
           - minimax-design
           - reasonix-desktop-bin
           - pi-agent-desktop-bin
@@ -43,6 +44,9 @@ on:
           - tessoa
           - ldtk-git
           - qoder-cn
+          - workbuddy-international
+          - agents-anywhere
+          - hifox-cli
   push:
     paths:
       - ".github/workflows/aur-auto-update.yml"
@@ -63,6 +67,7 @@ on:
       - "packages/mastergo/**"
       - "packages/pilauncher-bin/**"
       - "packages/pideck-bin/**"
+      - "packages/echobird-bin/**"
       - "packages/minimax-design/**"
       - "packages/reasonix-desktop-bin/**"
       - "packages/pi-agent-desktop-bin/**"
@@ -78,6 +83,8 @@ on:
       - "packages/tessoa/**"
       - "packages/ldtk-git/**"
       - "packages/qoder-cn/**"
+      - "packages/workbuddy-international/**"
+      - "packages/agents-anywhere/**"
   schedule:
     - cron: "43 0 * * *"
     - cron: "13 0 * * 1"
@@ -148,12 +155,15 @@ jobs:
             pi-agent-desktop-bin
             pilauncher-bin
             pideck-bin
+            echobird-bin
             opensquilla
             apifox
             photon-studio
             evox
             tessoa
             qoder-cn
+            workbuddy-international
+            agents-anywhere
           )
           weekly_packages=(
             keyviz-zh

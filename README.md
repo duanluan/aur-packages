@@ -20,6 +20,7 @@ User-facing notes for the AUR packages maintained in this repository.
 - [mastergo](packages/mastergo/README.md): MasterGo desktop app
 - [pilauncher-bin](packages/pilauncher-bin/README.md): Prebuilt Linux desktop release of PiLauncher
 - [pideck-bin](packages/pideck-bin/README.md): Prebuilt Linux desktop release of PiDeck
+- [echobird-bin](packages/echobird-bin/README.md): Prebuilt Linux desktop release of EchoBird
 - [minimax-design](packages/minimax-design/README.md): MiniMax Design desktop app (formerly MiniMax Hub)
 - [reasonix-desktop-bin](packages/reasonix-desktop-bin/README.md): Reasonix desktop app
 - [pi-agent-desktop-bin](packages/pi-agent-desktop-bin/README.md): Pi Agent desktop app
@@ -38,6 +39,8 @@ User-facing notes for the AUR packages maintained in this repository.
 - [tessoa](packages/tessoa/README.md): GPU-accelerated file manager with split panes, layouts, tags and multiple views
 - [qoder-cn](packages/qoder-cn/README.md): Qoder CN desktop app repackaged from the official Linux deb
 - [hifox-cli](packages/hifox-cli/README.md): HiFox CLI terminal client for the HiFox human and AI agent collaboration platform
+- [workbuddy-international](packages/workbuddy-international/README.md): WorkBuddy AI international edition (unofficial Linux port from the macOS build)
+- [agents-anywhere](packages/agents-anywhere/README.md): Agents Anywhere cross-device AI agent workbench (source build of desktop-workbench)
 
 ## Renamed Packages
 
@@ -81,12 +84,15 @@ frequently updated packages daily:
 - `pi-agent-desktop-bin`
 - `pilauncher-bin`
 - `pideck-bin`
+- `echobird-bin`
 - `opensquilla`
 - `apifox`
 - `photon-studio`
 - `evox`
 - `tessoa`
 - `qoder-cn`
+- `workbuddy-international`
+- `agents-anywhere`
 
 Less frequently updated packages stay on the weekly check:
 
