@@ -13,6 +13,7 @@ User-facing notes for the AUR packages maintained in this repository.
 - [mind-elixir](packages/mind-elixir/README.md): Prebuilt Linux desktop release of Mind Elixir
 - [ccgui-bin](packages/ccgui-bin/README.md): Prebuilt Linux desktop release of ccgui
 - [codeg-bin](packages/codeg-bin/README.md): Codeg multi-agent coding workspace
+- [codeg-server-bin](packages/codeg-server-bin/README.md): Standalone server of Codeg
 - [codepilot-bin](packages/codepilot-bin/README.md): CodePilot desktop client
 - [gooeypi-bin](packages/gooeypi-bin/README.md): GooeyPi desktop workspace
 - [codex-plus-plus](packages/codex-plus-plus/README.md): Codex++ injection bridge for the ChatGPT desktop app
@@ -76,6 +77,7 @@ frequently updated packages daily:
 - `rebased-zh-bin`
 - `ccgui-bin`
 - `codeg-bin`
+- `codeg-server-bin`
 - `codepilot-bin`
 - `gooeypi-bin`
 - `zcode`

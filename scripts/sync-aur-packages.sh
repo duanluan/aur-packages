@@ -16,6 +16,7 @@ DEFAULT_PACKAGES=(
   mind-elixir
   ccgui-bin
   codeg-bin
+  codeg-server-bin
   codepilot-bin
   gooeypi-bin
   zcode
@@ -41,6 +42,7 @@ DEFAULT_PACKAGES=(
   hifox-cli
   workbuddy-international
   agents-anywhere
+  strata-terminal-bin
 )
 
 AUR_SSH_KEY="${AUR_SSH_KEY:-${HOME}/.ssh/aur_actions}"
