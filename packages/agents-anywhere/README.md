@@ -43,11 +43,22 @@ application menu.
   time — rebuild if an upstream dependency breaks the build.
 - The upstream repository carries no LICENSE file at the time of packaging;
   `license` stays `NOASSERTION` until upstream adds one.
+- Dependency install scripts are disabled (`YARN_ENABLE_SCRIPTS=false`):
+  the electron/sharp postinstalls only serve local development and would
+  download from GitHub on every build; the build itself never needs them.
+- All GitHub build-time downloads (uv bundle, python-build-standalone, the
+  Electron zip) try the official URL first and fall back to a public proxy,
+  resuming partial transfers and verifying everything against the official
+  checksum files. Downloads are cached under `~/.cache/electron/` and
+  `~/.cache/agents-anywhere-build/`, so rebuilds reuse them.
+- If direct GitHub is unreachable and you prefer a proxy, build with your
+  proxy exported (`http_proxy=… https_proxy=… makepkg -si` or
+  `proxychains makepkg -si`); every download in the PKGBUILD honors the
+  standard proxy variables.
 - The bundled uv/python runtimes live under `/opt/agents-anywhere/resources/`
   and are managed by the app itself, mirroring the official macOS/Windows
   layout.
-- Network access is required at build time (npm registry, GitHub releases
-  for Electron/uv/python). Set `ELECTRON_MIRROR`, `PYTHON_BUNDLE_MIRROR` or
-  run behind a proxy if direct GitHub access is unavailable.
+- The font patch switches Geist/Instrument Serif to system font stacks
+  because next/font/google requires Google Fonts access at build time.
 - Desktop-Next (`desktop-next` workspace) is the experimental successor and
   is intentionally not packaged.
