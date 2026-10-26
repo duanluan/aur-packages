@@ -47,6 +47,7 @@ on:
           - qoder-cn
           - workbuddy-international
           - agents-anywhere
+          - strata-terminal-bin
           - hifox-cli
   push:
     paths:
@@ -87,6 +88,7 @@ on:
       - "packages/qoder-cn/**"
       - "packages/workbuddy-international/**"
       - "packages/agents-anywhere/**"
+      - "packages/strata-terminal-bin/**"
   schedule:
     - cron: "43 0 * * *"
     - cron: "13 0 * * 1"
@@ -167,6 +169,7 @@ jobs:
             qoder-cn
             workbuddy-international
             agents-anywhere
+            strata-terminal-bin
           )
           weekly_packages=(
             keyviz-zh

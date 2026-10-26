@@ -42,6 +42,7 @@ User-facing notes for the AUR packages maintained in this repository.
 - [hifox-cli](packages/hifox-cli/README.md): HiFox CLI terminal client for the HiFox human and AI agent collaboration platform
 - [workbuddy-international](packages/workbuddy-international/README.md): WorkBuddy AI international edition (unofficial Linux port from the macOS build)
 - [agents-anywhere](packages/agents-anywhere/README.md): Agents Anywhere cross-device AI agent workbench (source build of desktop-workbench)
+- [strata-terminal-bin](packages/strata-terminal-bin/README.md): Strata Terminal CLI to run Qwen3.8-Flash-Next / DeepSeek V4.1-Flash locally (prebuilt)
 
 ## Renamed Packages
 
@@ -95,6 +96,7 @@ frequently updated packages daily:
 - `qoder-cn`
 - `workbuddy-international`
 - `agents-anywhere`
+- `strata-terminal-bin`
 
 Less frequently updated packages stay on the weekly check:
 
