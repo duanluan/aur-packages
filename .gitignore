@@ -9,3 +9,7 @@ packages/*/*.dmg
 packages/*/*.whl
 packages/*/*.AppImage
 .idea/
+.playwright-cli/
+.reasonix/
+.zcode/
+/.SRCINFO
