@@ -28,12 +28,12 @@ User-facing notes for the AUR packages maintained in this repository.
 | [mind-elixir](packages/mind-elixir/README.md) | ~~mind-elixir-bin~~ | Prebuilt Linux desktop release of Mind Elixir | | ✓ |
 | [minimax-design](packages/minimax-design/README.md) | ~~minimax-hub~~, ~~minimax-hub-bin~~ | MiniMax Design desktop app (formerly MiniMax Hub) | ✓ | |
 | [navicat17-premium-cs](packages/navicat17-premium-cs/README.md) | | Chinese Simplified Navicat Premium 17 AppImage package | | ✓ |
-| [opensquilla](packages/opensquilla/README.md) | | OpenSquilla desktop app | ✓ | |
+| [opensquilla](packages/opensquilla/README.md) | | OpenSquilla desktop app | | ✓ |
 | [pdmaas-pro-bin](packages/pdmaas-pro-bin/README.md) | | Enterprise data modeling platform (prebuilt binary) | | |
 | [photon-studio](packages/photon-studio/README.md) | | Photon Studio desktop photo and image editor | ✓ | |
 | [pi-agent-desktop-bin](packages/pi-agent-desktop-bin/README.md) | | Pi Agent desktop app | ✓ | |
 | [pideck-bin](packages/pideck-bin/README.md) | | Prebuilt Linux desktop release of PiDeck | ✓ | |
-| [pilauncher-bin](packages/pilauncher-bin/README.md) | | Prebuilt Linux desktop release of PiLauncher | ✓ | |
+| [pilauncher-bin](packages/pilauncher-bin/README.md) | | Prebuilt Linux desktop release of PiLauncher | | ✓ |
 | [qoder-cn](packages/qoder-cn/README.md) | | Qoder CN desktop app repackaged from the official Linux deb | ✓ | |
 | [reasonix-desktop-bin](packages/reasonix-desktop-bin/README.md) | | Reasonix desktop app | ✓ | |
 | [rebased-bin](packages/rebased-bin/README.md) | | A standalone Git client based on the IntelliJ platform | ✓ | |

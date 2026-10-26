@@ -158,10 +158,8 @@ jobs:
             minimax-design
             reasonix-desktop-bin
             pi-agent-desktop-bin
-            pilauncher-bin
             pideck-bin
             echobird-bin
-            opensquilla
             apifox
             photon-studio
             evox
@@ -182,6 +180,8 @@ jobs:
             reeden
             alexandria-bin
             android-dex-bin
+            opensquilla
+            pilauncher-bin
             so-novel-bin
             mimo-desktop
             ldtk-git
