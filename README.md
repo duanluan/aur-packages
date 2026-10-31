@@ -17,6 +17,7 @@ User-facing notes for the AUR packages maintained in this repository.
 | [codepilot-bin](packages/codepilot-bin/README.md) | | CodePilot desktop client | ✓ | |
 | [codex-plus-plus](packages/codex-plus-plus/README.md) | | Codex++ injection bridge for the ChatGPT desktop app | | |
 | [echobird-bin](packages/echobird-bin/README.md) | | Prebuilt Linux desktop release of EchoBird | ✓ | |
+| [edithere-bin](packages/edithere-bin/README.md) | | Screenshot annotation and visual feedback tool | | ✓ |
 | [emeditor-wine](packages/emeditor-wine/README.md) | | EmEditor running through a dedicated Wine prefix | | ✓ |
 | [evox](packages/evox/README.md) | | EvoMap EvoX self-evolving swarm coding agent (beta channel) | ✓ | |
 | [gooeypi-bin](packages/gooeypi-bin/README.md) | | GooeyPi desktop workspace | ✓ | |

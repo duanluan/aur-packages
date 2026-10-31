@@ -30,6 +30,7 @@ on:
           - pilauncher-bin
           - pideck-bin
           - echobird-bin
+          - edithere-bin
           - minimax-design
           - reasonix-desktop-bin
           - pi-agent-desktop-bin
@@ -71,6 +72,7 @@ on:
       - "packages/pilauncher-bin/**"
       - "packages/pideck-bin/**"
       - "packages/echobird-bin/**"
+      - "packages/edithere-bin/**"
       - "packages/minimax-design/**"
       - "packages/reasonix-desktop-bin/**"
       - "packages/pi-agent-desktop-bin/**"
@@ -185,6 +187,7 @@ jobs:
             so-novel-bin
             mimo-desktop
             ldtk-git
+            edithere-bin
           )
 
           if [[ "${EVENT_NAME}" == "schedule" ]]; then

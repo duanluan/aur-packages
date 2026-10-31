@@ -24,6 +24,7 @@ DEFAULT_PACKAGES=(
   pilauncher-bin
   pideck-bin
   echobird-bin
+  edithere-bin
   minimax-design
   reasonix-desktop-bin
   pi-agent-desktop-bin
