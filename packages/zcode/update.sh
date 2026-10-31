@@ -5,7 +5,7 @@ set -euo pipefail
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 PKGBUILD_PATH="${SCRIPT_DIR}/PKGBUILD"
 SRCINFO_PATH="${SCRIPT_DIR}/.SRCINFO"
-VERSION_URL="${VERSION_URL:-https://zcode.z.ai/en}"
+MANIFEST_URL="${MANIFEST_URL:-https://zcode.z.ai/api/v1/releases/electron/manifest}"
 RELEASE_BASE_URL="${RELEASE_BASE_URL:-https://cdn-zcode.z.ai/zcode/electron/releases}"
 
 require_command() {
@@ -16,7 +16,6 @@ require_command() {
 }
 
 require_command curl
-require_command rg
 require_command awk
 require_command sha256sum
 require_command makepkg
@@ -45,19 +44,21 @@ if [[ -n "${target_pkgver}" ]]; then
   arm64_url="${RELEASE_BASE_URL}/${pkgver}/linux-arm64/ZCode-${pkgver}-linux-arm64.deb"
   arm64_pkgver="${pkgver}"
 else
-  page="$(curl -fsSL "${VERSION_URL}")"
-  x64_url="$(
-    printf '%s\n' "${page}" |
-      rg -o 'https://[^"'\'' ]+/ZCode-[0-9][0-9.]*-linux-x64[.]deb' |
-      head -n1
-  )"
-  pkgver="$(printf '%s\n' "${x64_url}" | sed -n 's|.*/ZCode-\([0-9][0-9.]*\)-linux-x64[.]deb$|\1|p')"
-  arm64_url="$(
-    printf '%s\n' "${page}" |
-      rg -o 'https://[^"'\'' ]+/ZCode-[0-9][0-9.]*-linux-arm64[.]deb' |
-      head -n1
-  )"
-  arm64_pkgver="$(printf '%s\n' "${arm64_url}" | sed -n 's|.*/ZCode-\([0-9][0-9.]*\)-linux-arm64[.]deb$|\1|p')"
+  # 版本来源是 manifest 接口（桌面端自动更新同源）：官网下载页的 deb 链接会滞后，
+  # 新版常先出现在接口和 CDN 上。稳定渠道（channel=1）与预览渠道（channel=3）都取，
+  # 双架构各取各自最新里较低的那个版本，保证 x64、arm64 两个 deb 都存在
+  manifest_version() { # platform
+    for channel in 1 3; do
+      curl -fsSL "${MANIFEST_URL}?platform=${1}&channel=${channel}" |
+        awk '/^version: / && !seen {print $2; seen=1}' || :
+    done
+  }
+  x64_pkgver="$(manifest_version linux-x64 | sort -V | tail -n1)"
+  arm64_pkgver="$(manifest_version linux-aarch64 | sort -V | tail -n1)"
+  pkgver="$(printf '%s\n%s\n' "${x64_pkgver}" "${arm64_pkgver}" | sort -V | head -n1)"
+  arm64_pkgver="${pkgver}"
+  x64_url="${RELEASE_BASE_URL}/${pkgver}/linux-x64/ZCode-${pkgver}-linux-x64.deb"
+  arm64_url="${RELEASE_BASE_URL}/${pkgver}/linux-arm64/ZCode-${pkgver}-linux-arm64.deb"
 fi
 
 if [[ -z "${x64_url}" || -z "${pkgver}" || -z "${arm64_url}" || "${arm64_pkgver}" != "${pkgver}" ]]; then
@@ -65,7 +66,7 @@ if [[ -z "${x64_url}" || -z "${pkgver}" || -z "${arm64_url}" || "${arm64_pkgver}
   exit 1
 fi
 
-# 防降级：新版可能先上 CDN、官网下载页仍指旧版；解析到的版本低于当前已发布
+# 防降级：接口可能滞后于 CDN 上已有的包；解析到的版本低于当前已发布
 # 版本时保持现状，避免每日自动更新把已发布的高版本改回旧版
 current_pkgver_pre="$(awk -F= '/^pkgver=/ {print $2; exit}' "${PKGBUILD_PATH}")"
 if [[ -n "${current_pkgver_pre}" && "${current_pkgver_pre}" != "${pkgver}" ]]; then
