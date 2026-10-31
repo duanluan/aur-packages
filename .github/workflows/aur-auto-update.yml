@@ -29,6 +29,7 @@ on:
           - mastergo
           - pilauncher-bin
           - pideck-bin
+          - pokebonk
           - echobird-bin
           - edithere-bin
           - minimax-design
@@ -71,6 +72,7 @@ on:
       - "packages/mastergo/**"
       - "packages/pilauncher-bin/**"
       - "packages/pideck-bin/**"
+      - "packages/pokebonk/**"
       - "packages/echobird-bin/**"
       - "packages/edithere-bin/**"
       - "packages/minimax-design/**"
@@ -161,6 +163,7 @@ jobs:
             reasonix-desktop-bin
             pi-agent-desktop-bin
             pideck-bin
+            pokebonk
             echobird-bin
             apifox
             photon-studio

@@ -24,6 +24,7 @@ DEFAULT_PACKAGES=(
   mastergo
   pilauncher-bin
   pideck-bin
+  pokebonk
   echobird-bin
   edithere-bin
   minimax-design
