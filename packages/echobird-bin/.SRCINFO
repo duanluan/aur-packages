@@ -1,6 +1,6 @@
 pkgbase = echobird-bin
 	pkgdesc = Desktop hub to manage AI coding tools, accounts and quota with smart routing (prebuilt binary)
-	pkgver = 6.1.8
+	pkgver = 6.2.0
 	pkgrel = 1
 	url = https://github.com/edison7009/EchoBird
 	arch = x86_64
@@ -16,16 +16,16 @@ pkgbase = echobird-bin
 	depends = libsoup3
 	depends = wayland
 	depends = webkit2gtk-4.1
-	provides = echobird=6.1.8
+	provides = echobird=6.2.0
 	conflicts = echobird
-	noextract = EchoBird_6.1.8_Linux_x64.deb
-	noextract = EchoBird_6.1.8_Linux_arm64.deb
+	noextract = EchoBird_6.2.0_Linux_x64.deb
+	noextract = EchoBird_6.2.0_Linux_arm64.deb
 	options = !strip
 	source = LICENSE
 	sha256sums = 80fe40d09a2f2c7a3b7a6a59b6d52f3e4b41d51642b279ad78de53a6d318fc64
-	source_x86_64 = EchoBird_6.1.8_Linux_x64.deb::https://github.com/edison7009/EchoBird/releases/download/v6.1.8/EchoBird_6.1.8_Linux_x64.deb
-	sha256sums_x86_64 = a590511618480ce5cd0eb3b8ede75e0550a5f050be77b02aee62579f68f29f9d
-	source_aarch64 = EchoBird_6.1.8_Linux_arm64.deb::https://github.com/edison7009/EchoBird/releases/download/v6.1.8/EchoBird_6.1.8_Linux_arm64.deb
-	sha256sums_aarch64 = 0ef12f80f6e36a5d689e3dca70f12133b6b326ee13e92dfaf3863d83ae726066
+	source_x86_64 = EchoBird_6.2.0_Linux_x64.deb::https://github.com/edison7009/EchoBird/releases/download/v6.2.0/EchoBird_6.2.0_Linux_x64.deb
+	sha256sums_x86_64 = 7bdbb43489f306b5667641f9111cfc6b845a6228edbb5ca044d0ac9fd89a0dca
+	source_aarch64 = EchoBird_6.2.0_Linux_arm64.deb::https://github.com/edison7009/EchoBird/releases/download/v6.2.0/EchoBird_6.2.0_Linux_arm64.deb
+	sha256sums_aarch64 = 8d5e3be2b0c13c50d0e0282f0b4b4863f2859dba47e52954f6711da29cc3fe6f
 
 pkgname = echobird-bin
