@@ -47,6 +47,7 @@ DEFAULT_PACKAGES=(
   strata-terminal-bin
   uu-remote-linux-bin
   uuway-bin
+  coze
 )
 
 AUR_SSH_KEY="${AUR_SSH_KEY:-${HOME}/.ssh/aur_actions}"

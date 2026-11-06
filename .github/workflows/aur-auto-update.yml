@@ -53,6 +53,7 @@ on:
           - hifox-cli
           - uu-remote-linux-bin
           - uuway-bin
+          - coze
   push:
     paths:
       - ".github/workflows/aur-auto-update.yml"
@@ -97,6 +98,7 @@ on:
       - "packages/strata-terminal-bin/**"
       - "packages/uu-remote-linux-bin/**"
       - "packages/uuway-bin/**"
+      - "packages/coze/**"
   schedule:
     - cron: "43 0 * * *"
     - cron: "13 0 * * 1"
@@ -179,6 +181,7 @@ jobs:
             strata-terminal-bin
             uu-remote-linux-bin
             uuway-bin
+            coze
           )
           weekly_packages=(
             keyviz-zh

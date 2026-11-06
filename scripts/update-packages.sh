@@ -47,6 +47,7 @@ DEFAULT_PACKAGES=(
   strata-terminal-bin
   uu-remote-linux-bin
   uuway-bin
+  coze
 )
 
 if [[ "$#" -gt 0 ]]; then
