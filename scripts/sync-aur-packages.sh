@@ -45,6 +45,7 @@ DEFAULT_PACKAGES=(
   workbuddy-international
   agents-anywhere
   strata-terminal-bin
+  uu-remote-linux-bin
 )
 
 AUR_SSH_KEY="${AUR_SSH_KEY:-${HOME}/.ssh/aur_actions}"

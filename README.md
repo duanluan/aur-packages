@@ -44,6 +44,7 @@ User-facing notes for the AUR packages maintained in this repository.
 | [so-novel-bin](packages/so-novel-bin/README.md) | | So Novel web content extraction and ebook export tool | | ✓ |
 | [strata-terminal-bin](packages/strata-terminal-bin/README.md) | | Strata Terminal CLI to run Qwen3.8-Flash-Next / DeepSeek V4.1-Flash locally (prebuilt) | ✓ | |
 | [tessoa](packages/tessoa/README.md) | | GPU-accelerated file manager with split panes, layouts, tags and multiple views | ✓ | |
+| [uu-remote-linux-bin](packages/uu-remote-linux-bin/README.md) | | Unofficial Linux host and viewer for NetEase UU Remote (prebuilt binary) | ✓ | |
 | [wechat-xwayland](packages/wechat-xwayland/README.md) | | Launch WeChat through XWayland with a KDE window-activation command | | |
 | [workbuddy-international](packages/workbuddy-international/README.md) | | WorkBuddy AI international edition (unofficial Linux port from the macOS build) | ✓ | |
 | [wuyou-docs](packages/wuyou-docs/README.md) | ~~wuyou-docs-bin~~ | Prebuilt Linux desktop release of Wuyou Docs | | ✓ |

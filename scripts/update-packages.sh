@@ -45,6 +45,7 @@ DEFAULT_PACKAGES=(
   workbuddy-international
   agents-anywhere
   strata-terminal-bin
+  uu-remote-linux-bin
 )
 
 if [[ "$#" -gt 0 ]]; then
