@@ -52,6 +52,7 @@ on:
           - strata-terminal-bin
           - hifox-cli
           - uu-remote-linux-bin
+          - uuway-bin
   push:
     paths:
       - ".github/workflows/aur-auto-update.yml"
@@ -95,6 +96,7 @@ on:
       - "packages/agents-anywhere/**"
       - "packages/strata-terminal-bin/**"
       - "packages/uu-remote-linux-bin/**"
+      - "packages/uuway-bin/**"
   schedule:
     - cron: "43 0 * * *"
     - cron: "13 0 * * 1"
@@ -176,6 +178,7 @@ jobs:
             agents-anywhere
             strata-terminal-bin
             uu-remote-linux-bin
+            uuway-bin
           )
           weekly_packages=(
             keyviz-zh

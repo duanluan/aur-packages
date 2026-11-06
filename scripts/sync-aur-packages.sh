@@ -46,6 +46,7 @@ DEFAULT_PACKAGES=(
   agents-anywhere
   strata-terminal-bin
   uu-remote-linux-bin
+  uuway-bin
 )
 
 AUR_SSH_KEY="${AUR_SSH_KEY:-${HOME}/.ssh/aur_actions}"

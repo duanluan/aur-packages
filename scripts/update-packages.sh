@@ -46,6 +46,7 @@ DEFAULT_PACKAGES=(
   agents-anywhere
   strata-terminal-bin
   uu-remote-linux-bin
+  uuway-bin
 )
 
 if [[ "$#" -gt 0 ]]; then
