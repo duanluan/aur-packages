@@ -27,6 +27,8 @@ DEFAULT_PACKAGES=(
   echobird-bin
   edithere-bin
   minimax-design
+  minimax-code
+  minimax-code-desktop
   reasonix-desktop-bin
   pi-agent-desktop-bin
   reeden

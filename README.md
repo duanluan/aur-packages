@@ -28,6 +28,8 @@ User-facing notes for the AUR packages maintained in this repository.
 | [mastergo](packages/mastergo/README.md) | ~~mastergo-desktop-bin~~ | MasterGo desktop app | | ✓ |
 | [mimo-desktop](packages/mimo-desktop/README.md) | | Xiaomi MiMo desktop app | | ✓ |
 | [mind-elixir](packages/mind-elixir/README.md) | ~~mind-elixir-bin~~ | Prebuilt Linux desktop release of Mind Elixir | | ✓ |
+| [minimax-code](packages/minimax-code/README.md) | | MiniMax Code terminal AI coding agent (mcode CLI) | ✓ | |
+| [minimax-code-desktop](packages/minimax-code-desktop/README.md) | | MiniMax Code desktop app repackaged from the official macOS release | ✓ | |
 | [minimax-design](packages/minimax-design/README.md) | ~~minimax-hub~~, ~~minimax-hub-bin~~ | MiniMax Design desktop app (formerly MiniMax Hub) | ✓ | |
 | [navicat17-premium-cs](packages/navicat17-premium-cs/README.md) | | Chinese Simplified Navicat Premium 17 AppImage package | | ✓ |
 | [opensquilla](packages/opensquilla/README.md) | | OpenSquilla desktop app | | ✓ |

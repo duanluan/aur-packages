@@ -33,6 +33,8 @@ on:
           - echobird-bin
           - edithere-bin
           - minimax-design
+          - minimax-code
+          - minimax-code-desktop
           - reasonix-desktop-bin
           - pi-agent-desktop-bin
           - reeden
@@ -79,6 +81,8 @@ on:
       - "packages/echobird-bin/**"
       - "packages/edithere-bin/**"
       - "packages/minimax-design/**"
+      - "packages/minimax-code/**"
+      - "packages/minimax-code-desktop/**"
       - "packages/reasonix-desktop-bin/**"
       - "packages/pi-agent-desktop-bin/**"
       - "packages/reeden/**"
@@ -166,6 +170,8 @@ jobs:
             gooeypi-bin
             zcode
             minimax-design
+            minimax-code
+            minimax-code-desktop
             reasonix-desktop-bin
             pi-agent-desktop-bin
             pideck-bin
