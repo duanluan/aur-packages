@@ -126,6 +126,17 @@ sha256sums_x86_64=('${A64}')
 sha256sums_aarch64=('${B64}')
 EOF
 
+cat > "${tmp}/qoder" <<EOF
+pkgver=1.0.0
+pkgrel=5
+sha256sums_x86_64=(
+  '${A64}'
+)
+sha256sums_aarch64=(
+  '${B64}'
+)
+EOF
+
 cat > "${tmp}/broken" <<EOF
 pkgver=1.0.0
 pkgrel=5
@@ -147,6 +158,7 @@ sed 's/^pkgrel=5/pkgrel=abc/' "${tmp}/double" > "${tmp}/nonum-double"
 sed 's/^pkgrel=5/pkgrel=abc/' "${tmp}/single" > "${tmp}/nonum-single"
 sed 's/^pkgrel=5/pkgrel=abc/' "${tmp}/single-line" > "${tmp}/nonum-single-line"
 sed 's/^pkgrel=7/pkgrel=abc/' "${tmp}/zcode" > "${tmp}/nonum-zcode"
+sed 's/^pkgrel=5/pkgrel=abc/' "${tmp}/qoder" > "${tmp}/nonum-qoder"
 
 # ---------- opensquilla：is_sha256 函数与上游元数据格式校验块 ----------
 isfn="$(extract_to_exact_line "${REPO_ROOT}/packages/opensquilla/update.sh" 'is_sha256()' '}')"
@@ -215,15 +227,16 @@ expect "$(run_zp 1.0.0 "$A64" "${tmp}/nonum-single-line")" 1 'zcode-pro pkgrel �
 # ---------- qoder-cn：判定块 ----------
 qblock="$(extract_before "${REPO_ROOT}/packages/qoder-cn/update.sh" 'current_pkgver=' 'sed -i')"
 check_block "${qblock}" 'qoder-cn 判定块' 'pkgrel=1'
-run_q() { # 新版本 新校验值 夹具
-  PKGBUILD_PATH="$3" pkgver="$1" source_sha256="$2" \
+run_q() { # 新版本 新x64 新arm64 夹具
+  PKGBUILD_PATH="$4" pkgver="$1" x86_64_sha256="$2" aarch64_sha256="$3" \
     bash -c "${qblock}; printf '%s\n' \"\${pkgrel}\""
 }
-expect "$(run_q 1.0.0 "$A64" "${tmp}/single")" 5 'qoder-cn 同版本同校验，保持'
-expect "$(run_q 1.0.0 "$C64" "${tmp}/single")" 6 'qoder-cn 同版本校验变化，加 1'
-expect "$(run_q 1.1.0 "$C64" "${tmp}/single")" 1 'qoder-cn 新版本，归 1'
-expect "$(run_q 1.0.0 "$A64" "${tmp}/broken")" 1 'qoder-cn 提取失败不虚增，归 1'
-expect "$(run_q 1.0.0 "$A64" "${tmp}/nonum-single")" 1 'qoder-cn pkgrel 非数字，归 1'
+expect "$(run_q 1.0.0 "$A64" "$B64" "${tmp}/qoder")" 5 'qoder-cn 同版本双校验相同，保持'
+expect "$(run_q 1.0.0 "$C64" "$B64" "${tmp}/qoder")" 6 'qoder-cn 同版本 x86_64 变，加 1'
+expect "$(run_q 1.0.0 "$A64" "$C64" "${tmp}/qoder")" 6 'qoder-cn 同版本 aarch64 变，加 1'
+expect "$(run_q 1.1.0 "$C64" "$D64" "${tmp}/qoder")" 1 'qoder-cn 新版本，归 1'
+expect "$(run_q 1.0.0 "$A64" "$B64" "${tmp}/broken")" 1 'qoder-cn 提取失败不虚增，归 1'
+expect "$(run_q 1.0.0 "$A64" "$B64" "${tmp}/nonum-qoder")" 1 'qoder-cn pkgrel 非数字，归 1'
 
 # ---------- sed 替换流程（五个包） ----------
 zchain="$(extract_through "${REPO_ROOT}/packages/zcode/update.sh" 'sed -i' 'PKGBUILD_PATH}"')"
@@ -268,15 +281,18 @@ zpmd5_2="$(md5sum "${tmp}/zcode-pro-run" | awk '{print $1}')"
 expect "$([[ "${zpmd5_1}" == "${zpmd5_2}" ]] && echo same || echo diff)" same 'zcode-pro 链路幂等性'
 
 qchain="$(extract_through "${REPO_ROOT}/packages/qoder-cn/update.sh" 'sed -i' 'PKGBUILD_PATH}"')"
-check_block "${qchain}" 'qoder-cn 替换流程' 's/^pkgver=' 's/^pkgrel=' '0,/'
-cp "${tmp}/single" "${tmp}/qoder-cn-run"
-PKGBUILD_PATH="${tmp}/qoder-cn-run" pkgver=1.1.0 pkgrel=1 source_sha256="$C64" \
-  bash -c "${qchain}"
-qhit=$(grep -cE "^(pkgver=1.1.0|pkgrel=1)|^  '${C64}'$" "${tmp}/qoder-cn-run")
-expect "${qhit}" 3 'qoder-cn 替换流程改写版本/修订/校验值'
+check_block "${qchain}" 'qoder-cn 替换流程' 's/^pkgver=' 's/^pkgrel=' 'sha256sums_x86_64=' 'sha256sums_aarch64='
+cp "${tmp}/qoder" "${tmp}/qoder-cn-run"
+qoder_chain() {
+  PKGBUILD_PATH="${tmp}/qoder-cn-run" pkgver=1.1.0 pkgrel=1 \
+    x86_64_sha256="$C64" aarch64_sha256="$D64" \
+    bash -c "${qchain}"
+}
+qoder_chain
+qhit=$(grep -cE "^(pkgver=1.1.0|pkgrel=1)|^  '${C64}'$|^  '${D64}'$" "${tmp}/qoder-cn-run")
+expect "${qhit}" 4 'qoder-cn 替换流程改写版本/修订/双校验值'
 qmd5_1="$(md5sum "${tmp}/qoder-cn-run" | awk '{print $1}')"
-PKGBUILD_PATH="${tmp}/qoder-cn-run" pkgver=1.1.0 pkgrel=1 source_sha256="$C64" \
-  bash -c "${qchain}"
+qoder_chain
 qmd5_2="$(md5sum "${tmp}/qoder-cn-run" | awk '{print $1}')"
 expect "$([[ "${qmd5_1}" == "${qmd5_2}" ]] && echo same || echo diff)" same 'qoder-cn 替换流程幂等性'
 
