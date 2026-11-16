@@ -54,7 +54,7 @@ User-facing notes for the AUR packages maintained in this repository.
 | [wuyou-docs](packages/wuyou-docs/README.md) | ~~wuyou-docs-bin~~ | Prebuilt Linux desktop release of Wuyou Docs | | ✓ |
 | [wuyou-toolkit](packages/wuyou-toolkit/README.md) | ~~wuyou-toolkit-bin~~ | Prebuilt Linux desktop release of wuyou-toolkit | | ✓ |
 | [zcode](packages/zcode/README.md) | ~~zcode-desktop-bin~~ | ZCode desktop app | ✓ | |
-| [zcode-pro](packages/zcode-pro/README.md) | | UI enhancement launcher for the ZCode desktop app (custom project aliases) | | |
+| [zcode-pro](packages/zcode-pro/README.md) | | UI enhancement launcher for the ZCode desktop app (custom project aliases) | ✓ | |
 
 Former names remain available on the AUR as transitional packages:
 updating an installed transitional package automatically replaces it with

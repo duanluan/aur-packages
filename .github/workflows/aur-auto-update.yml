@@ -26,6 +26,7 @@ on:
           - codepilot-bin
           - gooeypi-bin
           - zcode
+          - zcode-pro
           - mastergo
           - pilauncher-bin
           - pideck-bin
@@ -74,6 +75,7 @@ on:
       - "packages/codepilot-bin/**"
       - "packages/gooeypi-bin/**"
       - "packages/zcode/**"
+      - "packages/zcode-pro/**"
       - "packages/mastergo/**"
       - "packages/pilauncher-bin/**"
       - "packages/pideck-bin/**"
@@ -169,6 +171,7 @@ jobs:
             codepilot-bin
             gooeypi-bin
             zcode
+            zcode-pro
             minimax-design
             minimax-code
             minimax-code-desktop
