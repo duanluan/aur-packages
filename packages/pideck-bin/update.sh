@@ -42,11 +42,13 @@ current_pkgver=''
 current_pkgrel=''
 current_license_sha256=''
 current_x86_64_sha256=''
+current_aarch64_sha256=''
 if [[ -f "${PKGBUILD_PATH}" ]]; then
   current_pkgver="$(awk -F= '/^pkgver=/ {print $2; exit}' "${PKGBUILD_PATH}")"
   current_pkgrel="$(awk -F= '/^pkgrel=/ {print $2; exit}' "${PKGBUILD_PATH}")"
   current_license_sha256="$(awk -F"'" '/^sha256sums=/ {print $2; exit}' "${PKGBUILD_PATH}")"
   current_x86_64_sha256="$(awk -F"'" '/^sha256sums_x86_64=/ {print $2; exit}' "${PKGBUILD_PATH}")"
+  current_aarch64_sha256="$(awk -F"'" '/^sha256sums_aarch64=/ {print $2; exit}' "${PKGBUILD_PATH}")"
 fi
 
 curl_headers=(
@@ -72,10 +74,17 @@ fi
 # ${productName}_${version}_${arch}.deb（PiDeck_0.9.1_amd64.deb），
 # 早期版本是 pi-desktop_${version}_amd64.deb
 asset_name="PiDeck_${pkgver}_amd64.deb"
+arm_asset_name="PiDeck_${pkgver}_arm64.deb"
 asset_url="$(asset_field "${asset_name}" browser_download_url)"
 asset_digest="$(asset_field "${asset_name}" digest)"
+arm_asset_url="$(asset_field "${arm_asset_name}" browser_download_url)"
+arm_asset_digest="$(asset_field "${arm_asset_name}" digest)"
 if [[ -z "${asset_url}" ]]; then
   printf 'failed to resolve release asset: %s\n' "${asset_name}" >&2
+  exit 1
+fi
+if [[ -z "${arm_asset_url}" ]]; then
+  printf 'failed to resolve release asset: %s\n' "${arm_asset_name}" >&2
   exit 1
 fi
 
@@ -84,16 +93,23 @@ trap 'rm -rf "${tmpdir}"' EXIT
 
 license_sha256="$(sha256sum "${SCRIPT_DIR}/LICENSE" | awk '{print $1}')"
 x86_64_sha256="${asset_digest#sha256:}"
+aarch64_sha256="${arm_asset_digest#sha256:}"
 
 if [[ ! "${x86_64_sha256}" =~ ^[[:xdigit:]]{64}$ ]]; then
   x86_64_sha256="$(download_sha256 \
     "${asset_url}" "${tmpdir}/${asset_name}")"
 fi
 
+if [[ ! "${aarch64_sha256}" =~ ^[[:xdigit:]]{64}$ ]]; then
+  aarch64_sha256="$(download_sha256 \
+    "${arm_asset_url}" "${tmpdir}/${arm_asset_name}")"
+fi
+
 if [[ "${current_pkgver}" == "${pkgver}" &&
       "${current_pkgrel}" =~ ^[0-9]+$ &&
       "${current_license_sha256}" == "${license_sha256}" &&
-      "${current_x86_64_sha256}" == "${x86_64_sha256}" ]]; then
+      "${current_x86_64_sha256}" == "${x86_64_sha256}" &&
+      "${current_aarch64_sha256}" == "${aarch64_sha256}" ]]; then
   pkgrel="${current_pkgrel}"
 elif [[ "${current_pkgver}" == "${pkgver}" && "${current_pkgrel}" =~ ^[0-9]+$ ]]; then
   pkgrel="$((current_pkgrel + 1))"
@@ -110,7 +126,7 @@ _binname=pideck
 pkgver=${pkgver}
 pkgrel=${pkgrel}
 pkgdesc='Desktop workbench for managing local AI coding agent sessions (prebuilt binary)'
-arch=('x86_64')
+arch=('x86_64' 'aarch64')
 url='https://github.com/ayuayue/PiDeck'
 license=('MIT')
 depends=(
@@ -156,17 +172,28 @@ conflicts=('pideck' 'pi-desktop')
 options=('!strip')
 source=('LICENSE')
 source_x86_64=("\${_appname}_\${pkgver}_amd64.deb::https://github.com/ayuayue/PiDeck/releases/download/v\${pkgver}/\${_appname}_\${pkgver}_amd64.deb")
-noextract=("\${_appname}_\${pkgver}_amd64.deb")
+source_aarch64=("\${_appname}_\${pkgver}_arm64.deb::https://github.com/ayuayue/PiDeck/releases/download/v\${pkgver}/\${_appname}_\${pkgver}_arm64.deb")
+noextract=(
+  "\${_appname}_\${pkgver}_amd64.deb"
+  "\${_appname}_\${pkgver}_arm64.deb"
+)
 sha256sums=('${license_sha256}')
 sha256sums_x86_64=('${x86_64_sha256}')
+sha256sums_aarch64=('${aarch64_sha256}')
 
 package() {
-  local extract_dir="\${srcdir}/deb-extract"
+  local deb_arch
+  local extract_dir="\${srcdir}/deb-extract-\${CARCH}"
   local data_archives
+
+  case "\${CARCH}" in
+    x86_64) deb_arch='amd64' ;;
+    aarch64) deb_arch='arm64' ;;
+  esac
 
   rm -rf "\${extract_dir}"
   install -dm755 "\${extract_dir}"
-  bsdtar -C "\${extract_dir}" -xf "\${srcdir}/\${_appname}_\${pkgver}_amd64.deb"
+  bsdtar -C "\${extract_dir}" -xf "\${srcdir}/\${_appname}_\${pkgver}_\${deb_arch}.deb"
 
   data_archives=("\${extract_dir}"/data.tar.*)
   if (( \${#data_archives[@]} != 1 )) || [[ ! -f "\${data_archives[0]}" ]]; then

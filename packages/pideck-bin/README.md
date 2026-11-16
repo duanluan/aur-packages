@@ -1,7 +1,8 @@
 # pideck-bin
 
 `pideck-bin` repackages the official Linux `.deb` release of
-[PiDeck](https://github.com/ayuayue/PiDeck) for Arch Linux on x86_64.
+[PiDeck](https://github.com/ayuayue/PiDeck) for Arch Linux on x86_64 and
+aarch64.
 
 PiDeck is an open-source desktop workbench for managing pi Agent sessions in
 local project directories. It also imports Codex and Claude local sessions and
@@ -42,7 +43,7 @@ pi-desktop
 ## Notes
 
 - This package uses the upstream `.deb` release and does not require FUSE.
-- The upstream release currently supports x86_64 Linux only.
+- The upstream release ships x86_64 and aarch64 Linux builds; both are packaged.
 - `git` is optional at the package level but required for PiDeck's Git
   integration features.
 - Application state and configuration are stored in the current user's home

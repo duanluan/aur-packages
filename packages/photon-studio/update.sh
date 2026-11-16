@@ -24,13 +24,23 @@ require_command sha256sum
 
 # The download API redirects to a versioned CDN URL like
 # https://downloads.tenzen.studio/photon/stable/linux/0.1.42/Photon-Studio-0.1.42-linux-x64.flatpak
-redirect_url="$(curl -fsSL --max-time 30 -o /dev/null -w '%{url_effective}' -L -r 0-0 "${DOWNLOAD_API}?platform=linux&arch=x64")"
-pkgver="$(sed -nE 's|.*/stable/linux/([0-9]+(\.[0-9]+)+)/.*|\1|p' <<<"${redirect_url}")"
+resolve_version() { # arch
+  local redirect_url
+  redirect_url="$(curl -fsSL --max-time 30 -o /dev/null -w '%{url_effective}' -L -r 0-0 "${DOWNLOAD_API}?platform=linux&arch=$1")"
+  sed -nE 's|.*/stable/linux/([0-9]+(\.[0-9]+)+)/.*|\1|p' <<<"${redirect_url}"
+}
 
-if [[ -z "${pkgver}" ]]; then
-  printf 'failed to resolve latest version from %s\n' "${redirect_url}" >&2
+x64_pkgver="$(resolve_version x64)"
+arm64_pkgver="$(resolve_version arm64)"
+
+if [[ -z "${x64_pkgver}" || -z "${arm64_pkgver}" ]]; then
+  printf 'failed to resolve latest versions (x64=%s arm64=%s)\n' "${x64_pkgver}" "${arm64_pkgver}" >&2
   exit 1
 fi
+
+# Either architecture may lag behind the other; package the lower version so
+# both AppImages exist.
+pkgver="$(printf '%s\n%s\n' "${x64_pkgver}" "${arm64_pkgver}" | sort -V | head -n1)"
 
 current_pkgver="$(awk -F= '/^pkgver=/ {print $2; exit}' "${PKGBUILD_PATH}" 2>/dev/null || true)"
 current_pkgrel="$(awk -F= '/^pkgrel=/ {print $2; exit}' "${PKGBUILD_PATH}" 2>/dev/null || true)"
@@ -70,14 +80,30 @@ else
     --output "${archive_path}"
 fi
 
-archive_sha256="$(sha256sum "${archive_path}" | awk '{print $1}')"
+arm_archive_path="${tmpdir}/Photon-Studio-${pkgver}-linux-arm64.AppImage"
+curl \
+  --fail \
+  --location \
+  --show-error \
+  --silent \
+  --retry 6 \
+  --retry-delay 5 \
+  --retry-connrefused \
+  --retry-all-errors \
+  --connect-timeout 20 \
+  "${CDN_BASE}/${pkgver}/Photon-Studio-${pkgver}-linux-arm64.AppImage" \
+  --output "${arm_archive_path}"
 
-# Only pkgver, pkgrel and the first sha256 entry (the AppImage) change here.
+x86_64_sha256="$(sha256sum "${archive_path}" | awk '{print $1}')"
+aarch64_sha256="$(sha256sum "${arm_archive_path}" | awk '{print $1}')"
+
+# Only pkgver, pkgrel and the two architecture checksums change here.
 # Checksums of the local desktop/launcher/icon files stay untouched.
 sed -i \
   -e "s/^pkgver=.*/pkgver=${pkgver}/" \
   -e "s/^pkgrel=.*/pkgrel=${pkgrel}/" \
-  -e "0,/^[[:space:]]*'[0-9a-f]\{64\}'/{s/^[[:space:]]*'[0-9a-f]\{64\}'/  '${archive_sha256}'/}" \
+  -e "s|^sha256sums_x86_64=.*|sha256sums_x86_64=('${x86_64_sha256}')|" \
+  -e "s|^sha256sums_aarch64=.*|sha256sums_aarch64=('${aarch64_sha256}')|" \
   "${PKGBUILD_PATH}"
 
 (

@@ -115,7 +115,7 @@ _pkgname=rebased
 pkgver=__PKGVER__
 pkgrel=__PKGREL__
 pkgdesc='Chinese language pack for Rebased'
-arch=('x86_64')
+arch=('x86_64' 'aarch64')
 url='https://github.com/DetachHead/rebased'
 license=('Apache-2.0')
 depends=('rebased-bin>=__PKGVER__-__REBASED_BIN_MIN_PKGREL__')

@@ -25,6 +25,9 @@ pkgrel="${PKGREL:-1}"
 asset_name="$(printf '%s\n' "${release_json}" | jq -r --arg version "${pkgver}" '[.assets[] | select(.name == ("wuyou-docs_" + $version + "_amd64.deb"))][0].name')"
 asset_url="$(printf '%s\n' "${release_json}" | jq -r --arg version "${pkgver}" '[.assets[] | select(.name == ("wuyou-docs_" + $version + "_amd64.deb"))][0].browser_download_url')"
 asset_digest="$(printf '%s\n' "${release_json}" | jq -r --arg version "${pkgver}" '[.assets[] | select(.name == ("wuyou-docs_" + $version + "_amd64.deb"))][0].digest')"
+arm_asset_name="$(printf '%s\n' "${release_json}" | jq -r --arg version "${pkgver}" '[.assets[] | select(.name == ("wuyou-docs_" + $version + "_arm64.deb"))][0].name')"
+arm_asset_url="$(printf '%s\n' "${release_json}" | jq -r --arg version "${pkgver}" '[.assets[] | select(.name == ("wuyou-docs_" + $version + "_arm64.deb"))][0].browser_download_url')"
+arm_asset_digest="$(printf '%s\n' "${release_json}" | jq -r --arg version "${pkgver}" '[.assets[] | select(.name == ("wuyou-docs_" + $version + "_arm64.deb"))][0].digest')"
 
 if [[ -z "${tag_name}" || "${tag_name}" == "null" || -z "${pkgver}" ]]; then
   printf 'failed to resolve latest tag\n' >&2
@@ -36,8 +39,15 @@ if [[ -z "${asset_name}" || "${asset_name}" == "null" || -z "${asset_url}" || "$
   exit 1
 fi
 
+if [[ -z "${arm_asset_name}" || "${arm_asset_name}" == "null" || -z "${arm_asset_url}" || "${arm_asset_url}" == "null" ]]; then
+  printf 'failed to resolve arm64 deb asset\n' >&2
+  exit 1
+fi
+
 pkgbuild_asset_url="${asset_url/\/download\/${tag_name}\//\/download\/v\$\{pkgver\}\/}"
 pkgbuild_asset_url="${pkgbuild_asset_url/${asset_name}/\$\{_pkgname\}_\$\{pkgver\}_amd64.deb}"
+pkgbuild_arm_asset_url="${arm_asset_url/\/download\/${tag_name}\//\/download\/v\$\{pkgver\}\/}"
+pkgbuild_arm_asset_url="${pkgbuild_arm_asset_url/${arm_asset_name}/\$\{_pkgname\}_\$\{pkgver\}_arm64.deb}"
 if [[ -n "${asset_digest}" && "${asset_digest}" != "null" ]]; then
   asset_sha256="${asset_digest#sha256:}"
 else
@@ -45,6 +55,14 @@ else
   trap 'rm -rf "${tmpdir}"' EXIT
   curl -fL "${asset_url}" -o "${tmpdir}/${asset_name}" >/dev/null 2>&1
   asset_sha256="$(sha256sum "${tmpdir}/${asset_name}" | awk '{print $1}')"
+fi
+if [[ -n "${arm_asset_digest}" && "${arm_asset_digest}" != "null" ]]; then
+  arm_asset_sha256="${arm_asset_digest#sha256:}"
+else
+  tmpdir="${tmpdir:-$(mktemp -d)}"
+  trap 'rm -rf "${tmpdir}"' EXIT
+  curl -fL "${arm_asset_url}" -o "${tmpdir}/${arm_asset_name}" >/dev/null 2>&1
+  arm_asset_sha256="$(sha256sum "${tmpdir}/${arm_asset_name}" | awk '{print $1}')"
 fi
 
 cat > "${PKGBUILD_PATH}" <<EOF
@@ -55,21 +73,28 @@ _pkgname=wuyou-docs
 pkgver=${pkgver}
 pkgrel=${pkgrel}
 pkgdesc='Local-first desktop document workspace (prebuilt binary)'
-arch=('x86_64')
+arch=('x86_64' 'aarch64')
 url='https://github.com/duanluan/wuyou-docs-releases'
 license=('NOASSERTION')
 depends=('gtk3' 'webkit2gtk-4.1')
 provides=("wuyou-docs-bin=\${pkgver}")
 options=('!strip')
-source=("\${_pkgname}_\${pkgver}_amd64.deb::${pkgbuild_asset_url}")
-sha256sums=('${asset_sha256}')
+source_x86_64=("\${_pkgname}_\${pkgver}_amd64.deb::${pkgbuild_asset_url}")
+source_aarch64=("\${_pkgname}_\${pkgver}_arm64.deb::${pkgbuild_arm_asset_url}")
+sha256sums_x86_64=('${asset_sha256}')
+sha256sums_aarch64=('${arm_asset_sha256}')
 
 package() {
-  local _app_dir _app_source _desktop_dir _desktop_file _desktop_source _extractdir
+  local _app_dir _app_source _deb_arch _desktop_dir _desktop_file _desktop_source _extractdir
   _extractdir="\$(mktemp -d)"
   trap 'rm -rf "\${_extractdir}"' EXIT
 
-  bsdtar -C "\${_extractdir}" -xf "\${srcdir}/\${_pkgname}_\${pkgver}_amd64.deb"
+  case "\${CARCH}" in
+    x86_64) _deb_arch='amd64' ;;
+    aarch64) _deb_arch='arm64' ;;
+  esac
+
+  bsdtar -C "\${_extractdir}" -xf "\${srcdir}/\${_pkgname}_\${pkgver}_\${_deb_arch}.deb"
   bsdtar -C "\${pkgdir}" -xf "\${_extractdir}/data.tar.gz"
 
   _app_dir="\${pkgdir}/usr/lib/wuyou-docs"
