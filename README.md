@@ -31,6 +31,7 @@ User-facing notes for the AUR packages maintained in this repository.
 | [minimax-code](packages/minimax-code/README.md) | | MiniMax Code terminal AI coding agent (mcode CLI) | ✓ | |
 | [minimax-code-desktop](packages/minimax-code-desktop/README.md) | | MiniMax Code desktop app repackaged from the official macOS release | ✓ | |
 | [minimax-design](packages/minimax-design/README.md) | ~~minimax-hub~~, ~~minimax-hub-bin~~ | MiniMax Design desktop app (formerly MiniMax Hub) | ✓ | |
+| [mirasim](packages/mirasim/README.md) | | Mirasim desktop app for running agent CLIs in shared team spaces | ✓ | |
 | [navicat17-premium-cs](packages/navicat17-premium-cs/README.md) | | Chinese Simplified Navicat Premium 17 AppImage package | | ✓ |
 | [opensquilla](packages/opensquilla/README.md) | | OpenSquilla desktop app | | ✓ |
 | [pdmaas-pro-bin](packages/pdmaas-pro-bin/README.md) | | Enterprise data modeling platform (prebuilt binary) | | |

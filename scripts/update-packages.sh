@@ -51,6 +51,7 @@ DEFAULT_PACKAGES=(
   uu-remote-linux-bin
   uuway-bin
   coze
+  mirasim
 )
 
 if [[ "$#" -gt 0 ]]; then

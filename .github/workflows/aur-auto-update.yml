@@ -57,6 +57,7 @@ on:
           - uu-remote-linux-bin
           - uuway-bin
           - coze
+          - mirasim
   push:
     paths:
       - ".github/workflows/aur-auto-update.yml"
@@ -105,6 +106,7 @@ on:
       - "packages/uu-remote-linux-bin/**"
       - "packages/uuway-bin/**"
       - "packages/coze/**"
+      - "packages/mirasim/**"
   schedule:
     - cron: "43 0 * * *"
     - cron: "13 0 * * 1"
@@ -191,6 +193,7 @@ jobs:
             uu-remote-linux-bin
             uuway-bin
             coze
+            mirasim
           )
           weekly_packages=(
             keyviz-zh
