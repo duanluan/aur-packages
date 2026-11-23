@@ -1,17 +1,26 @@
 # reasonix-desktop-bin
 
-`reasonix-desktop-bin` repackages the prebuilt `.deb` release of
-[Reasonix Desktop](https://github.com/esengine/DeepSeek-Reasonix) for Arch Linux.
+`reasonix-desktop-bin` repackages the prebuilt Linux `.deb` release of
+[Reasonix Studio](https://github.com/esengine/DeepSeek-Reasonix) for Arch Linux.
 
-Reasonix Desktop is a Wails-based desktop GUI for the Reasonix terminal-native
-AI coding agent with DeepSeek API.
+Reasonix Studio is the Electron desktop GUI for Reasonix, a terminal-native AI
+coding agent working against the DeepSeek API.
 
 ## Notes
 
-- This package uses the official `.deb` release (native Go/Wails binary) with
-  only two dependencies: `gtk3` and `webkit2gtk-4.1`.
-- `deepseek-reasonix-desktop-bin` (AUR) at v1.7.0 uses a raw tarball approach
-  with 24 Electron-related dependencies and produces a white screen.
+- Upstream used to publish the desktop app as "Reasonix Desktop" on the
+  `desktop-v*` tag line. That line ended at 1.39.11; the app was renamed to
+  Reasonix Studio and continues on `studio-v*` with 2.x version numbers. This
+  package follows the Studio line while keeping its original AUR name so
+  existing installations upgrade in place.
+- The bundle ships its own pinned Electron runtime together with its helper
+  binaries (`reasonix-studio-host`, `cua-driver`), so the package only depends
+  on the shared libraries and desktop integration those binaries load.
+- `bubblewrap` is an optional dependency: the agent host uses it to sandbox
+  shell commands.
+- The in-app self-update helper and its polkit policy are deliberately not
+  installed — pacman owns upgrades, and self-updating would overwrite
+  package-tracked files.
 
 ## Install
 
@@ -40,11 +49,11 @@ makepkg -si
 Start it from your application menu, or run:
 
 ```bash
-reasonix-desktop
+reasonix-studio
 ```
 
 ## Conflicts
 
-This package conflicts with `reasonix-desktop`, `deepseek-reasonix-desktop`,
-and `deepseek-reasonix-desktop-bin` — only one Reasonix Desktop package should
-be installed at a time.
+This package conflicts with `reasonix-desktop`, `reasonix-studio`,
+`deepseek-reasonix-desktop`, and `deepseek-reasonix-desktop-bin` — only one
+Reasonix desktop package should be installed at a time.

@@ -41,7 +41,7 @@ User-facing notes for the AUR packages maintained in this repository.
 | [pilauncher-bin](packages/pilauncher-bin/README.md) | | Prebuilt Linux desktop release of PiLauncher | | ✓ |
 | [pokebonk](packages/pokebonk/README.md) | | Desktop client for PokéBonk, a 3D survival fan-game | ✓ | |
 | [qoder-cn](packages/qoder-cn/README.md) | | Qoder CN desktop app repackaged from the official Linux deb | ✓ | |
-| [reasonix-desktop-bin](packages/reasonix-desktop-bin/README.md) | | Reasonix desktop app | ✓ | |
+| [reasonix-desktop-bin](packages/reasonix-desktop-bin/README.md) | | Reasonix Studio desktop app for the Reasonix terminal AI agent | ✓ | |
 | [rebased-bin](packages/rebased-bin/README.md) | | A standalone Git client based on the IntelliJ platform | ✓ | |
 | [rebased-zh-bin](packages/rebased-zh-bin/README.md) | | Chinese language pack for Rebased | ✓ | |
 | [reeden](packages/reeden/README.md) | ~~reeden-bin~~ | Reeden desktop app | | ✓ |
