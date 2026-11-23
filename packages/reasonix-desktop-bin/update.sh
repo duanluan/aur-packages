@@ -50,6 +50,12 @@ release_json="$(curl_retry "${curl_headers[@]}" "${RELEASE_API_URL}")"
 
 # Upstream ships the desktop app as Reasonix Studio on the "studio-v" tag line;
 # the older "desktop-v" line stopped at 1.39.11 and is not followed any more.
+#
+# Upstream stopped maintaining the project on 2026-11-12 with 2.61.0 as the
+# final release, so this script always resolves the same version and normally
+# changes nothing. It is kept out of the daily run on purpose (see the note in
+# the repository README) and exists so a successor fork can be picked up by
+# repointing RELEASE_API_URL and the asset names.
 studio_release="$(printf '%s\n' "${release_json}" \
   | jq '[.[] | select(.tag_name | startswith("studio-v"))][0]')"
 tag_name="$(printf '%s\n' "${studio_release}" | jq -r '.tag_name')"

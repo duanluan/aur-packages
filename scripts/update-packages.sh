@@ -30,7 +30,6 @@ DEFAULT_PACKAGES=(
   minimax-design
   minimax-code
   minimax-code-desktop
-  reasonix-desktop-bin
   pi-agent-desktop-bin
   reeden
   alexandria-bin

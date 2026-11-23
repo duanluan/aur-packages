@@ -6,13 +6,29 @@
 Reasonix Studio is the Electron desktop GUI for Reasonix, a terminal-native AI
 coding agent working against the DeepSeek API.
 
+## Upstream status: end of maintenance
+
+**Upstream stopped maintaining Reasonix on 2026-11-12, and 2.61.0 is the final
+release.** The repository is archived, issues are closed, and the project
+receives no further releases, fixes or triage. The project is MIT-licensed, so
+forks are possible, but as of this package there is nothing newer to package.
+
+Consequences for this package:
+
+- It is pinned to 2.61.0 and deliberately removed from the daily auto-update
+  run. If a fork or a successor project picks the app up, the packaging needs
+  to be repointed by hand at the new release location.
+- No further bug fixes will arrive from upstream. Bugs present in 2.61.0 stay
+  present in this package.
+- The packaging itself is unaffected: it installs and launches normally.
+
 ## Notes
 
 - Upstream used to publish the desktop app as "Reasonix Desktop" on the
   `desktop-v*` tag line. That line ended at 1.39.11; the app was renamed to
-  Reasonix Studio and continues on `studio-v*` with 2.x version numbers. This
-  package follows the Studio line while keeping its original AUR name so
-  existing installations upgrade in place.
+  Reasonix Studio and continues on `studio-v*` with 2.x version numbers,
+  ending at 2.61.0. This package follows the Studio line while keeping its
+  original AUR name so existing installations upgrade in place.
 - The bundle ships its own pinned Electron runtime together with its helper
   binaries (`reasonix-studio-host`, `cua-driver`), so the package only depends
   on the shared libraries and desktop integration those binaries load.

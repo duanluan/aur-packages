@@ -41,7 +41,7 @@ User-facing notes for the AUR packages maintained in this repository.
 | [pilauncher-bin](packages/pilauncher-bin/README.md) | | Prebuilt Linux desktop release of PiLauncher | | ✓ |
 | [pokebonk](packages/pokebonk/README.md) | | Desktop client for PokéBonk, a 3D survival fan-game | ✓ | |
 | [qoder-cn](packages/qoder-cn/README.md) | | Qoder CN desktop app repackaged from the official Linux deb | ✓ | |
-| [reasonix-desktop-bin](packages/reasonix-desktop-bin/README.md) | | Reasonix Studio desktop app for the Reasonix terminal AI agent | ✓ | |
+| [reasonix-desktop-bin](packages/reasonix-desktop-bin/README.md) | | Reasonix Studio desktop app for the Reasonix terminal AI agent (final upstream release) | | |
 | [rebased-bin](packages/rebased-bin/README.md) | | A standalone Git client based on the IntelliJ platform | ✓ | |
 | [rebased-zh-bin](packages/rebased-zh-bin/README.md) | | Chinese language pack for Rebased | ✓ | |
 | [reeden](packages/reeden/README.md) | ~~reeden-bin~~ | Reeden desktop app | | ✓ |
@@ -62,8 +62,9 @@ updating an installed transitional package automatically replaces it with
 the current one.
 
 Daily entries are checked once a day and weekly entries every Monday;
-packages with neither mark are updated manually as needed. Two of them are
+packages with neither mark are updated manually as needed. Three of them are
 excluded from auto updates on purpose: every `codex-plus-plus` release
-requires manual build and runtime verification before publishing, and
+requires manual build and runtime verification before publishing,
 `pdmaas-pro-bin` has no stable public source URL because upstream requires
-a download code.
+a download code, and `reasonix-desktop-bin` tracks an upstream project that
+stopped being maintained on 2026-11-12, so 2.61.0 is its final version.
