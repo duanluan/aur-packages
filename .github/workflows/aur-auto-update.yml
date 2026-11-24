@@ -36,6 +36,7 @@ on:
           - minimax-design
           - minimax-code
           - minimax-code-desktop
+          - doubao-cli
           - reasonix-desktop-bin
           - pi-agent-desktop-bin
           - reeden
@@ -86,6 +87,7 @@ on:
       - "packages/minimax-design/**"
       - "packages/minimax-code/**"
       - "packages/minimax-code-desktop/**"
+      - "packages/doubao-cli/**"
       - "packages/reasonix-desktop-bin/**"
       - "packages/pi-agent-desktop-bin/**"
       - "packages/reeden/**"
@@ -177,6 +179,7 @@ jobs:
             minimax-design
             minimax-code
             minimax-code-desktop
+            doubao-cli
             pi-agent-desktop-bin
             pideck-bin
             pokebonk

@@ -30,6 +30,7 @@ DEFAULT_PACKAGES=(
   minimax-design
   minimax-code
   minimax-code-desktop
+  doubao-cli
   reasonix-desktop-bin
   pi-agent-desktop-bin
   reeden
