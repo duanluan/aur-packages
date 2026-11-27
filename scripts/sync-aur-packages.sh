@@ -35,6 +35,7 @@ DEFAULT_PACKAGES=(
   pi-agent-desktop-bin
   reeden
   alexandria-bin
+  alma-desktop
   android-dex-bin
   apifox
   photon-studio

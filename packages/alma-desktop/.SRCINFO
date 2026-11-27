@@ -1,0 +1,33 @@
+pkgbase = alma-desktop
+	pkgdesc = Desktop AI agent harness and GUI client for herdr, repackaged from the official Linux release
+	pkgver = 0.4.1212
+	pkgrel = 1
+	url = https://alma.now/
+	arch = x86_64
+	arch = aarch64
+	license = LicenseRef-Proprietary
+	makedepends = libarchive
+	depends = alsa-lib
+	depends = gtk3
+	depends = hicolor-icon-theme
+	depends = libayatana-appindicator
+	depends = libsecret
+	depends = webkit2gtk-4.1
+	depends = xdg-utils
+	optdepends = ffmpeg: H.264 video encoding for remote access
+	optdepends = gtk-layer-shell: Wayland layer shell windows
+	optdepends = libpulse: PulseAudio audio output
+	provides = alma-desktop-bin=0.4.1212
+	conflicts = alma-desktop-bin
+	conflicts = alma-appimage
+	noextract = alma-0.4.1212-linux-amd64.deb
+	noextract = alma-0.4.1212-linux-arm64.deb
+	options = !strip
+	options = !debug
+	options = !lto
+	source_x86_64 = alma-0.4.1212-linux-amd64.deb::https://github.com/yetone/alma-releases/releases/download/v0.4.1212/alma-0.4.1212-linux-amd64.deb
+	sha256sums_x86_64 = 5d5ba3a25057f07e81b866a542c0a70b466b663eef071466f665e096bec17dd3
+	source_aarch64 = alma-0.4.1212-linux-arm64.deb::https://github.com/yetone/alma-releases/releases/download/v0.4.1212/alma-0.4.1212-linux-arm64.deb
+	sha256sums_aarch64 = 2e65fe7f7bfce1a8410bfb60ae435e394d8f24cfc6561a8a40b42a39b00226f8
+
+pkgname = alma-desktop

@@ -8,6 +8,7 @@ User-facing notes for the AUR packages maintained in this repository.
 | --- | --- | --- | :-: | :-: |
 | [agents-anywhere](packages/agents-anywhere/README.md) | | Agents Anywhere cross-device AI agent workbench (source build of desktop-workbench) | ✓ | |
 | [alexandria-bin](packages/alexandria-bin/README.md) | | Alexandria desktop app | | ✓ |
+| [alma-desktop](packages/alma-desktop/README.md) | | Alma desktop AI agent harness and GUI client for herdr | ✓ | |
 | [android-dex-bin](packages/android-dex-bin/README.md) | | Android DEX Linux bundle | | ✓ |
 | [apifox](packages/apifox/README.md) | | Apifox API documentation, debugging, mocking, and automated testing tool | ✓ | |
 | [arch-cleaner-bin](packages/arch-cleaner-bin/README.md) | | Interactive TUI cleanup tool for Arch Linux (pacman cache, journal, user/AI-agent caches, large and duplicate files) | | |

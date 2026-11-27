@@ -41,6 +41,7 @@ on:
           - pi-agent-desktop-bin
           - reeden
           - alexandria-bin
+          - alma-desktop
           - android-dex-bin
           - apifox
           - photon-studio
@@ -92,6 +93,7 @@ on:
       - "packages/pi-agent-desktop-bin/**"
       - "packages/reeden/**"
       - "packages/alexandria-bin/**"
+      - "packages/alma-desktop/**"
       - "packages/android-dex-bin/**"
       - "packages/apifox/**"
       - "packages/photon-studio/**"
@@ -180,6 +182,7 @@ jobs:
             minimax-code
             minimax-code-desktop
             doubao-cli
+            alma-desktop
             pi-agent-desktop-bin
             pideck-bin
             pokebonk
